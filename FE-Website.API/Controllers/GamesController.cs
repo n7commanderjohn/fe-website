@@ -3,25 +3,37 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using FE_Website.API.Data;
 
 namespace FE_Website.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ValuesController : ControllerBase
+    public class GamesController : ControllerBase
     {
+        private DataContext Db { get; set; }
+
+        public GamesController(DataContext db)
+        {
+            this.Db = db;
+        }
+
         // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public IActionResult GetGames()
         {
-            return new string[] { "value1", "value2" };
+            var games = this.Db.Games.ToList();
+
+            return Ok(games);
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        public IActionResult GetGame(int id)
         {
-            return id.ToString();
+            var game = this.Db.Games.FirstOrDefault(r => r.Id == id);
+
+            return Ok(game);
         }
 
         // POST api/values
