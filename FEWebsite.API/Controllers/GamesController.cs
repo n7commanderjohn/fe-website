@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using FE_Website.API.Data;
+using FEWebsite.API.Data;
 
-namespace FE_Website.API.Controllers
+namespace FEWebsite.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

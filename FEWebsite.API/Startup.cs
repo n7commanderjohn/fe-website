@@ -11,9 +11,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using FE_Website.API.Data;
+using FEWebsite.API.Data;
 
-namespace FE_Website.API
+namespace FEWebsite.API
 {
     public class Startup
     {

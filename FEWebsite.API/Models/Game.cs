@@ -1,4 +1,4 @@
-namespace FE_Website.API.Models
+namespace FEWebsite.API.Models
 {
     public class Game
     {

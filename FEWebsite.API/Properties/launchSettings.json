@@ -17,7 +17,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "FE_Website.API": {
+    "FEWebsite.API": {
       "commandName": "Project",
       "launchBrowser": false,
       "launchUrl": "api/values",

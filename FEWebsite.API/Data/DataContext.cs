@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using FE_Website.API.Models;
+using FEWebsite.API.Models;
 
-namespace FE_Website.API.Data
+namespace FEWebsite.API.Data
 {
     public class DataContext : DbContext
     {
