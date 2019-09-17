@@ -1,0 +1,15 @@
+using Microsoft.EntityFrameworkCore;
+using FEWebsite.API.Models;
+
+namespace FEWebsite.API.Data
+{
+    public class DataContext : DbContext
+    {
+        public DataContext(DbContextOptions<DataContext> options) : base(options)
+        {
+
+        }
+
+        public DbSet<Game> Games { get; set; }
+    }
+}
