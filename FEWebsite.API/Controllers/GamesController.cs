@@ -24,7 +24,7 @@ namespace FEWebsite.API.Controllers
         {
             var games = this.Db.Games.ToList();
 
-            return Ok(games);
+            return this.Ok(games);
         }
 
         // GET api/values/5
@@ -33,7 +33,7 @@ namespace FEWebsite.API.Controllers
         {
             var game = this.Db.Games.FirstOrDefault(r => r.Id == id);
 
-            return Ok(game);
+            return this.Ok(game);
         }
 
         // POST api/values
