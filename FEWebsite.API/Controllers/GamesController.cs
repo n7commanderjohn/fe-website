@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using FEWebsite.API.Data;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace FEWebsite.API.Controllers
 {
@@ -11,7 +10,7 @@ namespace FEWebsite.API.Controllers
     [ApiController]
     public class GamesController : ControllerBase
     {
-        private DataContext Db { get; set; }
+        private DataContext Db { get; }
 
         public GamesController(DataContext db)
         {
@@ -20,18 +19,18 @@ namespace FEWebsite.API.Controllers
 
         // GET api/values
         [HttpGet]
-        public IActionResult GetGames()
+        public async Task<IActionResult> GetGames()
         {
-            var games = this.Db.Games.ToList();
+            var games = await this.Db.Games.ToListAsync().ConfigureAwait(false);
 
             return this.Ok(games);
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public IActionResult GetGame(int id)
+        public async Task<IActionResult> GetGame(int id)
         {
-            var game = this.Db.Games.FirstOrDefault(r => r.Id == id);
+            var game = await this.Db.Games.FirstOrDefaultAsync(r => r.Id == id).ConfigureAwait(false);
 
             return this.Ok(game);
         }

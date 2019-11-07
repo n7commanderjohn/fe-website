@@ -7,7 +7,6 @@ namespace FEWebsite.API.Data
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
-
         }
 
         public DbSet<Game> Games { get; set; }

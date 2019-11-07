@@ -14,10 +14,7 @@ namespace FEWebsite.API.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(nullable: true)
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Games", x => x.Id);
-                });
+                constraints: table => table.PrimaryKey("PK_Games", x => x.Id));
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
