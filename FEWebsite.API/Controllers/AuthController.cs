@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using FEWebsite.API.Data.BaseServices;
 using System.Threading.Tasks;
 using FEWebsite.API.Models;
+using FEWebsite.API.DTOs;
+using FEWebsite.API.Data.DerivedServices;
 
 namespace FEWebsite.API.Controllers
 {
@@ -17,19 +19,20 @@ namespace FEWebsite.API.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(string username, string password) {
-            username = username.ToLower();
+        public async Task<IActionResult> Register(UserForRegisterDto userForRegisterDto)
+        {
+            userForRegisterDto.Username = userForRegisterDto.Username.ToLower();
 
-            if (await this.Repo.UserExists(username).ConfigureAwait(false))
+            if (await this.Repo.UserExists(userForRegisterDto.Username).ConfigureAwait(false))
             {
                 return this.BadRequest("Username already exists.");
             }
 
             var newUser = new User() {
-                Username = username,
+                Username = userForRegisterDto.Username,
             };
 
-            var createdUser = await this.Repo.Register(newUser, password);
+            var createdUser = await this.Repo.Register(newUser, userForRegisterDto.Password).ConfigureAwait(false);
 
             return this.StatusCode(201);
         }
