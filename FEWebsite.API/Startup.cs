@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using FEWebsite.API.Data;
+using FEWebsite.API.Data.BaseServices;
+using FEWebsite.API.Data.DerivedServices;
 
 namespace FEWebsite.API
 {
@@ -23,6 +25,7 @@ namespace FEWebsite.API
             services.AddDbContext<DataContext>(x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddCors();
+            services.AddScoped<IAuthRepositoryService, AuthRepositoryService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
