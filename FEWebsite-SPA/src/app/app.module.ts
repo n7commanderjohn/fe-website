@@ -4,11 +4,13 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { GameComponent } from './game/game.component';
+import { NavComponent } from './nav/nav.component';
 
 @NgModule({
    declarations: [
       AppComponent,
-      GameComponent
+      GameComponent,
+      NavComponent
    ],
    imports: [
       BrowserModule,
