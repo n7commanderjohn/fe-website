@@ -9,11 +9,11 @@ nav.navbar.navbar-expand-md.navbar-dark.bg-dark
     li.nav-item
       a.nav-link(href='#') Media
     li.nav-item.dropdown
-      a#dropdown01.nav-link.dropdown-toggle(data-toggle='dropdown' aria-haspopup='true' aria-expanded='false') Games
+      a#dropdown01.nav-link.dropdown-toggle(data-toggle='dropdown', aria-haspopup='true', aria-expanded='false') Games
       .dropdown-menu(*ngFor="let num of nums" aria-labelledby='dropdown01')
-        a.dropdown-item(href='#') FE{{num}}
-  form.form-inline.my-2.my-lg-0
-    input.form-control.mr-sm-2(type='text' placeholder='Username')
-    input.form-control.mr-sm-2(type='password' placeholder='Password')
-    button.btn.btn-primary.my-2.my-sm-0(type='submit') Login
+        a.dropdown-item(href='#/FE{{num}}') FE{{num}}
+  form.form-inline.my-2.my-lg-0(#loginForm="ngForm", (ngSubmit)="login()")
+    input.form-control.mr-sm-2(required type='text' name='username' placeholder='Username', [(ngModel)]="loginCredentials.username")
+    input.form-control.mr-sm-2(required type='password' name='password' placeholder='Password', [(ngModel)]="loginCredentials.password")
+    button.btn.btn-primary.my-2.my-sm-0(type='submit', [disabled]="!loginForm.valid") Login
     
