@@ -9,6 +9,8 @@ import { HttpClient } from '@angular/common/http';
 export class GameComponent implements OnInit {
   games: any;
 
+  baseUrl = 'http://localhost:5000/api/games/';
+
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
@@ -16,12 +18,12 @@ export class GameComponent implements OnInit {
   }
 
   getGames() {
-    this.http.get('http://localhost:5000/api/games')
-    .subscribe(response => {
-      this.games = response;
-    }, error => {
-      console.log(error);
-    });
+    this.http.get(this.baseUrl)
+      .subscribe(response => {
+        this.games = response; }, error => {
+          console.log(error);
+        }
+      );
   }
 
 }
