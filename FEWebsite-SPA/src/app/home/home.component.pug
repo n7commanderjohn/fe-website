@@ -8,4 +8,8 @@
   .container(*ngIf="registerMode")
     .row.justify-content-center
       .col-4
-        app-register
+        app-register([gamesFromHome]="games")
+
+p(*ngFor='let game of games').
+  {{game.id}}, {{game.name}}
+  

@@ -5,7 +5,6 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AuthService } from './_services/auth.service';
 import { AppComponent } from './app.component';
-import { GameComponent } from './game/game.component';
 import { NavComponent } from './nav/nav.component';
 import { HomeComponent } from './home/home.component';
 import { RegisterComponent } from './register/register.component';
@@ -13,7 +12,6 @@ import { RegisterComponent } from './register/register.component';
 @NgModule({
    declarations: [
       AppComponent,
-      GameComponent,
       NavComponent,
       HomeComponent,
       RegisterComponent

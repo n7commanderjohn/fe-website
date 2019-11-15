@@ -4,6 +4,10 @@ form(#registerForm="ngForm", (ngSubmit)="register();")
   .form-group
     input.form-control([(ngModel)]="model.username" required name='username' type='text' placeholder='Username')
   .form-group
+    label(for="favoriteGame") What is your favorite game?
+    select.form-control(id="favoriteGame")
+      option(*ngFor="let game of gamesFromHome", [value]="game") {{game.name}}
+  .form-group
     input.form-control([(ngModel)]="model.password" required name='password' type='password' placeholder='Password')
   .form-group.text-center
     button.btn.btn-success(type='submit') Register
