@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using FEWebsite.API.Data;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FEWebsite.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class GamesController : ControllerBase
     {
-        private DataContext Db { get; set; }
+        private DataContext Db { get; }
 
         public GamesController(DataContext db)
         {
@@ -19,21 +19,23 @@ namespace FEWebsite.API.Controllers
         }
 
         // GET api/values
+        [AllowAnonymous]
         [HttpGet]
-        public IActionResult GetGames()
+        public async Task<IActionResult> GetGames()
         {
-            var games = this.Db.Games.ToList();
+            var games = await this.Db.Games.ToListAsync().ConfigureAwait(false);
 
-            return Ok(games);
+            return this.Ok(games);
         }
 
         // GET api/values/5
+        [AllowAnonymous]
         [HttpGet("{id}")]
-        public IActionResult GetGame(int id)
+        public async Task<IActionResult> GetGame(int id)
         {
-            var game = this.Db.Games.FirstOrDefault(r => r.Id == id);
+            var game = await this.Db.Games.FirstOrDefaultAsync(r => r.Id == id).ConfigureAwait(false);
 
-            return Ok(game);
+            return this.Ok(game);
         }
 
         // POST api/values

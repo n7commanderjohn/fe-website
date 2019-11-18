@@ -1,0 +1,3 @@
+FEWebsite.API/appsettings.json
+#store pug instead of html.
+FEWebsite-SPA/src/**/*.html
