@@ -1,0 +1,14 @@
+.container.mt-5
+  div(*ngIf="!registerMode" style='text-align: center')
+    h1 Find your match
+    p.lead Come on in to view your matches... All you need to do is sign up!
+    .text-center
+      button.btn.btn-primary.btn-lg.mr-2((click)="registerToggle();") Register
+      button.btn.btn-info.btn-lg Learn more
+  .container(*ngIf="registerMode")
+    .row.justify-content-center
+      .col-4
+        app-register([gamesFromHome]="games", (cancelRegister)="cancelRegisterMode($event)")
+
+p(*ngFor='let game of games').
+  {{game.id}}, {{game.name}}
