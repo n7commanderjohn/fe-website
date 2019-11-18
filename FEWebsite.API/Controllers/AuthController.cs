@@ -47,6 +47,8 @@ namespace FEWebsite.API.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserForLoginDto userForLoginDto)
         {
+            throw new Exception("badbad");
+
             var userFromRepo = await Repo.Login(userForLoginDto.Username.ToLower(), userForLoginDto.Password).ConfigureAwait(false);
 
             if (userFromRepo == null)
