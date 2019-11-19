@@ -15,7 +15,7 @@ nav.navbar.navbar-expand-md.navbar-dark.bg-dark
       .dropdown-menu(*ngFor="let num of nums" aria-labelledby='dropdown01')
         a.dropdown-item(href='#/FE{{num}}') FE{{num}}
   .dropdown(*ngIf="loggedIn();")
-    a.dropdown-toggle Welcome User
+    a.dropdown-toggle Welcome {{authService.decodedToken?.unique_name | titlecase}}
     .dropdown-menu
       a.dropdown-item(href='#')
         i.fa.fa-user Edit Profile
@@ -26,4 +26,3 @@ nav.navbar.navbar-expand-md.navbar-dark.bg-dark
     input.form-control.mr-sm-2(required type='text' name='username' placeholder='Username', [(ngModel)]="loginCredentials.username")
     input.form-control.mr-sm-2(required type='password' name='password' placeholder='Password', [(ngModel)]="loginCredentials.password")
     button.btn.btn-primary.my-2.my-sm-0(type='submit', [disabled]="!loginForm.valid") Login
-    
