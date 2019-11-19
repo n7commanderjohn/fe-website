@@ -1,29 +1,27 @@
-nav.navbar.navbar-expand-md.navbar-dark.bg-dark
-  a.navbar-brand(href='#') FE Website
-  button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbarsExampleDefault' aria-controls='navbarsExampleDefault' aria-expanded='false' aria-label='Toggle navigation')
-    span.navbar-toggler-icon
-  ul.navbar-nav.mr-auto
-    li.nav-item.active
-      a.nav-link(href='#') Users 
-        span.sr-only (current)
-    li.nav-item
-      a.nav-link(href='#') Media
-    li.nav-item
-      a.nav-link(href='#', (click)="logout();") Logout
-    li.nav-item.dropdown
-      a#dropdown01.nav-link.dropdown-toggle(data-toggle='dropdown', aria-haspopup='true', aria-expanded='false') Games
-      .dropdown-menu(*ngFor="let num of nums" aria-labelledby='dropdown01')
-        a.dropdown-item(href='#/FE{{num}}') FE{{num}}
-  .dropdown(*ngIf="loggedIn();")
-    a.dropdown-toggle Welcome User
-    .dropdown-menu
-      a.dropdown-item(href='#')
-        i.fa.fa-user Edit Profile
-      .dropdown-divider
-      a.dropdown-item(href='#')
-        i.fa.fa-sign-out Logout
-  form.form-inline.my-2.my-lg-0(*ngIf="!loggedIn();" #loginForm="ngForm", (ngSubmit)="login();")
-    input.form-control.mr-sm-2(required type='text' name='username' placeholder='Username', [(ngModel)]="loginCredentials.username")
-    input.form-control.mr-sm-2(required type='password' name='password' placeholder='Password', [(ngModel)]="loginCredentials.password")
-    button.btn.btn-primary.my-2.my-sm-0(type='submit', [disabled]="!loginForm.valid") Login
-    
+nav.navbar.navbar-expand-md.navbar-dark.bg-warning
+  .container
+    a.navbar-brand(href='') FE Website
+    ul.navbar-nav.mr-auto(*ngIf="loggedIn();")
+      li.nav-item.active
+        a.nav-link(href='#') Users 
+          span.sr-only (current)
+      li.nav-item
+        a.nav-link(href='#') Media
+      li.nav-item.dropdown(dropdown)
+        a.nav-link.dropdown-toggle(dropdownToggle) Games
+        .dropdown-menu('*dropdownMenu')
+          div(*ngFor="let num of nums")
+            a.dropdown-item(href='#/FE{{num}}') FE{{num}}
+            .dropdown-divider
+    .hover.dropdown(*ngIf="loggedIn();", 'dropdown')
+      a.dropdown-toggle(dropdownToggle) Welcome {{authService.decodedToken?.unique_name | titlecase}}
+      .dropdown-menu.mt-4('*dropdownMenu')
+        a.dropdown-item(href='#')
+          i.fa.fa-user &nbsp;Edit Profile
+        .dropdown-divider
+        a.dropdown-item((click)="logout();")
+          i.fa.fa-sign-out &nbsp;Logout
+    form.form-inline.my-2.my-lg-0(*ngIf="!loggedIn();" #loginForm="ngForm", (ngSubmit)="login();")
+      input.form-control.mr-sm-2(required type='text' name='username' placeholder='Username', [(ngModel)]="loginCredentials.username")
+      input.form-control.mr-sm-2(required type='password' name='password' placeholder='Password', [(ngModel)]="loginCredentials.password")
+      button.btn.btn-primary.my-2.my-sm-0(type='submit', [disabled]="!loginForm.valid") Login
