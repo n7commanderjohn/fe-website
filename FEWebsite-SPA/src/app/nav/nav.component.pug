@@ -10,7 +10,9 @@ nav.navbar.navbar-expand-md.navbar-dark.bg-warning
       li.nav-item.dropdown(dropdown)
         a.nav-link.dropdown-toggle(dropdownToggle) Games
         .dropdown-menu('*dropdownMenu')
-          a.dropdown-item(*ngFor="let num of nums", href='#/FE{{num}}') FE{{num}}
+          div(*ngFor="let num of nums")
+            a.dropdown-item(href='#/FE{{num}}') FE{{num}}
+            .dropdown-divider
     .hover.dropdown(*ngIf="loggedIn();", 'dropdown')
       a.dropdown-toggle(dropdownToggle) Welcome {{authService.decodedToken?.unique_name | titlecase}}
       .dropdown-menu.mt-4('*dropdownMenu')

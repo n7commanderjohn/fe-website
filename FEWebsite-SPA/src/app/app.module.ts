@@ -1,5 +1,6 @@
 import { ErrorInteceptorProvider } from './_services/error.inteceptor';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -24,6 +25,7 @@ import { RegisterComponent } from './register/register.component';
       BrowserModule,
       HttpClientModule,
       FormsModule,
+      BrowserAnimationsModule,
       BsDropdownModule.forRoot(),
    ],
    providers: [
