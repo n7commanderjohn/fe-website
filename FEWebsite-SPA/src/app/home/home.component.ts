@@ -1,3 +1,4 @@
+import { AlertifyService } from './../_services/alertify.service';
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
@@ -12,13 +13,14 @@ export class HomeComponent implements OnInit {
   baseUrl = 'http://localhost:5000/api/games/';
 
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private alertify: AlertifyService) { }
 
   ngOnInit() {
     this.getGames();
   }
 
   registerToggle() {
+    this.alertify.message('Registration started.');
     this.registerMode = true;
   }
 
