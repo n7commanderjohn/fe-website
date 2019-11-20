@@ -1,7 +1,3 @@
 .dropdown-toggle, .dropdown-item {
     cursor: pointer;
 }
-
-.hover:hover {
-    color: #007053;
-}

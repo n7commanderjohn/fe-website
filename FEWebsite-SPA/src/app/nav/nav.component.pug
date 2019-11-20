@@ -13,8 +13,8 @@ nav.navbar.navbar-expand-md.navbar-dark.bg-primary
           div(*ngFor="let num of nums")
             a.nav-link.dropdown-item([routerLink]="['games/FE' + num]") FE{{num}}
             .dropdown-divider
-    .hover.dropdown(*ngIf="loggedIn();", 'dropdown')
-      a.dropdown-toggle(dropdownToggle) Welcome {{authService.decodedToken?.unique_name | titlecase}}
+    button.btn.btn-primary.dropdown(*ngIf="loggedIn();", 'dropdown')
+      a.dropdown-toggle(dropdownToggle) Welcome {{authService.decodedToken?.unique_name | titlecase}}&nbsp;
       .dropdown-menu.mt-4('*dropdownMenu')
         a.dropdown-item(href='#')
           i.fa.fa-user &nbsp;Edit Profile
