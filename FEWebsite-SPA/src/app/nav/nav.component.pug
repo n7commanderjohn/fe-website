@@ -1,20 +1,22 @@
-nav.navbar.navbar-expand-md.navbar-dark.bg-warning
+nav.navbar.navbar-expand-md.navbar-dark.bg-primary
   .container
-    a.navbar-brand(href='') FE Website
+    a.navbar-brand([routerLink]="['/home']") FE Website
     ul.navbar-nav.mr-auto(*ngIf="loggedIn();")
-      li.nav-item.active
-        a.nav-link(href='#') Users 
+      li.nav-item(routerLinkActive="active")
+        a.nav-link([routerLink]="['/users']") Users 
           span.sr-only (current)
-      li.nav-item
-        a.nav-link(href='#') Media
-      li.nav-item.dropdown(dropdown)
+      li.nav-item(routerLinkActive="active")
+        a.nav-link([routerLink]="['/media']") Media
+      li.nav-item(routerLinkActive="active")
+        a.nav-link([routerLink]="['/messages']") Messages
+      li.nav-item.dropdown(dropdown, routerLinkActive="active")
         a.nav-link.dropdown-toggle(dropdownToggle) Games
         .dropdown-menu('*dropdownMenu')
           div(*ngFor="let num of nums")
-            a.dropdown-item(href='#/FE{{num}}') FE{{num}}
+            a.nav-link.dropdown-item([routerLink]="['games/FE' + num]") FE{{num}}
             .dropdown-divider
-    .hover.dropdown(*ngIf="loggedIn();", 'dropdown')
-      a.dropdown-toggle(dropdownToggle) Welcome {{authService.decodedToken?.unique_name | titlecase}}
+    button.btn.btn-primary.dropdown(*ngIf="loggedIn();", 'dropdown')
+      a.dropdown-toggle(dropdownToggle) Welcome {{authService.decodedToken?.unique_name | titlecase}}&nbsp;
       .dropdown-menu.mt-4('*dropdownMenu')
         a.dropdown-item(href='#')
           i.fa.fa-user &nbsp;Edit Profile

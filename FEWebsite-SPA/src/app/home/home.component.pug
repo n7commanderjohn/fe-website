@@ -9,6 +9,3 @@
     .row.justify-content-center
       .col-4
         app-register([gamesFromHome]="games", (cancelRegister)="cancelRegisterMode($event)")
-
-p(*ngFor='let game of games').
-  {{game.id}}, {{game.name}}
