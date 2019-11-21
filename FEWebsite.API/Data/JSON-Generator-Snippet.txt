@@ -54,14 +54,51 @@ Snippet for NEXT JSON Generator site at https://next.json-generator.com
     City: '{{city()}}',
     Country: '{{country()}}',
     Photos: [
+      {
+          url: function(num) {
+            return 'https://randomuser.me/api/portraits/women/' + num.integer(1,99) + '.jpg';
+          },
+        isMain: true,
+        description: '{{lorem()}}'
+      }
+    ]
+  }
+ } 
+]
+
+//custom use here: Snippet for NEXT JSON Generator site at https://next.json-generator.com
+
+[
+  {
+    'repeat(7)': {
+    Username: '{{firstName("female")}}',
+    GenderId: 'F',
+    Birthday: '{{date(new Date(1950,0,1), new Date(1999, 11, 31), "YYYY-MM-dd")}}',
+    Password: 'password',
+    Alias: function(){ return this.Username; },
+    AccountCreated: '{{date(new Date(2017,0,1), new Date(2017, 7, 31), "YYYY-MM-dd")}}',
+    LastLogin: function(){return this.Created; },
+    AboutMe:  function() { return 'My story is ' + guid(); },
+    Photos: [
         {
           url: function(num) {
           return 'https://randomuser.me/api/portraits/women/' + num.integer(1,99) + '.jpg';
         },
         isMain: true,
-        description: '{{lorem()}}'
+        description: function() { return 'Yummy ' + guid(); }
       }
-    ]
+    ],
+    Games: [
+        {
+          Rand: function() { return integer(1,16); },
+          name: function() {
+          		return 'FE' + this.Rand;
+          },
+          description: function() {
+          		return 'Fire Emblem ' + this.Rand;
+          },
+        },
+    ],
   }
  } 
 ]
