@@ -8,6 +8,15 @@ namespace FEWebsite.API.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Genders",
+                columns: table => new
+                {
+                    Id = table.Column<string>(maxLength: 3, nullable: false),
+                    Description = table.Column<string>(nullable: true)
+                },
+                constraints: table => table.PrimaryKey("PK_Genders", x => x.Id));
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -19,10 +28,20 @@ namespace FEWebsite.API.Migrations
                     Birthday = table.Column<DateTime>(nullable: false),
                     AccountCreated = table.Column<DateTime>(nullable: false),
                     LastLogin = table.Column<DateTime>(nullable: false),
+                    Gender = table.Column<string>(nullable: true),
                     AboutMe = table.Column<string>(nullable: true),
                     Alias = table.Column<string>(nullable: true)
                 },
-                constraints: table => table.PrimaryKey("PK_Users", x => x.Id));
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Users_Genders_Gender",
+                        column: x => x.Gender,
+                        principalTable: "Genders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
 
             migrationBuilder.CreateTable(
                 name: "GameGenres",
@@ -104,6 +123,11 @@ namespace FEWebsite.API.Migrations
                 name: "IX_Photos_UserId",
                 table: "Photos",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Gender",
+                table: "Users",
+                column: "Gender");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -119,6 +143,9 @@ namespace FEWebsite.API.Migrations
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Genders");
         }
     }
 }

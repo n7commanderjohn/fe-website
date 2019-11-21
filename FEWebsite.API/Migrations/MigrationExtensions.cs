@@ -7,15 +7,23 @@ namespace FEWebsite.API.Migrations
         #region Public Methods
 
         /// <summary>
+        /// Format = "DELETE FROM {table};" // used if argWhere is not provided
         /// Format = "DELETE FROM {table} WHERE ({argWhere});"
         /// </summary>
         /// <param name="table">sql table</param>
         /// <param name="argWhere">arguments to provide as where clause</param>
-        protected void Delete(MigrationBuilder migrationBuilder, string table, string argWhere)
+        protected void Delete(MigrationBuilder migrationBuilder, string table, string argWhere = null)
         {
-            var sql = string.Format("DELETE FROM {0} WHERE ({1});",
-                table, argWhere
-            );
+            string sql;
+            if (string.IsNullOrEmpty(argWhere)) {
+                sql = string.Format("DELETE FROM {0};",
+                    table
+                );
+            } else {
+                sql = string.Format("DELETE FROM {0} WHERE ({1});",
+                    table, argWhere
+                );
+            }
 
             migrationBuilder.Sql(sql);
         }

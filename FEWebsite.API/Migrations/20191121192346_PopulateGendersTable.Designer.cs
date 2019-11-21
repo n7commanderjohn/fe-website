@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FEWebsite.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20191121183359_RecreationOfFEWebsiteSQLiteDB")]
-    partial class RecreationOfFEWebsiteSQLiteDB
+    [Migration("20191121192346_PopulateGendersTable")]
+    partial class PopulateGendersTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -54,6 +54,19 @@ namespace FEWebsite.API.Migrations
                     b.ToTable("GameGenres");
                 });
 
+            modelBuilder.Entity("FEWebsite.API.Models.Gender", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(3);
+
+                    b.Property<string>("Description");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Genders");
+                });
+
             modelBuilder.Entity("FEWebsite.API.Models.Photo", b =>
                 {
                     b.Property<int>("Id")
@@ -90,6 +103,9 @@ namespace FEWebsite.API.Migrations
                     b.Property<string>("Description")
                         .HasColumnName("AboutMe");
 
+                    b.Property<string>("GenderId")
+                        .HasColumnName("Gender");
+
                     b.Property<DateTime>("LastLogin");
 
                     b.Property<string>("Name")
@@ -102,6 +118,8 @@ namespace FEWebsite.API.Migrations
                     b.Property<string>("Username");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("GenderId");
 
                     b.ToTable("Users");
                 });
@@ -126,6 +144,13 @@ namespace FEWebsite.API.Migrations
                         .WithMany("Photos")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("FEWebsite.API.Models.User", b =>
+                {
+                    b.HasOne("FEWebsite.API.Models.Gender", "Gender")
+                        .WithMany()
+                        .HasForeignKey("GenderId");
                 });
 #pragma warning restore 612, 618
         }

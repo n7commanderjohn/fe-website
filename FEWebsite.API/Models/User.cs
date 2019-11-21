@@ -19,6 +19,11 @@ namespace FEWebsite.API.Models
 
         public DateTime LastLogin { get; set; }
 
+        public Gender Gender { get; set; }
+
+        [Column("Gender")]
+        public string GenderId { get; set; }
+
         public ICollection<Game> FavoriteGames { get; set; }
 
         public ICollection<GameGenre> FavoriteGenres { get; set; }
