@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System.Text;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace FEWebsite.API.Migrations
 {
@@ -37,6 +39,28 @@ namespace FEWebsite.API.Migrations
         {
             var sql = string.Format("INSERT INTO {0} VALUES ({1});",
                 table, argValues
+            );
+
+            migrationBuilder.Sql(sql);
+        }
+
+        /// <summary>
+        /// Format = "INSERT INTO {table} VALUES ({argValues});"
+        /// </summary>
+        /// <param name="table">sql table</param>
+        /// <param name="argValues">provide a list of arguments to provide as values</param>
+        protected void Insert(MigrationBuilder migrationBuilder, string table, List<string> argValues)
+        {
+            var valuesToInsert = new StringBuilder();
+            foreach (var arg in argValues) {
+                var append = $"({arg}), ";
+                valuesToInsert.Append(append);
+            }
+
+            var valuesString = valuesToInsert.ToString();
+            valuesString = valuesString.Substring(0, valuesString.LastIndexOf(','));
+            var sql = string.Format("INSERT INTO {0} VALUES {1};",
+                table, valuesString
             );
 
             migrationBuilder.Sql(sql);
