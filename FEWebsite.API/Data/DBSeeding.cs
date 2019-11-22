@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Collections.Generic;
 using System.Linq;
 using FEWebsite.API.Models;
@@ -15,7 +16,21 @@ namespace FEWebsite.API.Data
                 var users = JsonConvert.DeserializeObject<List<User>>(userData);
                 foreach (var user in users)
                 {
+                    CreatePasswordHash(user, "password");
+                    user.Username = user.Username.ToLower();
+                    context.Users.Add(user);
                 }
+
+                context.SaveChanges();
+            }
+        }
+
+        private static void CreatePasswordHash(User user, string password)
+        {
+            using (var hmac = new System.Security.Cryptography.HMACSHA512())
+            {
+                user.PasswordSalt = hmac.Key;
+                user.PasswordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
             }
         }
     }

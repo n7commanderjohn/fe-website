@@ -70,15 +70,15 @@ Snippet for NEXT JSON Generator site at https://next.json-generator.com
 
 [
   {
-    'repeat(7)': {
-    Username: '{{firstName("female")}}',
-    GenderId: 'F',
-    Birthday: '{{date(new Date(1950,0,1), new Date(1999, 11, 31), "YYYY-MM-dd")}}',
+    'repeat(4)': {
+    Username: '{{firstName("male")}}',
+    GenderId: 'M',
+    Birthday: '{{moment(this.date(new Date(2014, 0, 1), new Date())).format("YYYY-MM-DD")}}',
     Password: 'password',
-    Alias: function(){ return this.Username; },
-    AccountCreated: '{{date(new Date(2017,0,1), new Date(2017, 7, 31), "YYYY-MM-dd")}}',
-    LastLogin: function(){return this.Created; },
-    AboutMe:  function() { return 'My story is ' + guid(); },
+    Name: function(){ return this.Username; },
+    AccountCreated: '{{moment(this.date(new Date(2014, 0, 1), new Date())).format("YYYY-MM-DD")}}',
+    LastLogin: function(){return this.AccountCreated; },
+    Description:  function() { return 'My story is ' + guid(); },
     Photos: [
         {
           url: function(num) {
