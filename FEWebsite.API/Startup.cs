@@ -32,7 +32,7 @@ namespace FEWebsite.API
             services.AddDbContext<DataContext>(x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddCors();
-            services.AddScoped<IAuthRepositoryService, AuthRepositoryService>();
+            this.AddServiceScopes(services);
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                     options.TokenValidationParameters = new TokenValidationParameters
@@ -44,6 +44,12 @@ namespace FEWebsite.API
                         ValidateAudience = false,
                     }
                 );
+        }
+
+        private void AddServiceScopes(IServiceCollection services)
+        {
+            services.AddScoped<IAuthRepositoryService, AuthRepositoryService>();
+            services.AddScoped<IUserInfoRepository, UserInfoRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
