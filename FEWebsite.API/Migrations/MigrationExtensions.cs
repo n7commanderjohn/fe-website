@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System.Text;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace FEWebsite.API.Migrations
 {
@@ -7,15 +9,23 @@ namespace FEWebsite.API.Migrations
         #region Public Methods
 
         /// <summary>
+        /// Format = "DELETE FROM {table};" // used if argWhere is not provided
         /// Format = "DELETE FROM {table} WHERE ({argWhere});"
         /// </summary>
         /// <param name="table">sql table</param>
         /// <param name="argWhere">arguments to provide as where clause</param>
-        protected void Delete(MigrationBuilder migrationBuilder, string table, string argWhere)
+        protected void Delete(MigrationBuilder migrationBuilder, string table, string argWhere = null)
         {
-            var sql = string.Format("DELETE FROM {0} WHERE ({1});",
-                table, argWhere
-            );
+            string sql;
+            if (string.IsNullOrEmpty(argWhere)) {
+                sql = string.Format("DELETE FROM {0};",
+                    table
+                );
+            } else {
+                sql = string.Format("DELETE FROM {0} WHERE ({1});",
+                    table, argWhere
+                );
+            }
 
             migrationBuilder.Sql(sql);
         }
@@ -29,6 +39,28 @@ namespace FEWebsite.API.Migrations
         {
             var sql = string.Format("INSERT INTO {0} VALUES ({1});",
                 table, argValues
+            );
+
+            migrationBuilder.Sql(sql);
+        }
+
+        /// <summary>
+        /// Format = "INSERT INTO {table} VALUES ({argValues});"
+        /// </summary>
+        /// <param name="table">sql table</param>
+        /// <param name="argValues">provide a list of arguments to provide as values</param>
+        protected void Insert(MigrationBuilder migrationBuilder, string table, List<string> argValues)
+        {
+            var valuesToInsert = new StringBuilder();
+            foreach (var arg in argValues) {
+                var append = $"({arg}), ";
+                valuesToInsert.Append(append);
+            }
+
+            var valuesString = valuesToInsert.ToString();
+            valuesString = valuesString.Substring(0, valuesString.LastIndexOf(','));
+            var sql = string.Format("INSERT INTO {0} VALUES {1};",
+                table, valuesString
             );
 
             migrationBuilder.Sql(sql);
