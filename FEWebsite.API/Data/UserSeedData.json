@@ -1,0 +1,98 @@
+[
+    {
+      "Username": "Rodriguez",
+      "GenderId": "M",
+      "Birthday": "2018-06-18",
+      "Password": "password",
+      "Name": "Rodriguez",
+      "AccountCreated": "2017-02-19",
+      "LastLogin": "2017-02-19",
+      "Description": "My story is f8581094-f66f-4417-8708-f7fb7aa72e22",
+      "Photos": [
+        {
+          "url": "https://randomuser.me/api/portraits/women/50.jpg",
+          "isMain": true,
+          "description": "Yummy 49501192-3060-405c-a289-fd7dab4269eb"
+        }
+      ],
+      "Games": [
+        {
+          "Rand": 3,
+          "name": "FE3",
+          "description": "Fire Emblem 3"
+        }
+      ]
+    },
+    {
+      "Username": "Mccarthy",
+      "GenderId": "M",
+      "Birthday": "2017-09-11",
+      "Password": "password",
+      "Name": "Mccarthy",
+      "AccountCreated": "2015-03-26",
+      "LastLogin": "2015-03-26",
+      "Description": "My story is 16bb078b-95d9-42a6-9155-4186aed4f7f6",
+      "Photos": [
+        {
+          "url": "https://randomuser.me/api/portraits/women/75.jpg",
+          "isMain": true,
+          "description": "Yummy b5038817-4bc3-41a3-a9bb-f8ff02f2dd21"
+        }
+      ],
+      "Games": [
+        {
+          "Rand": 6,
+          "name": "FE6",
+          "description": "Fire Emblem 6"
+        }
+      ]
+    },
+    {
+      "Username": "Kramer",
+      "GenderId": "M",
+      "Birthday": "2017-10-22",
+      "Password": "password",
+      "Name": "Kramer",
+      "AccountCreated": "2014-08-04",
+      "LastLogin": "2014-08-04",
+      "Description": "My story is adf81c59-e9aa-43f4-9a02-d080db83ffb4",
+      "Photos": [
+        {
+          "url": "https://randomuser.me/api/portraits/women/87.jpg",
+          "isMain": true,
+          "description": "Yummy b4c95222-dd83-4215-8dd5-c6f36966dc05"
+        }
+      ],
+      "Games": [
+        {
+          "Rand": 9,
+          "name": "FE9",
+          "description": "Fire Emblem 9"
+        }
+      ]
+    },
+    {
+      "Username": "Cash",
+      "GenderId": "M",
+      "Birthday": "2016-10-17",
+      "Password": "password",
+      "Name": "Cash",
+      "AccountCreated": "2018-10-22",
+      "LastLogin": "2018-10-22",
+      "Description": "My story is e9c1039e-88bc-41e8-a77c-d69aaae84370",
+      "Photos": [
+        {
+          "url": "https://randomuser.me/api/portraits/women/85.jpg",
+          "isMain": true,
+          "description": "Yummy df89a532-cc6d-4bac-a762-6f7825b472b7"
+        }
+      ],
+      "Games": [
+        {
+          "Rand": 2,
+          "name": "FE2",
+          "description": "Fire Emblem 2"
+        }
+      ]
+    }
+  ]

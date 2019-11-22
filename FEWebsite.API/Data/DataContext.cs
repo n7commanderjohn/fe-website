@@ -12,5 +12,11 @@ namespace FEWebsite.API.Data
         public DbSet<Game> Games { get; set; }
 
         public DbSet<User> Users { get; set; }
+
+        public DbSet<GameGenre> GameGenres { get; set; }
+
+        public DbSet<Photo> Photos { get; set; }
+
+        public DbSet<Gender> Genders { get; set; }
     }
 }
