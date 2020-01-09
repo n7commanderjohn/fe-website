@@ -85,8 +85,8 @@ namespace FEWebsite.API
 
             app.UseRouting();
 
-            app.UseAuthorization();
             app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseCors(x => x.AllowAnyOrigin()
                 .AllowAnyMethod()
