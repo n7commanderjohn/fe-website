@@ -14,6 +14,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using FEWebsite.API.Helpers;
+using Microsoft.Extensions.Hosting;
 
 namespace FEWebsite.API
 {
@@ -30,7 +31,11 @@ namespace FEWebsite.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DataContext>(x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddControllers()
+                .AddNewtonsoftJson(opt => {
+                    opt.SerializerSettings.ReferenceLoopHandling =
+                        Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                });
             services.AddCors();
             this.AddServiceScopes(services);
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -53,7 +58,7 @@ namespace FEWebsite.API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -77,12 +82,18 @@ namespace FEWebsite.API
             }
 
             // app.UseHttpsRedirection();
+
+            app.UseRouting();
+
+            app.UseAuthorization();
+            app.UseAuthentication();
+
             app.UseCors(x => x.AllowAnyOrigin()
                 .AllowAnyMethod()
                 .AllowAnyHeader()
             );
-            app.UseAuthentication();
-            app.UseMvc();
+
+            app.UseEndpoints(endpoints => endpoints.MapControllers());
         }
     }
 }
