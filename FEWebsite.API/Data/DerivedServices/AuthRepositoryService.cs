@@ -18,12 +18,8 @@ namespace FEWebsite.API.Data.DerivedServices
         {
             var user = await this.Context.Users.FirstOrDefaultAsync(u => u.Username == username).ConfigureAwait(false);
 
-            if (user == null)
-            {
-                return null;
-            }
-
-            if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
+            if (user == null
+                || !VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
             {
                 return null;
             }
@@ -33,7 +29,8 @@ namespace FEWebsite.API.Data.DerivedServices
 
         private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
         {
-            using (var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt))
+            var hMACSHA512 = new System.Security.Cryptography.HMACSHA512(passwordSalt);
+            using (var hmac = hMACSHA512)
             {
                 var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
 
@@ -54,23 +51,26 @@ namespace FEWebsite.API.Data.DerivedServices
             this.CreatePasswordHash(user, password);
 
             await this.Context.Users.AddAsync(user).ConfigureAwait(false);
-            await Context.SaveChangesAsync().ConfigureAwait(false);
+            await this.Context.SaveChangesAsync().ConfigureAwait(false);
 
             return user;
         }
 
         private void CreatePasswordHash(User user, string password)
         {
-            using (var hmac = new System.Security.Cryptography.HMACSHA512())
+            var hMACSHA512 = new System.Security.Cryptography.HMACSHA512();
+            using (var hmac = hMACSHA512)
             {
                 user.PasswordSalt = hmac.Key;
-                user.PasswordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                user.PasswordHash = hmac.ComputeHash(buffer: System.Text.Encoding.UTF8.GetBytes(password));
             }
         }
 
         public async Task<bool> UserExists(string username)
         {
-            return await this.Context.Users.AnyAsync(u => u.Username == username).ConfigureAwait(false);
+            return await this.Context.Users
+                .AnyAsync(u => u.Username == username)
+                .ConfigureAwait(false);
         }
     }
 }

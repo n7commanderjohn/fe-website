@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace FEWebsite.API.DTOs
+namespace FEWebsite.API.DTOs.UserDTOs
 {
     public class UserForRegisterDto
     {
