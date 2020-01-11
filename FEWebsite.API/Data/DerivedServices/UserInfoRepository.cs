@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using FEWebsite.API.Data.BaseServices;
 using FEWebsite.API.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
 
 namespace FEWebsite.API.Data.DerivedServices
 {

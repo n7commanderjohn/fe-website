@@ -16,12 +16,12 @@ namespace FEWebsite.API.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private IAuthRepositoryService Repo { get; }
+        private IAuthRepositoryService RepoUser { get; }
         public IConfiguration Config { get; }
 
-        public AuthController(IAuthRepositoryService repo, IConfiguration config)
+        public AuthController(IAuthRepositoryService repoUser, IConfiguration config)
         {
-            this.Repo = repo;
+            this.RepoUser = repoUser;
             this.Config = config;
         }
 
@@ -30,7 +30,7 @@ namespace FEWebsite.API.Controllers
         {
             userForRegisterDto.Username = userForRegisterDto.Username.ToLower();
 
-            if (await this.Repo.UserExists(userForRegisterDto.Username).ConfigureAwait(false))
+            if (await this.RepoUser.UserExists(userForRegisterDto.Username).ConfigureAwait(false))
             {
                 return this.BadRequest("Username already exists.");
             }
@@ -39,15 +39,23 @@ namespace FEWebsite.API.Controllers
                 Username = userForRegisterDto.Username,
             };
 
-            var createdUser = await this.Repo.Register(newUser, userForRegisterDto.Password).ConfigureAwait(false);
+            var createdUser = await this.RepoUser.Register(newUser, userForRegisterDto.Password).ConfigureAwait(false);
 
-            return this.StatusCode(201);
+            if (createdUser != null)
+            {
+                return this.Created($"api/users/{createdUser.Id}", createdUser);
+            }
+            else {
+                return this.BadRequest("Registration failed when creating the user.");
+            }
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserForLoginDto userForLoginDto)
         {
-            var userFromRepo = await Repo.Login(userForLoginDto.Username.ToLower(), userForLoginDto.Password).ConfigureAwait(false);
+            var userFromRepo = await this.RepoUser
+                .Login(userForLoginDto.Username.ToLower(), userForLoginDto.Password)
+                .ConfigureAwait(false);
 
             if (userFromRepo == null)
             {
