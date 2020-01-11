@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using FEWebsite.API.Data.BaseServices;
 using System.Threading.Tasks;
 using FEWebsite.API.Models;
-using FEWebsite.API.DTOs;
+using FEWebsite.API.DTOs.UserDTOs;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
 using System.IdentityModel.Tokens.Jwt;
