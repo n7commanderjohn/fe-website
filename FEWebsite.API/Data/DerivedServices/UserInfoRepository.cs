@@ -1,8 +1,10 @@
+using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FEWebsite.API.Data.BaseServices;
 using FEWebsite.API.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace FEWebsite.API.Data.DerivedServices
 {
@@ -27,8 +29,7 @@ namespace FEWebsite.API.Data.DerivedServices
 
         public async Task<User> GetUser(int userId)
         {
-            var user = await this.Context.Users
-                .Include(u => u.Photos)
+            var user = await this.DefaultUserIncludes()
                 .FirstOrDefaultAsync(u => u.Id == userId)
                 .ConfigureAwait(false);
 
@@ -37,18 +38,25 @@ namespace FEWebsite.API.Data.DerivedServices
 
         public async Task<IEnumerable<User>> GetUsers()
         {
-            var users = await this.Context.Users
-                .Include(u => u.Photos)
+            var users = await this.DefaultUserIncludes()
                 .ToListAsync()
                 .ConfigureAwait(false);
 
             return users;
         }
 
+        private IQueryable<User> DefaultUserIncludes() {
+            return this.Context.Users
+                .Include(u => u.Photos)
+                .Include(u => u.FavoriteGames)
+                .Include(u => u.FavoriteGenres);
+        }
+
         public async Task<bool> SaveAll()
         {
             return await this.Context
-                .SaveChangesAsync().ConfigureAwait(false) > 0;
+                .SaveChangesAsync()
+                .ConfigureAwait(false) > 0;
         }
     }
 }
