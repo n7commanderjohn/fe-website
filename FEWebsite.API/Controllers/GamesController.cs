@@ -18,41 +18,41 @@ namespace FEWebsite.API.Controllers
             this.Db = db;
         }
 
-        // GET api/values
+        // GET api/games
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> GetGames()
+        public async Task<OkObjectResult> GetGames()
         {
             var games = await this.Db.Games.ToListAsync().ConfigureAwait(false);
 
             return this.Ok(games);
         }
 
-        // GET api/values/5
+        // GET api/games/5
         [AllowAnonymous]
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetGame(int id)
+        public async Task<OkObjectResult> GetGame(int id)
         {
             var game = await this.Db.Games.FirstOrDefaultAsync(r => r.Id == id).ConfigureAwait(false);
 
             return this.Ok(game);
         }
 
-        // POST api/values
+        // POST api/games
         [HttpPost]
         public void Post([FromBody] string value)
         {
 
         }
 
-        // PUT api/values/5
+        // PUT api/games/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
 
         }
 
-        // DELETE api/values/5
+        // DELETE api/games/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {

@@ -29,7 +29,7 @@ namespace FEWebsite.API.Data.DerivedServices
 
         public async Task<User> GetUser(int userId)
         {
-            var user = await this.DefaultUserIncludes()
+            var user = await this.DefaultUserIncludes(expandedInclude: true)
                 .FirstOrDefaultAsync(u => u.Id == userId)
                 .ConfigureAwait(false);
 
@@ -45,11 +45,23 @@ namespace FEWebsite.API.Data.DerivedServices
             return users;
         }
 
-        private IQueryable<User> DefaultUserIncludes() {
-            return this.Context.Users
-                .Include(u => u.Photos)
-                .Include(u => u.FavoriteGames)
-                .Include(u => u.FavoriteGenres);
+        private IQueryable<User> DefaultUserIncludes(bool expandedInclude = false) {
+            if (expandedInclude)
+            {
+                return this.Context.Users
+                    .Include(u => u.Photos)
+                    .Include(u => u.FavoriteGames)
+                        .ThenInclude(ug => ug.Game)
+                    .Include(u => u.FavoriteGenres)
+                        .ThenInclude(ugg => ugg.GameGenre);
+            }
+            else //for some reason when calling all users, it will never finish the api call
+            {
+                return this.Context.Users
+                    .Include(u => u.Photos)
+                    .Include(u => u.FavoriteGames)
+                    .Include(u => u.FavoriteGenres);
+            }
         }
 
         public async Task<bool> SaveAll()
