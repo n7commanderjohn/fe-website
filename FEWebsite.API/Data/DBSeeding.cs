@@ -16,7 +16,9 @@ namespace FEWebsite.API.Data
                 var users = JsonConvert.DeserializeObject<List<User>>(userData);
                 foreach (var user in users)
                 {
-                    CreatePasswordHash(user, "password");
+                    CreatePasswordHash("password", out byte[] passwordHash, out byte[] passwordSalt);
+                    user.PasswordHash = passwordHash;
+                    user.PasswordSalt = passwordSalt;
                     user.Username = user.Username.ToLower();
                     context.Users.Add(user);
                 }
@@ -25,12 +27,12 @@ namespace FEWebsite.API.Data
             }
         }
 
-        private static void CreatePasswordHash(User user, string password)
+        private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             using (var hmac = new System.Security.Cryptography.HMACSHA512())
             {
-                user.PasswordSalt = hmac.Key;
-                user.PasswordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                passwordSalt = hmac.Key;
             }
         }
     }
