@@ -2,6 +2,9 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using FEWebsite.API.Data.BaseServices;
+using AutoMapper;
+using FEWebsite.API.DTOs.UserDTOs;
+using System.Collections.Generic;
 
 namespace FEWebsite.API.Controllers
 {
@@ -12,9 +15,12 @@ namespace FEWebsite.API.Controllers
     {
         private IUserInfoRepository RepoUsers { get; }
 
-        public UsersController(IUserInfoRepository repo)
+        private IMapper Mapper { get; }
+
+        public UsersController(IUserInfoRepository repo, IMapper mapper)
         {
             this.RepoUsers = repo;
+            this.Mapper = mapper;
         }
 
         // GET api/users
@@ -25,18 +31,22 @@ namespace FEWebsite.API.Controllers
                 .GetUsers()
                 .ConfigureAwait(false);
 
-            return this.Ok(users);
+            var usersDto = this.Mapper.Map<IEnumerable<UserForListDto>>(users);
+
+            return this.Ok(usersDto);
         }
 
         // GET api/users/5
         [HttpGet("{id}")]
         public async Task<OkObjectResult> GetUser(int id)
         {
-            var game = await this.RepoUsers
+            var user = await this.RepoUsers
                 .GetUser(id)
                 .ConfigureAwait(false);
 
-            return this.Ok(game);
+            var userDto = this.Mapper.Map<UserForDetailedDto>(user);
+
+            return this.Ok(userDto);
         }
 
         // POST api/users

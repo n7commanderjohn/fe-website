@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using FEWebsite.API.Models;
+using FEWebsite.API.Models.ManyToManyModels;
 
 namespace FEWebsite.API.DTOs.UserDTOs
 {
@@ -24,9 +25,9 @@ namespace FEWebsite.API.DTOs.UserDTOs
 
         public string AboutMe { get; set; }
 
-        public ICollection<Game> FavoriteGames { get; set; }
+        public ICollection<UserGame> FavoriteGames { get; set; }
 
-        public ICollection<GameGenre> FavoriteGenres { get; set; }
+        public ICollection<UserGameGenre> FavoriteGenres { get; set; }
 
         public ICollection<Photo> Photos { get; set; }
     }

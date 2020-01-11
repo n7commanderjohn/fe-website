@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using FEWebsite.API.Helpers;
 using Microsoft.Extensions.Hosting;
+using AutoMapper;
 
 namespace FEWebsite.API
 {
@@ -37,6 +38,7 @@ namespace FEWebsite.API
                         Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                 });
             services.AddCors();
+            services.AddAutoMapper(typeof(UserInfoRepository).Assembly);
             this.AddServiceScopes(services);
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
