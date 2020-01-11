@@ -8,7 +8,7 @@ Snippet for JSON Generator site at https://www.json-generator.com/
   '{{repeat(5)}}',
   {
     Username: '{{firstName("female")}}',
-    Gender: 'female',
+    GenderId: 'F',
     DateOfBirth: '{{date(new Date(1950,0,1), new Date(1999, 11, 31), "YYYY-MM-dd")}}',
     Password: 'password',
     KnownAs: function(){ return this.Username; },
@@ -40,35 +40,28 @@ Snippet for NEXT JSON Generator site at https://next.json-generator.com
 
 [
   {
-    'repeat(5)': {
-    Username: '{{firstName("female")}}',
-    Gender: 'female',
-    DateOfBirth: '{{date(new Date(1950,0,1), new Date(1999, 11, 31), "YYYY-MM-dd")}}',
-    Password: 'password',
-    KnownAs: function(){ return this.Username; },
-    Created: '{{date(new Date(2017,0,1), new Date(2017, 7, 31), "YYYY-MM-dd")}}',
-    LastActive: function(){return this.Created; },
-    Introduction: '{{lorem(1, "paragraphs")}}',
-    LookingFor: '{{lorem(1, "paragraphs")}}',
-    Interests: '{{lorem(1, "sentences")}}',
-    City: '{{city()}}',
-    Country: '{{country()}}',
-    Photos: [
+    "Username": "john69",
+    "GenderId": "M",
+    "Birthday": "2018-09-11",
+    "Password": "password",
+    "Name": "John",
+    "AccountCreated": "2015-01-30",
+    "LastLogin": "2015-01-30",
+    "Description": "I am best pro",
+    "Photos": [
       {
-          url: function(num) {
-            return 'https://randomuser.me/api/portraits/women/' + num.integer(1,99) + '.jpg';
-          },
-        isMain: true,
-        description: '{{lorem()}}'
+        "url": "https://randomuser.me/api/portraits/men/63.jpg",
+        "isMain": true,
+        "description": "super mlg hacker tactician"
       }
+    ],
+    "FavoriteGames": [
+      {GameId: 7}, {GameId: 8}, {GameId: 16},
+    ],
+    "FavoriteGenres": [
+      {GameGenreId: 2}, {GameGenreId: 3}, {GameGenreId: 4},
     ]
-  }
- } 
-]
-
-//custom use here: Snippet for NEXT JSON Generator site at https://next.json-generator.com
-
-[
+  },
   {
     'repeat(4)': {
     Username: '{{firstName("male")}}',
@@ -78,7 +71,34 @@ Snippet for NEXT JSON Generator site at https://next.json-generator.com
     Name: function(){ return this.Username; },
     AccountCreated: '{{moment(this.date(new Date(2014, 0, 1), new Date())).format("YYYY-MM-DD")}}',
     LastLogin: function(){return this.AccountCreated; },
-    Description:  function() { return 'My story is ' + guid(); },
+    Description:  function() { return 'My story is boy' + guid(); },
+    Photos: [
+        {
+          url: function(num) {
+          return 'https://randomuser.me/api/portraits/men/' + num.integer(1,99) + '.jpg';
+        },
+        isMain: true,
+        description: function() { return 'Yummy ' + guid(); }
+      }
+    ],
+    FavoriteGames: [
+      	{GameId: integer (1,5)}, {GameId: integer (6,10)}, {GameId: integer (11,16)},
+    ],
+    FavoriteGenres: [
+      	{GameGenreId: integer (1,2)}, {GameGenreId: integer (3,4)}
+    ],  
+   }
+  },
+  {
+    'repeat(4)': {
+    Username: '{{firstName("female")}}',
+    GenderId: 'M',
+    Birthday: '{{moment(this.date(new Date(2014, 0, 1), new Date())).format("YYYY-MM-DD")}}',
+    Password: 'password',
+    Name: function(){ return this.Username; },
+    AccountCreated: '{{moment(this.date(new Date(2014, 0, 1), new Date())).format("YYYY-MM-DD")}}',
+    LastLogin: function(){return this.AccountCreated; },
+    Description:  function() { return 'My story is girl' + guid(); },
     Photos: [
         {
           url: function(num) {
@@ -88,17 +108,12 @@ Snippet for NEXT JSON Generator site at https://next.json-generator.com
         description: function() { return 'Yummy ' + guid(); }
       }
     ],
-    Games: [
-        {
-          Rand: function() { return integer(1,16); },
-          name: function() {
-          		return 'FE' + this.Rand;
-          },
-          description: function() {
-          		return 'Fire Emblem ' + this.Rand;
-          },
-        },
+    FavoriteGames: [
+      	{GameId: integer (1,5)}, {GameId: integer (6,10)}, {GameId: integer (11,16)},
     ],
-  }
- } 
+    FavoriteGenres: [
+      	{GameGenreId: integer (1,2)}, {GameGenreId: integer (3,4)}
+    ],  
+   }
+  } 
 ]

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using FEWebsite.API.Models.AbstractModels;
+using FEWebsite.API.Models.ManyToManyModels;
 
 namespace FEWebsite.API.Models
 {
@@ -24,9 +25,9 @@ namespace FEWebsite.API.Models
         [Column("Gender")]
         public string GenderId { get; set; }
 
-        public ICollection<Game> FavoriteGames { get; set; }
+        public ICollection<UserGame> FavoriteGames { get; set; }
 
-        public ICollection<GameGenre> FavoriteGenres { get; set; }
+        public ICollection<UserGameGenre> FavoriteGenres { get; set; }
 
         public ICollection<Photo> Photos { get; set; }
 
