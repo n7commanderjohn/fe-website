@@ -49,6 +49,7 @@ namespace FEWebsite.API.Data.DerivedServices
             {
                 return this.Context.Users
                     .Include(u => u.Photos)
+                    .Include(u => u.Gender)
                     .Include(u => u.FavoriteGames)
                         .ThenInclude(ug => ug.Game)
                     .Include(u => u.FavoriteGenres)
@@ -58,6 +59,7 @@ namespace FEWebsite.API.Data.DerivedServices
             {
                 return this.Context.Users
                     .Include(u => u.Photos)
+                    .Include(u => u.Gender)
                     .Include(u => u.FavoriteGames)
                     .Include(u => u.FavoriteGenres);
             }

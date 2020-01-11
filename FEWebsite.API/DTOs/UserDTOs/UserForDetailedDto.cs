@@ -1,14 +1,15 @@
 using System;
 using System.Collections.Generic;
+using FEWebsite.API.DTOs.BaseDTOs;
+using FEWebsite.API.DTOs.GameDTOs;
+using FEWebsite.API.DTOs.GameGenreDTOs;
+using FEWebsite.API.DTOs.PhotoDTOs;
 using FEWebsite.API.Models;
-using FEWebsite.API.Models.ManyToManyModels;
 
 namespace FEWebsite.API.DTOs.UserDTOs
 {
-    public class UserForDetailedDto
+    public class UserForDetailedDto : BaseDto
     {
-        public int Id { get; set; }
-
         public string Username { get; set; }
 
         public int Age { get; set; }
@@ -19,16 +20,16 @@ namespace FEWebsite.API.DTOs.UserDTOs
 
         public string Gender { get; set; }
 
-        public string Alias { get; set; }
-
         public string PhotoUrl { get; set; }
 
-        public string AboutMe { get; set; }
+        public ICollection<string> ListOfGames { get; set; }
 
-        public ICollection<UserGame> FavoriteGames { get; set; }
+        public ICollection<string> ListOfGenres { get; set; }
 
-        public ICollection<UserGameGenre> FavoriteGenres { get; set; }
+        public ICollection<GameForDetailedDto> Games { get; set; }
 
-        public ICollection<Photo> Photos { get; set; }
+        public ICollection<GameGenreForDetailedDto> Genres { get; set; }
+
+        public ICollection<PhotoForDetailedDto> Photos { get; set; }
     }
 }

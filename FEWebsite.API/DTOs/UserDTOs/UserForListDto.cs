@@ -1,11 +1,11 @@
 using System;
+using FEWebsite.API.DTOs.BaseDTOs;
+using FEWebsite.API.Models;
 
 namespace FEWebsite.API.DTOs.UserDTOs
 {
-    public class UserForListDto
+    public class UserForListDto : BaseDto
     {
-        public int Id { get; set; }
-
         public string Username { get; set; }
 
         public int Age { get; set; }
@@ -15,8 +15,6 @@ namespace FEWebsite.API.DTOs.UserDTOs
         public DateTime LastLogin { get; set; }
 
         public string Gender { get; set; }
-
-        public string Alias { get; set; }
 
         public string PhotoUrl { get; set; }
     }
