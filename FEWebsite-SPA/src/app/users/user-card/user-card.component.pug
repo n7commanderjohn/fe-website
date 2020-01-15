@@ -1,6 +1,16 @@
 .card.mb-4
   .card-img-wrapper
     img.card-img-top(src="{{user.photoUrl}}", alt="{{user.name}}")
+    ul.list-inline.member-icons.animate.text-center
+      li.list-inline-item
+        button.btn.btn-primary
+          i.fa.fa-user
+      li.list-inline-item
+        button.btn.btn-primary
+          i.fa.fa-heart
+      li.list-inline-item
+        button.btn.btn-primary
+          i.fa.fa-envelope
   .card-body.p-1
     h6.card-title.text-center.mb-1
       i.fa.fa-user &nbsp;
