@@ -5,6 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { JwtModule } from '@auth0/angular-jwt';
 
 import { BsDropdownModule } from 'ngx-bootstrap';
 
@@ -19,6 +20,9 @@ import { MediaComponent } from './media/media.component';
 import { MessagesComponent } from './messages/messages.component';
 import { routes } from './routes.routing';
 
+export function tokenGetter() {
+   return localStorage.getItem('token');
+}
 
 @NgModule({
    declarations: [
@@ -38,6 +42,13 @@ import { routes } from './routes.routing';
       BrowserAnimationsModule,
       BsDropdownModule.forRoot(),
       RouterModule.forRoot(routes),
+      JwtModule.forRoot({
+         config: {
+           tokenGetter,
+           whitelistedDomains: ['localhost:5000'],
+           blacklistedRoutes: ['localhost:5000/api/auth/']
+         }
+       }),
    ],
    providers: [
       AuthService,
