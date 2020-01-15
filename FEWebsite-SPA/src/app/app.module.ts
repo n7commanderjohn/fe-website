@@ -13,7 +13,8 @@ import { AppComponent } from './app.component';
 import { NavComponent } from './nav/nav.component';
 import { HomeComponent } from './home/home.component';
 import { RegisterComponent } from './register/register.component';
-import { UserListComponent } from './user-list/user-list.component';
+import { UserListComponent } from './users/user-list/user-list.component';
+import { UserCardComponent } from './users/user-card/user-card.component';
 import { MediaComponent } from './media/media.component';
 import { MessagesComponent } from './messages/messages.component';
 import { routes } from './routes.routing';
@@ -27,7 +28,8 @@ import { routes } from './routes.routing';
       RegisterComponent,
       UserListComponent,
       MediaComponent,
-      MessagesComponent
+      MessagesComponent,
+      UserCardComponent
    ],
    imports: [
       BrowserModule,

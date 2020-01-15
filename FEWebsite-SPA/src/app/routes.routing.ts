@@ -1,7 +1,7 @@
 import { AuthGuard } from './_guards/auth.guard';
 import { MediaComponent } from './media/media.component';
 import { MessagesComponent } from './messages/messages.component';
-import { UserListComponent } from './user-list/user-list.component';
+import { UserListComponent } from './users/user-list/user-list.component';
 import { HomeComponent } from './home/home.component';
 import { Routes, RouterModule } from '@angular/router';
 

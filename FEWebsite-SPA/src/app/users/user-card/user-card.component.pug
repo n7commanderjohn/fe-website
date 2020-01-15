@@ -1,0 +1,9 @@
+.card.mb-4
+  .card-img-wrapper
+    img.card-img-top(src="{{user.photoUrl}}", alt="{{user.name}}")
+  .card-body.p-1
+    h6.card-title.text-center.mb-1
+      i.fa.fa-user &nbsp;
+      | {{user.name}}, {{user.age}}
+    p.card-text.text-muted.text-center Last Login: {{user.lastLogin | date:'longDate'}}
+    p.card-text.text-muted.text-center Gender: {{user.gender}}
