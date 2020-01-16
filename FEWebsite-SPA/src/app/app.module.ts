@@ -16,9 +16,10 @@ import { HomeComponent } from './home/home.component';
 import { RegisterComponent } from './register/register.component';
 import { UserListComponent } from './users/user-list/user-list.component';
 import { UserCardComponent } from './users/user-card/user-card.component';
+import { UserDetailComponent } from './users/user-detail/user-detail.component';
 import { MediaComponent } from './media/media.component';
 import { MessagesComponent } from './messages/messages.component';
-import { routes } from './routes.routing';
+import { routes } from './routes';
 
 export function tokenGetter() {
    return localStorage.getItem('token');
@@ -33,7 +34,8 @@ export function tokenGetter() {
       UserListComponent,
       MediaComponent,
       MessagesComponent,
-      UserCardComponent
+      UserCardComponent,
+      UserDetailComponent,
    ],
    imports: [
       BrowserModule,
