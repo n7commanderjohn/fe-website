@@ -1,2 +1,27 @@
-p.
-  {{user?.name}}
+.container.mt-4
+  .row
+    .col-sm-4
+      .card
+        img.card-img-top.img-thumbnail(src="{{user?.photoUrl}}" alt="{{user?.name}}")
+        .card-body
+          div
+            strong Age:
+            p {{user?.age}}
+          div
+            strong Last Active:
+            p {{user?.lastLogin | date:'MMMM d, y, h:mm:ss a'}}
+          div
+            strong User Since:
+            p {{user?.accountCreated | date:'MMMM d, y'}}
+          div
+            strong Favorite Games
+            p {{user?.listOfGames.join('; ')}}
+          div
+            strong Favorite Game Genres
+            p {{user?.listOfGenres.join(', ')}}
+        .card-footer
+          .btn-group.d-flex
+            .btn.btn-primary.w-100 Follow
+            .btn.btn-success.w-100 Message
+    .col-sm-8
+      | Profilessss infooooo
