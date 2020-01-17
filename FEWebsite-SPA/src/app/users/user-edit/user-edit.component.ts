@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import { User } from 'src/app/_models/user';
@@ -15,6 +16,7 @@ import { GamesService } from './../../_services/games.service';
   styleUrls: ['./user-edit.component.css']
 })
 export class UserEditComponent implements OnInit {
+  @ViewChild('editForm', {static: true}) editForm: NgForm;
   user: User;
   allGames: Game[];
   allGenres: GameGenre[];
@@ -35,6 +37,18 @@ export class UserEditComponent implements OnInit {
     });
   }
 
+  updateUser() {
+    console.log(this.user);
+    console.log(this.allGames);
+    console.log(this.allGames.filter(game => {
+      if (game.selected) {
+        return game;
+      }})
+    );
+    this.alertify.success('Profile updated successfully.');
+    this.editForm.reset(this.user);
+  }
+
   getGames() {
     this.gamesService.getGames().subscribe(
       retrievedGames => {
@@ -53,11 +67,11 @@ export class UserEditComponent implements OnInit {
     });
 
     retrievedGames.forEach(game => {
-      game.isActive = userGameIds.includes(game.id);
+      game.selected = userGameIds.includes(game.id);
     });
 
     const activeGames = retrievedGames.filter(game => {
-      if (game.isActive) {
+      if (game.selected) {
         return game;
       }
     });

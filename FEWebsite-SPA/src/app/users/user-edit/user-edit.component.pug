@@ -21,25 +21,26 @@
             strong User Since:
             p {{user.accountCreated | date:'MMMM d, y'}}
         .card-footer
-            button.btn.btn-success.btn-block([disabled]="!editForm.dirty") Save Changes
+            button.btn.btn-success.btn-block([disabled]="!editForm.dirty", form="editForm") Save Changes
     .col-sm-9
       .tab-panel
         tabset.user-tabset
           tab(heading="Edit Profile")
-            form(#editForm="ngForm", (ngSubmit)="updateUser();")
+            form(#editForm="ngForm", (ngSubmit)="updateUser();", id="editForm")
               h4 Description
               textarea.form-control(name="description", rows="6", [(ngModel)]="user.description") {{user.description}}
               h4 Favorite Games (WIP)
               .form-group
                 .form-check(*ngFor="let game of allGames")
-                  input.form-check-input(type="checkbox", name="games", id="game-{{game.id}}", [(ngModel)]="game.isActive")
-                  label.form-check-label(for="game-{{game.id}}") {{game.description}}
+                  label.form-check-label
+                    input.form-check-input(type="checkbox", name="games", [(ngModel)]="game.selected")
+                    | {{game.description}}
                 button.btn.btn-primary Add New Game
               h4 Favorite Game Genres (WIP)
               .form-group
                 .form-check(*ngFor="let genre of allGenres")
-                  input.form-check-input(type="checkbox", name="genres", id="genre-{{genre.id}}", [(ngModel)]="genre.isActive")
-                  label.form-check-label(for="genre-{{genre.id}}") {{genre.description}}
-                button.btn.btn-primary Add New Game Genre
+                  label.form-check-label
+                    input.form-check-input(type="checkbox", name="genres", [(ngModel)]="genre.selected")
+                    | {{genre.description}}
           tab(heading="Edit Photos")
             h4 photos
