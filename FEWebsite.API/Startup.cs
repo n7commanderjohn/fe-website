@@ -2,7 +2,6 @@
 using System.Text;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,6 +14,7 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using FEWebsite.API.Helpers;
 using Microsoft.Extensions.Hosting;
+using AutoMapper;
 
 namespace FEWebsite.API
 {
@@ -37,6 +37,7 @@ namespace FEWebsite.API
                         Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                 });
             services.AddCors();
+            this.AddAutoMappers(services);
             this.AddServiceScopes(services);
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -49,6 +50,11 @@ namespace FEWebsite.API
                         ValidateAudience = false,
                     }
                 );
+        }
+
+        private void AddAutoMappers(IServiceCollection services)
+        {
+            services.AddAutoMapper(typeof(UserInfoRepository).Assembly);
         }
 
         private void AddServiceScopes(IServiceCollection services)

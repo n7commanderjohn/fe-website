@@ -42,7 +42,7 @@ Snippet for NEXT JSON Generator site at https://next.json-generator.com
   {
     "Username": "john69",
     "GenderId": "M",
-    "Birthday": "2018-09-11",
+    "Birthday": "2000-09-11",
     "Password": "password",
     "Name": "John",
     "AccountCreated": "2015-01-30",
@@ -50,7 +50,7 @@ Snippet for NEXT JSON Generator site at https://next.json-generator.com
     "Description": "I am best pro",
     "Photos": [
       {
-        "url": "https://randomuser.me/api/portraits/men/63.jpg",
+        "url": "https://randomuser.me/api/portraits/men/47.jpg",
         "isMain": true,
         "description": "super mlg hacker tactician"
       }
@@ -66,7 +66,7 @@ Snippet for NEXT JSON Generator site at https://next.json-generator.com
     'repeat(4)': {
     Username: '{{firstName("male")}}',
     GenderId: 'M',
-    Birthday: '{{moment(this.date(new Date(2014, 0, 1), new Date())).format("YYYY-MM-DD")}}',
+    Birthday: '{{moment(this.date(new Date(1980, 0, 1), new Date(2000, 0, 1))).format("YYYY-MM-DD")}}',
     Password: 'password',
     Name: function(){ return this.Username; },
     AccountCreated: '{{moment(this.date(new Date(2014, 0, 1), new Date())).format("YYYY-MM-DD")}}',
@@ -92,8 +92,8 @@ Snippet for NEXT JSON Generator site at https://next.json-generator.com
   {
     'repeat(4)': {
     Username: '{{firstName("female")}}',
-    GenderId: 'M',
-    Birthday: '{{moment(this.date(new Date(2014, 0, 1), new Date())).format("YYYY-MM-DD")}}',
+    GenderId: 'F',
+    Birthday: '{{moment(this.date(new Date(1980, 0, 1), new Date(2000, 0, 1))).format("YYYY-MM-DD")}}',
     Password: 'password',
     Name: function(){ return this.Username; },
     AccountCreated: '{{moment(this.date(new Date(2014, 0, 1), new Date())).format("YYYY-MM-DD")}}',
