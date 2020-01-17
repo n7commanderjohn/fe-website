@@ -9,7 +9,6 @@ import { JwtModule } from '@auth0/angular-jwt';
 
 import { BsDropdownModule, TabsModule } from 'ngx-bootstrap';
 
-import { AuthService } from './_services/auth.service';
 import { AppComponent } from './app.component';
 import { NavComponent } from './nav/nav.component';
 import { HomeComponent } from './home/home.component';
@@ -19,7 +18,16 @@ import { UserCardComponent } from './users/user-card/user-card.component';
 import { UserDetailComponent } from './users/user-detail/user-detail.component';
 import { MediaComponent } from './media/media.component';
 import { MessagesComponent } from './messages/messages.component';
+
+import { AuthService } from './_services/auth.service';
+import { UserService } from './_services/user.service';
+import { AlertifyService } from './_services/alertify.service';
+
+import { AuthGuard } from './_guards/auth.guard';
+
 import { routes } from './routes';
+import { UserListResolver } from './_resolvers/user-list.resolver';
+import { UserDetailResolver } from './_resolvers/user-detail.resolver';
 
 export function tokenGetter() {
    return localStorage.getItem('token');
@@ -55,7 +63,12 @@ export function tokenGetter() {
    ],
    providers: [
       AuthService,
-      ErrorInteceptorProvider
+      ErrorInteceptorProvider,
+      AlertifyService,
+      AuthGuard,
+      UserService,
+      UserListResolver,
+      UserDetailResolver,
    ],
    bootstrap: [
       AppComponent
