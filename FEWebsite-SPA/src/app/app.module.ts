@@ -28,6 +28,7 @@ import { GameGenresService } from './_services/gameGenres.service';
 import { AlertifyService } from './_services/alertify.service';
 
 import { AuthGuard } from './_guards/auth.guard';
+import { PreventUnsavedChangesGuard } from './_guards/prevent-unsaved-changes.guard';
 
 import { routes } from './routes';
 import { UserListResolver } from './_resolvers/user-list.resolver';
@@ -80,6 +81,7 @@ export class CustomHammerConfig extends HammerGestureConfig  {
       ErrorInteceptorProvider,
       AlertifyService,
       AuthGuard,
+      PreventUnsavedChangesGuard,
       UserService,
       UserListResolver,
       UserDetailResolver,
