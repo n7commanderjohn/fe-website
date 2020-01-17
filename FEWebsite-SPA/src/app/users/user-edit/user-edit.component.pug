@@ -3,10 +3,9 @@
     .col-sm-3
       h1 Your Profile
     .col-sm-9
-      .alert.alert-info
-        p
-          strong Information:&nbsp;
-          | You have made changes. Any unsaved changes will lost!
+      .alert.alert-info(*ngIf="editForm.dirty")
+        strong Information:&nbsp;
+        | You have made changes. Any unsaved changes will lost!
   .row
     .col-sm-3
       .card
@@ -22,25 +21,25 @@
             strong User Since:
             p {{user.accountCreated | date:'MMMM d, y'}}
         .card-footer
-            .btn.btn-success.btn-block Save Changes
+            button.btn.btn-success.btn-block([disabled]="!editForm.dirty") Save Changes
     .col-sm-9
       .tab-panel
         tabset.user-tabset
           tab(heading="Edit Profile")
-            form
+            form(#editForm="ngForm", (ngSubmit)="updateUser();")
               h4 Description
               textarea.form-control(name="description", rows="6", [(ngModel)]="user.description") {{user.description}}
               h4 Favorite Games (WIP)
               .form-group
-                .form-check(*ngFor="let game of user.games")
-                  input.form-check-input(type="checkbox", name="games", id="{{game.id}}", [(ngModel)]="game.isTrue")
-                  label.form-check-label(for="{{game.id}}") {{game.description}}
+                .form-check(*ngFor="let game of allGames")
+                  input.form-check-input(type="checkbox", name="games", id="game-{{game.id}}", [(ngModel)]="game.isActive")
+                  label.form-check-label(for="game-{{game.id}}") {{game.description}}
                 button.btn.btn-primary Add New Game
               h4 Favorite Game Genres (WIP)
               .form-group
-                .form-check(*ngFor="let genre of user.genres")
-                  input.form-check-input(type="checkbox", name="genres", id="{{genre.id}}", [(ngModel)]="genre.isTrue")
-                  label.form-check-label(for="{{genre.id}}") {{genre.description}}
+                .form-check(*ngFor="let genre of allGenres")
+                  input.form-check-input(type="checkbox", name="genres", id="genre-{{genre.id}}", [(ngModel)]="genre.isActive")
+                  label.form-check-label(for="genre-{{genre.id}}") {{genre.description}}
                 button.btn.btn-primary Add New Game Genre
           tab(heading="Edit Photos")
             h4 photos

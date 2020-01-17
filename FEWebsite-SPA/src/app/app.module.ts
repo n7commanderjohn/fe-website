@@ -23,6 +23,8 @@ import { UserEditComponent } from './users/user-edit/user-edit.component';
 
 import { AuthService } from './_services/auth.service';
 import { UserService } from './_services/user.service';
+import { GamesService } from './_services/games.service';
+import { GameGenresService } from './_services/gameGenres.service';
 import { AlertifyService } from './_services/alertify.service';
 
 import { AuthGuard } from './_guards/auth.guard';
@@ -82,7 +84,9 @@ export class CustomHammerConfig extends HammerGestureConfig  {
       UserListResolver,
       UserDetailResolver,
       UserEditResolver,
-      { provide: HAMMER_GESTURE_CONFIG, useClass: CustomHammerConfig }
+      { provide: HAMMER_GESTURE_CONFIG, useClass: CustomHammerConfig },
+      GamesService,
+      GameGenresService,
    ],
    bootstrap: [
       AppComponent

@@ -54,13 +54,17 @@ namespace FEWebsite.API
 
         private void AddAutoMappers(IServiceCollection services)
         {
-            services.AddAutoMapper(typeof(UserInfoRepository).Assembly);
+            services.AddAutoMapper(typeof(UserInfoRepositoryService).Assembly);
+            services.AddAutoMapper(typeof(GamesService).Assembly);
+            services.AddAutoMapper(typeof(GameGenresService).Assembly);
         }
 
         private void AddServiceScopes(IServiceCollection services)
         {
             services.AddScoped<IAuthRepositoryService, AuthRepositoryService>();
-            services.AddScoped<IUserInfoRepository, UserInfoRepository>();
+            services.AddScoped<IUserInfoRepositoryService, UserInfoRepositoryService>();
+            services.AddScoped<IGamesService, GamesService>();
+            services.AddScoped<IGameGenresService, GameGenresService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

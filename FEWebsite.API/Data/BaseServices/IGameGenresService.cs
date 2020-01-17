@@ -4,7 +4,7 @@ using FEWebsite.API.Models;
 
 namespace FEWebsite.API.Data.BaseServices
 {
-    public interface IUserInfoRepository : IService
+    public interface IGameGenresService
     {
         void Add<T>(T entity) where T : class;
 
@@ -12,8 +12,8 @@ namespace FEWebsite.API.Data.BaseServices
 
         Task<bool> SaveAll();
 
-        Task<IEnumerable<User>> GetUsers();
+        Task<IEnumerable<GameGenre>> GetGameGenres();
 
-        Task<User> GetUser(int userId);
+        Task<GameGenre> GetGameGenre(int gameGenreId);
     }
 }

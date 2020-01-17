@@ -13,13 +13,13 @@ namespace FEWebsite.API.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private IUserInfoRepository RepoUserInfo { get; }
+        private IUserInfoRepositoryService RepoUserInfoService { get; }
 
         private IMapper Mapper { get; }
 
-        public UsersController(IUserInfoRepository repoUserInfo, IMapper mapper)
+        public UsersController(IUserInfoRepositoryService repoUserInfo, IMapper mapper)
         {
-            this.RepoUserInfo = repoUserInfo;
+            this.RepoUserInfoService = repoUserInfo;
             this.Mapper = mapper;
         }
 
@@ -27,7 +27,7 @@ namespace FEWebsite.API.Controllers
         [HttpGet]
         public async Task<OkObjectResult> GetUsers()
         {
-            var users = await this.RepoUserInfo
+            var users = await this.RepoUserInfoService
                 .GetUsers()
                 .ConfigureAwait(false);
 
@@ -40,7 +40,7 @@ namespace FEWebsite.API.Controllers
         [HttpGet("{id}")]
         public async Task<OkObjectResult> GetUser(int id)
         {
-            var user = await this.RepoUserInfo
+            var user = await this.RepoUserInfoService
                 .GetUser(id)
                 .ConfigureAwait(false);
 
