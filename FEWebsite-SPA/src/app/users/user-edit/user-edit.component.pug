@@ -1,2 +1,46 @@
-p.
-  {{user.name}}
+.container.mt-4
+  .row
+    .col-sm-3
+      h1 Your Profile
+    .col-sm-9
+      .alert.alert-info
+        p
+          strong Information:&nbsp;
+          | You have made changes. Any unsaved changes will lost!
+  .row
+    .col-sm-3
+      .card
+        img.card-img-top.img-thumbnail(src="{{user.photoUrl}}" alt="{{user.name}}")
+        .card-body
+          div
+            strong Age:
+            p {{user.age}}
+          div
+            strong Last Active:
+            p {{user.lastLogin | date:'MMMM d, y, h:mm:ss a'}}
+          div
+            strong User Since:
+            p {{user.accountCreated | date:'MMMM d, y'}}
+        .card-footer
+            .btn.btn-success.btn-block Save Changes
+    .col-sm-9
+      .tab-panel
+        tabset.user-tabset
+          tab(heading="Edit Profile")
+            form
+              h4 Description
+              textarea.form-control(name="description", rows="6", [(ngModel)]="user.description") {{user.description}}
+              h4 Favorite Games (WIP)
+              .form-group
+                .form-check(*ngFor="let game of user.games")
+                  input.form-check-input(type="checkbox", name="games", id="{{game.id}}", [(ngModel)]="game.isTrue")
+                  label.form-check-label(for="{{game.id}}") {{game.description}}
+                button.btn.btn-primary Add New Game
+              h4 Favorite Game Genres (WIP)
+              .form-group
+                .form-check(*ngFor="let genre of user.genres")
+                  input.form-check-input(type="checkbox", name="genres", id="{{genre.id}}", [(ngModel)]="genre.isTrue")
+                  label.form-check-label(for="{{genre.id}}") {{genre.description}}
+                button.btn.btn-primary Add New Game Genre
+          tab(heading="Edit Photos")
+            h4 photos
