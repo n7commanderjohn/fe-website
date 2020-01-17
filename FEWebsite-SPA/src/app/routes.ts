@@ -1,3 +1,4 @@
+import { UserEditResolver } from './_resolvers/user-edit.resolver';
 import { Routes } from '@angular/router';
 
 import { MediaComponent } from './media/media.component';
@@ -10,6 +11,7 @@ import { AuthGuard } from './_guards/auth.guard';
 
 import { UserListResolver } from './_resolvers/user-list.resolver';
 import { UserDetailResolver } from './_resolvers/user-detail.resolver';
+import { UserEditComponent } from './users/user-edit/user-edit.component';
 
 export const routes: Routes = [
   {
@@ -24,6 +26,7 @@ export const routes: Routes = [
     runGuardsAndResolvers: 'always',
     canActivate: [AuthGuard],
     children: [
+      { path: 'user/edit', component: UserEditComponent, resolve: {user: UserEditResolver} },
       { path: 'users', component: UserListComponent, resolve: {users: UserListResolver} },
       { path: 'users/:id', component: UserDetailComponent, resolve: {user: UserDetailResolver} },
       { path: 'messages', component: MessagesComponent },
