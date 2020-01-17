@@ -11,6 +11,8 @@ export interface User extends BaseModel {
     lastLogin: Date;
     photoUrl: string;
     photos: Photo[];
-    listOfGames?: Game[];
-    listOfGenres?: GameGenre[];
+    listOfGames?: string[];
+    listOfGenres?: string[];
+    games?: Game[];
+    genres?: GameGenre[];
 }
