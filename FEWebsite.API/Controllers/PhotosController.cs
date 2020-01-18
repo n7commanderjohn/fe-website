@@ -42,6 +42,16 @@ namespace FEWebsite.API.Controllers
             this.Cloudinary = new Cloudinary(acc);
         }
 
+        [HttpGet("{id}", Name = "GetPhoto")]
+        public async Task<IActionResult> GetPhoto(int id)
+        {
+            var photoFromRepo = await this.UserService.GetPhoto(id).ConfigureAwait(false);
+
+            var photo = this.Mapper.Map<PhotoForReturnDto>(photoFromRepo);
+
+            return this.Ok(photo);
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddPhotoForUser(int userId, PhotoForUploadDto photoForUploadDto)
         {
@@ -85,7 +95,9 @@ namespace FEWebsite.API.Controllers
 
             if (await this.UserService.SaveAll().ConfigureAwait(false))
             {
-                return this.Ok();
+                var photoToReturn = this.Mapper.Map<PhotoForReturnDto>(photo);
+
+                return this.CreatedAtRoute("GetPhoto", new { userId, photo.Id }, photoToReturn);
             }
 
             return BadRequest("Photo upload failed.");

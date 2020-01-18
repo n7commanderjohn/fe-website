@@ -44,6 +44,15 @@ namespace FEWebsite.API.Data.DerivedServices
             return users;
         }
 
+        public async Task<Photo> GetPhoto(int photoId)
+        {
+            var photo = await this.Context.Photos
+                .FirstOrDefaultAsync(p => p.Id == photoId)
+                .ConfigureAwait(false);
+
+            return photo;
+        }
+
         private IQueryable<User> DefaultUserIncludes(bool expandedInclude = false) {
             if (expandedInclude)
             {
