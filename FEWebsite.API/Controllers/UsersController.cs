@@ -15,13 +15,13 @@ namespace FEWebsite.API.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private IUserInfoRepositoryService RepoUserInfoService { get; }
+        private IUserInfoRepositoryService UserService { get; }
 
         private IMapper Mapper { get; }
 
         public UsersController(IUserInfoRepositoryService repoUserInfo, IMapper mapper)
         {
-            this.RepoUserInfoService = repoUserInfo;
+            this.UserService = repoUserInfo;
             this.Mapper = mapper;
         }
 
@@ -29,7 +29,7 @@ namespace FEWebsite.API.Controllers
         [HttpGet]
         public async Task<OkObjectResult> GetUsers()
         {
-            var users = await this.RepoUserInfoService
+            var users = await this.UserService
                 .GetUsers()
                 .ConfigureAwait(false);
 
@@ -42,7 +42,7 @@ namespace FEWebsite.API.Controllers
         [HttpGet("{id}")]
         public async Task<OkObjectResult> GetUser(int id)
         {
-            var user = await this.RepoUserInfoService
+            var user = await this.UserService
                 .GetUser(id)
                 .ConfigureAwait(false);
 
@@ -59,11 +59,11 @@ namespace FEWebsite.API.Controllers
                 return this.Unauthorized();
             }
 
-            var userFromRepo = await this.RepoUserInfoService.GetUser(id).ConfigureAwait(false);
+            var currentUser = await this.UserService.GetUser(id).ConfigureAwait(false);
 
-            this.Mapper.Map(userForUpdateDto, userFromRepo);
+            this.Mapper.Map(userForUpdateDto, currentUser);
 
-            if (await this.RepoUserInfoService.SaveAll().ConfigureAwait(false)) {
+            if (await this.UserService.SaveAll().ConfigureAwait(false)) {
                 return this.NoContent();
             }
 
