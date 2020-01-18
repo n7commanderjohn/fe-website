@@ -44,6 +44,7 @@ namespace FEWebsite.API.Helpers
                     memberOptions => memberOptions.MapFrom(sourceMember => sourceMember.FavoriteGenres.ToList().Select(fg => fg.GameGenre)))
                 .ForMember(destinationMember => destinationMember.ListOfGenres,
                     memberOptions => memberOptions.MapFrom(sourceMember => sourceMember.FavoriteGenres.ToList().Select(fg => fg.GameGenre.Description)));
+            this.CreateMap<UserForUpdateDto, User>();
         }
     }
 }

@@ -18,7 +18,7 @@ nav.navbar.navbar-expand-md.navbar-dark.bg-primary
     button.btn.btn-primary.dropdown(*ngIf="loggedIn();", 'dropdown')
       a.dropdown-toggle(dropdownToggle) Welcome {{authService.decodedToken?.unique_name | titlecase}}&nbsp;
       .dropdown-menu.mt-4('*dropdownMenu')
-        a.dropdown-item(href='#')
+        a.dropdown-item([routerLink]="['/user/edit']")
           i.fa.fa-user &nbsp;Edit Profile
         .dropdown-divider
         a.dropdown-item((click)="logout();")

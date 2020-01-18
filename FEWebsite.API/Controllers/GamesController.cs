@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using FEWebsite.API.Data;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using FEWebsite.API.Data.BaseServices;
+using AutoMapper;
+using FEWebsite.API.DTOs.GameDTOs;
+using System.Collections.Generic;
 
 namespace FEWebsite.API.Controllers
 {
@@ -11,11 +13,14 @@ namespace FEWebsite.API.Controllers
     [ApiController]
     public class GamesController : ControllerBase
     {
-        private DataContext Db { get; }
+        private IGamesService GamesService { get; }
 
-        public GamesController(DataContext db)
+        private IMapper Mapper { get; }
+
+        public GamesController(IGamesService gamesService, IMapper mapper)
         {
-            this.Db = db;
+            this.GamesService = gamesService;
+            this.Mapper = mapper;
         }
 
         // GET api/games
@@ -23,9 +28,13 @@ namespace FEWebsite.API.Controllers
         [HttpGet]
         public async Task<OkObjectResult> GetGames()
         {
-            var games = await this.Db.Games.ToListAsync().ConfigureAwait(false);
+            var games = await this.GamesService
+                .GetGames()
+                .ConfigureAwait(false);
 
-            return this.Ok(games);
+            var gamesDto = this.Mapper.Map<IEnumerable<GameForDetailedDto>>(games);
+
+            return this.Ok(gamesDto);
         }
 
         // GET api/games/5
@@ -33,9 +42,13 @@ namespace FEWebsite.API.Controllers
         [HttpGet("{id}")]
         public async Task<OkObjectResult> GetGame(int id)
         {
-            var game = await this.Db.Games.FirstOrDefaultAsync(r => r.Id == id).ConfigureAwait(false);
+            var game = await this.GamesService
+                .GetGame(id)
+                .ConfigureAwait(false);
 
-            return this.Ok(game);
+            var gameDto = this.Mapper.Map<GameForDetailedDto>(game);
+
+            return this.Ok(gameDto);
         }
 
         // POST api/games
