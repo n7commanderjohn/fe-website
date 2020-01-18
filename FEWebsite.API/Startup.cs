@@ -37,6 +37,7 @@ namespace FEWebsite.API
                         Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                 });
             services.AddCors();
+            services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
             this.AddAutoMappers(services);
             this.AddServiceScopes(services);
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
