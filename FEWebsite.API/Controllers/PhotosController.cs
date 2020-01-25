@@ -53,7 +53,7 @@ namespace FEWebsite.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddPhotoForUser(int userId, PhotoForUploadDto photoForUploadDto)
+        public async Task<IActionResult> AddPhotoForUser(int userId, [FromForm]PhotoForUploadDto photoForUploadDto)
         {
             if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
             {
@@ -74,7 +74,7 @@ namespace FEWebsite.API.Controllers
                     {
                         File = new FileDescription(file.Name, stream),
                         Transformation = new Transformation()
-                        .Width(500).Height(500).Crop("fill").Gravity(CloudinaryDotNet.Gravity.Auto)
+                        .Width(500).Height(500).Crop("fill").Gravity(CloudinaryDotNet.Gravity.Face)
                     };
 
                     uploadResult = this.Cloudinary.Upload(uploadParams);
