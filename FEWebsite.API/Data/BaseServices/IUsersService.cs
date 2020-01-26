@@ -4,7 +4,7 @@ using FEWebsite.API.Models;
 
 namespace FEWebsite.API.Data.BaseServices
 {
-    public interface IUserInfoRepositoryService
+    public interface IUsersService
     {
         void Add<T>(T entity) where T : class;
 

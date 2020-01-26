@@ -16,12 +16,12 @@ namespace FEWebsite.API.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private IAuthRepositoryService RepoUser { get; }
+        private IAuthService AuthService { get; }
         public IConfiguration Config { get; }
 
-        public AuthController(IAuthRepositoryService repoUser, IConfiguration config)
+        public AuthController(IAuthService authService, IConfiguration config)
         {
-            this.RepoUser = repoUser;
+            this.AuthService = authService;
             this.Config = config;
         }
 
@@ -30,7 +30,7 @@ namespace FEWebsite.API.Controllers
         {
             userForRegisterDto.Username = userForRegisterDto.Username.ToLower();
 
-            if (await this.RepoUser.UserExists(userForRegisterDto.Username).ConfigureAwait(false))
+            if (await this.AuthService.UserExists(userForRegisterDto.Username).ConfigureAwait(false))
             {
                 return this.BadRequest("Username already exists.");
             }
@@ -39,7 +39,7 @@ namespace FEWebsite.API.Controllers
                 Username = userForRegisterDto.Username,
             };
 
-            var createdUser = await this.RepoUser.Register(newUser, userForRegisterDto.Password).ConfigureAwait(false);
+            var createdUser = await this.AuthService.Register(newUser, userForRegisterDto.Password).ConfigureAwait(false);
 
             if (createdUser != null)
             {
@@ -53,19 +53,19 @@ namespace FEWebsite.API.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserForLoginDto userForLoginDto)
         {
-            var userFromRepo = await this.RepoUser
+            var authenticatedUser = await this.AuthService
                 .Login(userForLoginDto.Username.ToLower(), userForLoginDto.Password)
                 .ConfigureAwait(false);
 
-            if (userFromRepo == null)
+            if (authenticatedUser == null)
             {
                 return this.Unauthorized();
             }
 
             var claims = new[]
             {
-                new Claim(ClaimTypes.NameIdentifier, userFromRepo.Id.ToString()),
-                new Claim(ClaimTypes.Name, userFromRepo.Username),
+                new Claim(ClaimTypes.NameIdentifier, authenticatedUser.Id.ToString()),
+                new Claim(ClaimTypes.Name, authenticatedUser.Username),
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.Config.GetSection("AppSettings:Token").Value));

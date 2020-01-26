@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FEWebsite.API.Data.DerivedServices
 {
-    public class AuthRepositoryService : BaseService, IAuthRepositoryService
+    public class AuthService : BaseService, IAuthService
     {
-        public AuthRepositoryService(DataContext context)
+        public AuthService(DataContext context)
         {
             this.Context = context;
         }

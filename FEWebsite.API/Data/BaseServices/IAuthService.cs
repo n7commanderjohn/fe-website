@@ -3,7 +3,7 @@ using FEWebsite.API.Models;
 
 namespace FEWebsite.API.Data.BaseServices
 {
-    public interface IAuthRepositoryService
+    public interface IAuthService
     {
          Task<User> Register(User user, string password);
 

@@ -7,9 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FEWebsite.API.Data.DerivedServices
 {
-    public class UserInfoRepositoryService : BaseService, IUserInfoRepositoryService
+    public class UsersService : BaseService, IUsersService
     {
-        public UserInfoRepositoryService(DataContext context)
+        public UsersService(DataContext context)
         {
             Context = context;
         }
