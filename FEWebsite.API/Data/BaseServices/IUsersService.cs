@@ -17,5 +17,9 @@ namespace FEWebsite.API.Data.BaseServices
         Task<User> GetUser(int userId);
 
         Task<Photo> GetPhoto(int photoId);
+
+        Task<Photo> GetCurrentMainPhotoForUser(int userId);
+
+        void SetUserPhotoAsMain(int userId, Photo photoToBeSet);
     }
 }
