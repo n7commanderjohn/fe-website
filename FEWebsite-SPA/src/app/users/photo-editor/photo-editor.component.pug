@@ -2,24 +2,23 @@
   .col-sm-2.text-center(*ngFor="let photo of photos")
     img.img-thumbnail.p-1(src="{{photo.url}}", alt="{{photo.description}}")
     div.photo-buttons
-      button.btn-btn-sm(type="button") Set as Main
+      button.btn-btn-sm(type="button", [disabled]="photo.isMain") Set as Main
       button.btn-btn-sm.btn-danger(type="button")
         i.fa.fa-trash
+hr
+// file uploading
 .row
   .col-md-3
     h3 Select files
-    .well.my-drop-zone(ng2filedrop [ngclass]="{'nv-file-over': hasBaseDropZoneOver}",
+    .well.my-drop-zone(ng2FileDrop [ngClass]="{'nv-file-over': hasBaseDropZoneOver}",
      (fileover)="fileOverBase($event)", [uploader]="uploader")
        | Base drop zone
-    .well.my-drop-zone(ng2filedrop [ngclass]="{'another-file-over-class': hasAnotherDropZoneOver}",
-     (fileover)="fileOverAnother($event)", [uploader]="uploader").
-       | Another drop zone
     .p Multiple
-      input(type='file' ng2fileselect [uploader]='uploader' multiple)
+      input(type='file', ng2FileSelect, [uploader]='uploader', multiple)
     br
     .p Single
-      input(type='file' ng2fileselect [uploader]='uploader')
-    .col-md-9(style='margin-bottom: 40px')
+      input(type='file', ng2FileSelect, [uploader]='uploader')
+  .col-md-9(style='margin-bottom: 40px')
     h3 Upload queue
     p Queue length: {{ uploader?.queue?.length }}
     table.table
@@ -31,19 +30,19 @@
           th Status
           th Actions
       tbody
-        tr(*ngfor='let item of uploader.queue')
+        tr(*ngFor='let item of uploader.queue')
           td
             strong {{ item?.file?.name }}
-          td(*ngif='uploader.options.isHTML5' nowrap) {{ item?.file?.size/1024/1024 | number:'.2' }} MB
-          td(*ngif='uploader.options.isHTML5')
+          td(*ngIf='uploader.options.isHTML5' nowrap) {{ item?.file?.size/1024/1024 | number:'.2' }} MB
+          td(*ngIf='uploader.options.isHTML5')
             .progress(style='margin-bottom: 0;')
-              .progress-bar(role='progressbar', [ngstyle]="{ 'width': item.progress + '%' }")
+              .progress-bar(role='progressbar', [ngStyle]="{ 'width': item.progress + '%' }")
           td.text-center
-            span(*ngif="item.isSuccess")
+            span(*ngIf="item.isSuccess")
               i.glyphicon.glyphicon-ok
-            span(*ngif="item.isCancel")
+            span(*ngIf="item.isCancel")
               i.glyphicon.glyphicon-ban-circle
-            span(*ngif="item.isError")
+            span(*ngIf="item.isError")
               i.glyphicon.glyphicon-remove
           td(nowrap)
             button.btn.btn-success.btn-xs(type="button", (click)="item.upload()", [disabled]="item.isReady || item.isUploading || item.isSuccess")

@@ -66,7 +66,11 @@ namespace FEWebsite.API.Controllers
 
             var uploadResult = new ImageUploadResult();
 
-            if (file.Length > 0)
+            if (file == null)
+            {
+                return this.BadRequest("The photo to be uploaded was not found.");
+            }
+            else if (file.Length > 0)
             {
                 using(var stream = file.OpenReadStream())
                 {
@@ -100,7 +104,7 @@ namespace FEWebsite.API.Controllers
                 return this.CreatedAtRoute("GetPhoto", new { userId, photo.Id }, photoToReturn);
             }
 
-            return BadRequest("Photo upload failed.");
+            return BadRequest("Photo upload to server failed.");
         }
     }
 }
