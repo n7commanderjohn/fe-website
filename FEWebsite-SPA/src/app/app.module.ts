@@ -9,6 +9,7 @@ import { JwtModule } from '@auth0/angular-jwt';
 
 import { BsDropdownModule, TabsModule } from 'ngx-bootstrap';
 import { NgxGalleryModule } from 'ngx-gallery';
+import { FileUploadModule } from 'ng2-file-upload';
 
 import { AppComponent } from './app.component';
 import { NavComponent } from './nav/nav.component';
@@ -20,7 +21,7 @@ import { UserListComponent } from './users/user-list/user-list.component';
 import { UserCardComponent } from './users/user-card/user-card.component';
 import { UserDetailComponent } from './users/user-detail/user-detail.component';
 import { UserEditComponent } from './users/user-edit/user-edit.component';
-
+import { PhotoEditorComponent } from './users/photo-editor/photo-editor.component';
 import { AuthService } from './_services/auth.service';
 import { UserService } from './_services/user.service';
 import { GamesService } from './_services/games.service';
@@ -57,7 +58,8 @@ export class CustomHammerConfig extends HammerGestureConfig  {
       MessagesComponent,
       UserCardComponent,
       UserDetailComponent,
-      UserEditComponent
+      UserEditComponent,
+      PhotoEditorComponent
    ],
    imports: [
       BrowserModule,
@@ -68,6 +70,7 @@ export class CustomHammerConfig extends HammerGestureConfig  {
       TabsModule.forRoot(),
       RouterModule.forRoot(routes),
       NgxGalleryModule,
+      FileUploadModule,
       JwtModule.forRoot({
          config: {
            tokenGetter,

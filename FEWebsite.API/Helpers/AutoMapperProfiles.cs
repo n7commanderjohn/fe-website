@@ -16,6 +16,8 @@ namespace FEWebsite.API.Helpers
             this.CreateMapForUser();
             this.CreateMap<Gender, GenderDto>();
             this.CreateMap<Photo, PhotoForDetailedDto>();
+            this.CreateMap<Photo, PhotoForReturnDto>();
+            this.CreateMap<PhotoForUploadDto, Photo>();
             this.CreateMap<Game, GameForDetailedDto>();
             this.CreateMap<GameGenre, GameGenreForDetailedDto>();
         }

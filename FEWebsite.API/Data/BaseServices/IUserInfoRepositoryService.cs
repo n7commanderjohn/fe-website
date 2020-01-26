@@ -15,5 +15,7 @@ namespace FEWebsite.API.Data.BaseServices
         Task<IEnumerable<User>> GetUsers();
 
         Task<User> GetUser(int userId);
+
+        Task<Photo> GetPhoto(int photoId);
     }
 }
