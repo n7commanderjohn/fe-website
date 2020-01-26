@@ -1,0 +1,7 @@
+.row
+  .col-sm-2.text-center(*ngFor="let photo of photos")
+    img.img-thumbnail.p-1(src="{{photo.url}}", alt="{{photo.description}}")
+    div.photo-buttons
+      button.btn-btn-sm(type="button") Set as Main
+      button.btn-btn-sm.btn-danger(type="button")
+        i.fa.fa-trash
