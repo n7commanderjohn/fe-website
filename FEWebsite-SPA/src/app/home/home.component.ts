@@ -1,6 +1,7 @@
-import { AlertifyService } from './../_services/alertify.service';
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { AuthService } from './../_services/auth.service';
+import { AlertifyService } from './../_services/alertify.service';
 
 @Component({
   selector: 'app-home',
@@ -13,7 +14,7 @@ export class HomeComponent implements OnInit {
   baseUrl = 'http://localhost:5000/api/games/';
 
 
-  constructor(private http: HttpClient, private alertify: AlertifyService) { }
+  constructor(private http: HttpClient, private alertify: AlertifyService, private authService: AuthService) { }
 
   ngOnInit() {
     this.getGames();
@@ -35,5 +36,9 @@ export class HomeComponent implements OnInit {
 
   cancelRegisterMode(registerMode: boolean) {
     this.registerMode = registerMode;
+  }
+
+  loggedIn() {
+    return this.authService.loggedIn();
   }
 }
