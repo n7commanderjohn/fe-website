@@ -4,21 +4,22 @@
     div.photo-buttons
       button.btn-btn-sm(type="button", [disabled]="photo.isMain") Set as Main
       button.btn-btn-sm.btn-danger(type="button")
-        i.fa.fa-trash
+        i.fas.fa-trash
 hr
 // file uploading
 .row
   .col-md-3
-    h3 Select files
-    .well.my-drop-zone(ng2FileDrop [ngClass]="{'nv-file-over': hasBaseDropZoneOver}",
-     (fileover)="fileOverBase($event)", [uploader]="uploader")
-       | Base drop zone
+    h3 Add Photos
+    .card.bg-faded.p-3.text-center.mb-3.my-drop-zone(ng2FileDrop [ngClass]="{'nv-file-over': hasBaseDropZoneOver}",
+     (fileOver)="fileOverBase($event)", [uploader]="uploader")
+       i.fa.fa-upload.fa-3x(data-fa-transform="right-17.5")
+       | Drag Photos Here
     .p Multiple
       input(type='file', ng2FileSelect, [uploader]='uploader', multiple)
     br
     .p Single
       input(type='file', ng2FileSelect, [uploader]='uploader')
-  .col-md-9(style='margin-bottom: 40px')
+  .col-md-9(style='margin-bottom: 40px', *ngIf="uploader?.queue.length")
     h3 Upload queue
     p Queue length: {{ uploader?.queue?.length }}
     table.table
@@ -26,45 +27,30 @@ hr
         tr
           th(width='50%') Name
           th Size
-          th Progress
           th Status
-          th Actions
       tbody
         tr(*ngFor='let item of uploader.queue')
           td
             strong {{ item?.file?.name }}
           td(*ngIf='uploader.options.isHTML5' nowrap) {{ item?.file?.size/1024/1024 | number:'.2' }} MB
-          td(*ngIf='uploader.options.isHTML5')
-            .progress(style='margin-bottom: 0;')
-              .progress-bar(role='progressbar', [ngStyle]="{ 'width': item.progress + '%' }")
           td.text-center
             span(*ngIf="item.isSuccess")
-              i.glyphicon.glyphicon-ok
+              i.fas.fa-check
             span(*ngIf="item.isCancel")
-              i.glyphicon.glyphicon-ban-circle
+              i.fas.fa-ban
             span(*ngIf="item.isError")
-              i.glyphicon.glyphicon-remove
-          td(nowrap)
-            button.btn.btn-success.btn-xs(type="button", (click)="item.upload()", [disabled]="item.isReady || item.isUploading || item.isSuccess")
-              span.glyphicon.glyphicon-upload
-              | Upload
-            button.btn.btn-warning.btn-xs(type="button", (click)="item.cancel()", [disabled]="!item.isUploading")
-              span.glyphicon.glyphicon-ban-circle
-              | Cancel
-            button.btn.btn-danger.btn-xs(type="button", (click)="item.remove()")
-              span.glyphicon.glyphicon-trash
-              | Remove
+              i.fas.fa-times
     div
       div
         .p Queue progress:
-          .progress
+          .progress.mb-4
             .progress-bar(role='progressbar' [ngstyle]="{ 'width': uploader.progress + '%' }")
         button.btn.btn-success.btn-s(type='button', (click)='uploader.uploadAll()', [disabled]='!uploader.getNotUploadedItems().length')
-          span.glyphicon.glyphicon-upload
-          | Upload all
+          span.fas.fa-upload &nbsp;
+          | Upload
         button.btn.btn-warning.btn-s(type='button', (click)='uploader.cancelAll()', [disabled]='!uploader.isUploading')
-          span.glyphicon.glyphicon-ban-circle
-          | Cancel all
+          span.fas.fa-ban &nbsp;
+          | Cancel
         button.btn.btn-danger.btn-s(type='button', (click)='uploader.clearQueue()', [disabled]='!uploader.queue.length')
-          span.glyphicon.glyphicon-trash
-          | Remove all
+          span.fas.fa-trash &nbsp;
+          | Remove

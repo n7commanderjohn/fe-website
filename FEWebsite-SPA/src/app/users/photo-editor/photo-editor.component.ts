@@ -33,7 +33,6 @@ export class PhotoEditorComponent implements OnInit {
       authToken: 'Bearer ' + localStorage.getItem('token'),
       isHTML5: true,
       allowedFileType: ['image'],
-      removeAfterUpload: true,
       autoUpload: false,
       maxFileSize: 10 * 1024 * 1024,
     });
@@ -41,6 +40,13 @@ export class PhotoEditorComponent implements OnInit {
     this.hasBaseDropZoneOver = false;
     this.response = '';
     this.uploader.onAfterAddingFile = (file) => { file.withCredentials = false; };
+    this.uploader.onSuccessItem = (item, response, status, headers) => {
+      if (response) {
+        const photo: Photo = JSON.parse(response);
+        this.photos.push(photo);
+      }
+    };
+    this.uploader.onCompleteAll = () => { this.uploader.clearQueue(); };
     this.uploader.response.subscribe((res: string) => this.response = res );
   }
 

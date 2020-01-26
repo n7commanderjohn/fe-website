@@ -1,7 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 @import '../node_modules/bootswatch/dist/darkly/bootstrap.min.css';
-@import '../node_modules/font-awesome/css/font-awesome.min.css';
+@import '../node_modules/@fortawesome/fontawesome-free/css/all.css';
 @import '../node_modules/alertifyjs/build/css/alertify.min.css';
 @import '../node_modules/alertifyjs/build/css/themes/bootstrap.min.css';
 
@@ -78,4 +78,8 @@ hr:before { /* Not really supposed to work, but does */
   border-color: white;
   border-width: 0 0 1px 0;
   border-radius: 20px;
+}
+
+.my-drop-zone {
+  border-color: white;
 }
