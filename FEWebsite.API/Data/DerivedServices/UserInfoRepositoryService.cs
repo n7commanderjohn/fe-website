@@ -7,9 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FEWebsite.API.Data.DerivedServices
 {
-    public class UserInfoRepository : BaseService, IUserInfoRepository
+    public class UserInfoRepositoryService : BaseService, IUserInfoRepositoryService
     {
-        public UserInfoRepository(DataContext context)
+        public UserInfoRepositoryService(DataContext context)
         {
             Context = context;
         }
@@ -42,6 +42,15 @@ namespace FEWebsite.API.Data.DerivedServices
                 .ConfigureAwait(false);
 
             return users;
+        }
+
+        public async Task<Photo> GetPhoto(int photoId)
+        {
+            var photo = await this.Context.Photos
+                .FirstOrDefaultAsync(p => p.Id == photoId)
+                .ConfigureAwait(false);
+
+            return photo;
         }
 
         private IQueryable<User> DefaultUserIncludes(bool expandedInclude = false) {

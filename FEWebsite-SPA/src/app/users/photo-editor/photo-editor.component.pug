@@ -1,0 +1,56 @@
+.row
+  .col-sm-2.text-center(*ngFor="let photo of photos")
+    img.img-thumbnail.p-1(src="{{photo.url}}", alt="{{photo.description}}")
+    div.photo-buttons
+      button.btn-btn-sm(type="button", [disabled]="photo.isMain") Set as Main
+      button.btn-btn-sm.btn-danger(type="button")
+        i.fas.fa-trash
+hr
+// file uploading
+.row
+  .col-md-3
+    h3 Add Photos
+    .card.bg-faded.p-3.text-center.mb-3.my-drop-zone(ng2FileDrop [ngClass]="{'nv-file-over': hasBaseDropZoneOver}",
+     (fileOver)="fileOverBase($event)", [uploader]="uploader")
+       i.fa.fa-upload.fa-3x(data-fa-transform="right-17.5")
+       | Drag Photos Here
+    .p Multiple
+      input(type='file', ng2FileSelect, [uploader]='uploader', multiple)
+    br
+    .p Single
+      input(type='file', ng2FileSelect, [uploader]='uploader')
+  .col-md-9(style='margin-bottom: 40px', *ngIf="uploader?.queue.length")
+    h3 Upload queue
+    p Queue length: {{ uploader?.queue?.length }}
+    table.table
+      thead
+        tr
+          th(width='50%') Name
+          th Size
+          th Status
+      tbody
+        tr(*ngFor='let item of uploader.queue')
+          td
+            strong {{ item?.file?.name }}
+          td(*ngIf='uploader.options.isHTML5' nowrap) {{ item?.file?.size/1024/1024 | number:'.2' }} MB
+          td.text-center
+            span(*ngIf="item.isSuccess")
+              i.fas.fa-check
+            span(*ngIf="item.isCancel")
+              i.fas.fa-ban
+            span(*ngIf="item.isError")
+              i.fas.fa-times
+    div
+      div
+        .p Queue progress:
+          .progress.mb-4
+            .progress-bar(role='progressbar' [ngstyle]="{ 'width': uploader.progress + '%' }")
+        button.btn.btn-success.btn-s(type='button', (click)='uploader.uploadAll()', [disabled]='!uploader.getNotUploadedItems().length')
+          span.fas.fa-upload &nbsp;
+          | Upload
+        button.btn.btn-warning.btn-s(type='button', (click)='uploader.cancelAll()', [disabled]='!uploader.isUploading')
+          span.fas.fa-ban &nbsp;
+          | Cancel
+        button.btn.btn-danger.btn-s(type='button', (click)='uploader.clearQueue()', [disabled]='!uploader.queue.length')
+          span.fas.fa-trash &nbsp;
+          | Remove

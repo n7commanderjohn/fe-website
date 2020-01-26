@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using FEWebsite.API.Data.BaseServices;
 using AutoMapper;
 using FEWebsite.API.DTOs.UserDTOs;
 using System.Collections.Generic;
+using System;
 
 namespace FEWebsite.API.Controllers
 {
@@ -13,13 +15,13 @@ namespace FEWebsite.API.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private IUserInfoRepository RepoUserInfo { get; }
+        private IUserInfoRepositoryService UserService { get; }
 
         private IMapper Mapper { get; }
 
-        public UsersController(IUserInfoRepository repoUserInfo, IMapper mapper)
+        public UsersController(IUserInfoRepositoryService repoUserInfo, IMapper mapper)
         {
-            this.RepoUserInfo = repoUserInfo;
+            this.UserService = repoUserInfo;
             this.Mapper = mapper;
         }
 
@@ -27,7 +29,7 @@ namespace FEWebsite.API.Controllers
         [HttpGet]
         public async Task<OkObjectResult> GetUsers()
         {
-            var users = await this.RepoUserInfo
+            var users = await this.UserService
                 .GetUsers()
                 .ConfigureAwait(false);
 
@@ -40,7 +42,7 @@ namespace FEWebsite.API.Controllers
         [HttpGet("{id}")]
         public async Task<OkObjectResult> GetUser(int id)
         {
-            var user = await this.RepoUserInfo
+            var user = await this.UserService
                 .GetUser(id)
                 .ConfigureAwait(false);
 
@@ -49,18 +51,23 @@ namespace FEWebsite.API.Controllers
             return this.Ok(userDto);
         }
 
-        // POST api/users
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-
-        }
-
         // PUT api/users/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> UpdateUser(int id, UserForUpdateDto userForUpdateDto)
         {
+            if (id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)) {
+                return this.Unauthorized();
+            }
 
+            var currentUser = await this.UserService.GetUser(id).ConfigureAwait(false);
+
+            this.Mapper.Map(userForUpdateDto, currentUser);
+
+            if (await this.UserService.SaveAll().ConfigureAwait(false)) {
+                return this.NoContent();
+            }
+
+            throw new Exception($"Update user {id} failed on save.");
         }
 
         // DELETE api/users/5

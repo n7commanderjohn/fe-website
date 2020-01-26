@@ -1,7 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 @import '../node_modules/bootswatch/dist/darkly/bootstrap.min.css';
-@import '../node_modules/font-awesome/css/font-awesome.min.css';
+@import '../node_modules/@fortawesome/fontawesome-free/css/all.css';
 @import '../node_modules/alertifyjs/build/css/alertify.min.css';
 @import '../node_modules/alertifyjs/build/css/themes/bootstrap.min.css';
 
@@ -53,4 +53,33 @@
   border: 0;
   border-top: 1px solid #eee;
   padding: 15px 0;
+}
+
+button:disabled {
+  opacity: 50%;
+}
+
+hr {
+  overflow: visible; /* For IE */
+  height: 30px;
+  border-style: solid;
+  border-color: white;
+  border-width: 1px 0 0 0;
+  border-radius: 20px;
+  margin-bottom: -15px;
+}
+
+hr:before { /* Not really supposed to work, but does */
+  display: block;
+  content: "";
+  height: 30px;
+  margin-top: -31px;
+  border-style: solid;
+  border-color: white;
+  border-width: 0 0 1px 0;
+  border-radius: 20px;
+}
+
+.my-drop-zone {
+  border-color: white;
 }
