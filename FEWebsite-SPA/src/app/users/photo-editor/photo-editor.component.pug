@@ -2,7 +2,10 @@
   .col-sm-2.text-center(*ngFor="let photo of photos")
     img.img-thumbnail.p-1(src="{{photo.url}}", alt="{{photo.description}}")
     div.photo-buttons
-      button.btn-btn-sm(type="button", [disabled]="photo.isMain") Set as Main
+      button.btn-btn-sm.mr-1(type="button",
+       [disabled]="photo.isMain",
+       [ngClass]="photo.isMain ? 'btn-light active' : 'btn-info'",
+       (click)="setMainPhoto(photo.id)") Set as Main
       button.btn-btn-sm.btn-danger(type="button")
         i.fas.fa-trash
 hr
