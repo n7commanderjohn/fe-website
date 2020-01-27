@@ -24,6 +24,9 @@ namespace FEWebsite.API.Helpers
 
         private void CreateMapForUser()
         {
+            this.CreateMap<User, UserForLoginDto>()
+                .ForMember(destinationMember => destinationMember.PhotoUrl,
+                    memberOptions => memberOptions.MapFrom(sourceMember => sourceMember.Photos.FirstOrDefault(p => p.IsMain).Url));
             this.CreateMap<User, UserForListDto>()
                 .ForMember(destinationMember => destinationMember.PhotoUrl,
                     memberOptions => memberOptions.MapFrom(sourceMember => sourceMember.Photos.FirstOrDefault(p => p.IsMain).Url))

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using FEWebsite.API.Models.AbstractModels;
 using FEWebsite.API.Models.ManyToManyModels;
 
@@ -36,5 +37,10 @@ namespace FEWebsite.API.Models
 
         [Column("Alias")]
         public override string Name { get; set; }
+
+        public bool DoesPhotoExist(int photoId)
+        {
+            return this.Photos.Any(p => p.Id == photoId);
+        }
     }
 }

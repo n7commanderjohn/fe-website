@@ -15,13 +15,13 @@ namespace FEWebsite.API.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private IUserInfoRepositoryService UserService { get; }
+        private IUsersService UserService { get; }
 
         private IMapper Mapper { get; }
 
-        public UsersController(IUserInfoRepositoryService repoUserInfo, IMapper mapper)
+        public UsersController(IUsersService userService, IMapper mapper)
         {
-            this.UserService = repoUserInfo;
+            this.UserService = userService;
             this.Mapper = mapper;
         }
 

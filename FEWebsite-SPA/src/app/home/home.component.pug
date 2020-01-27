@@ -1,4 +1,11 @@
-.container.mt-5
+.container.mt-5(*ngIf="loggedIn()")
+  div(*ngIf="!registerMode" style='text-align: center')
+  h1 You are logged in.
+  p.lead (Home Page News WIP)
+  .text-center
+    button.btn.btn-primary.btn-lg.mr-2((click)="registerToggle();") Link 1
+    button.btn.btn-info.btn-lg Link 2
+.container.mt-5(*ngIf="!loggedIn()")
   div(*ngIf="!registerMode" style='text-align: center')
     h1 Become the Expert Tactician people need.
     p.lead Learn all you need to know to be the best... All you need to do is sign up!

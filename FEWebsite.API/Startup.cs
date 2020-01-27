@@ -55,15 +55,15 @@ namespace FEWebsite.API
 
         private void AddAutoMappers(IServiceCollection services)
         {
-            services.AddAutoMapper(typeof(UserInfoRepositoryService).Assembly);
+            services.AddAutoMapper(typeof(UsersService).Assembly);
             services.AddAutoMapper(typeof(GamesService).Assembly);
             services.AddAutoMapper(typeof(GameGenresService).Assembly);
         }
 
         private void AddServiceScopes(IServiceCollection services)
         {
-            services.AddScoped<IAuthRepositoryService, AuthRepositoryService>();
-            services.AddScoped<IUserInfoRepositoryService, UserInfoRepositoryService>();
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IUsersService, UsersService>();
             services.AddScoped<IGamesService, GamesService>();
             services.AddScoped<IGameGenresService, GameGenresService>();
         }

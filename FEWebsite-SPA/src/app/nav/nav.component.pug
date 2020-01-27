@@ -16,6 +16,8 @@ nav.navbar.navbar-expand-md.navbar-dark.bg-primary
             a.nav-link.dropdown-item([routerLink]="['games/FE' + num]") FE{{num}}
             .dropdown-divider
     button.btn.btn-primary.dropdown(*ngIf="loggedIn();", 'dropdown')
+      span.mr-1
+        img(src="{{photoUrl}}", alt="")
       a.dropdown-toggle(dropdownToggle) Welcome {{authService.decodedToken?.unique_name | titlecase}}&nbsp;
       .dropdown-menu.mt-4('*dropdownMenu')
         a.dropdown-item([routerLink]="['/user/edit']")

@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -7,9 +8,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FEWebsite.API.Data.DerivedServices
 {
-    public class UserInfoRepositoryService : BaseService, IUserInfoRepositoryService
+    public class UsersService : BaseService, IUsersService
     {
-        public UserInfoRepositoryService(DataContext context)
+        public UsersService(DataContext context)
         {
             Context = context;
         }
@@ -79,6 +80,20 @@ namespace FEWebsite.API.Data.DerivedServices
             return await this.Context
                 .SaveChangesAsync()
                 .ConfigureAwait(false) > 0;
+        }
+
+        public async Task<Photo> GetCurrentMainPhotoForUser(int userId)
+        {
+            return await this.Context.Photos
+                .FirstOrDefaultAsync(p => p.UserId == userId && p.IsMain)
+                .ConfigureAwait(false);
+        }
+
+        public async void SetUserPhotoAsMain(int userId, Photo photoToBeSet)
+        {
+            var currentMainPhoto = await this.GetCurrentMainPhotoForUser(userId).ConfigureAwait(false);
+            currentMainPhoto.IsMain = false;
+            photoToBeSet.IsMain = true;
         }
     }
 }

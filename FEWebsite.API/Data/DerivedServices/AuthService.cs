@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FEWebsite.API.Data.DerivedServices
 {
-    public class AuthRepositoryService : BaseService, IAuthRepositoryService
+    public class AuthService : BaseService, IAuthService
     {
-        public AuthRepositoryService(DataContext context)
+        public AuthService(DataContext context)
         {
             this.Context = context;
         }
@@ -16,7 +16,10 @@ namespace FEWebsite.API.Data.DerivedServices
 
         public async Task<User> Login(string username, string password)
         {
-            var user = await this.Context.Users.FirstOrDefaultAsync(u => u.Username == username).ConfigureAwait(false);
+            var user = await this.Context.Users
+                .Include(p => p.Photos)
+                .FirstOrDefaultAsync(u => u.Username == username)
+                .ConfigureAwait(false);
 
             if (user == null
                 || !VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
