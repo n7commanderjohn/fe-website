@@ -1,14 +1,15 @@
 using System;
-using System.Text;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Text;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using FEWebsite.API.Data.BaseServices;
-using System.Threading.Tasks;
 using FEWebsite.API.Models;
 using FEWebsite.API.DTOs.UserDTOs;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
-using System.IdentityModel.Tokens.Jwt;
+using AutoMapper;
 
 namespace FEWebsite.API.Controllers
 {
@@ -18,11 +19,13 @@ namespace FEWebsite.API.Controllers
     {
         private IAuthService AuthService { get; }
         public IConfiguration Config { get; }
+        public IMapper Mapper { get; }
 
-        public AuthController(IAuthService authService, IConfiguration config)
+        public AuthController(IAuthService authService, IConfiguration config, IMapper mapper)
         {
             this.AuthService = authService;
             this.Config = config;
+            this.Mapper = mapper;
         }
 
         [HttpPost("register")]
@@ -83,8 +86,11 @@ namespace FEWebsite.API.Controllers
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
+            var user = this.Mapper.Map<UserForLoginDto>(authenticatedUser);
+
             return this.Ok(new {
-                token = tokenHandler.WriteToken(token)
+                token = tokenHandler.WriteToken(token),
+                user
             });
         }
     }
