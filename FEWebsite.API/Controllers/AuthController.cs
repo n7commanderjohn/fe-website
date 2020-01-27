@@ -38,10 +38,7 @@ namespace FEWebsite.API.Controllers
                 return this.BadRequest("Username already exists.");
             }
 
-            var newUser = new User() {
-                Username = userForRegisterDto.Username,
-            };
-
+            var newUser = this.Mapper.Map<User>(userForRegisterDto);
             var createdUser = await this.AuthService.Register(newUser, userForRegisterDto.Password).ConfigureAwait(false);
 
             if (createdUser != null)

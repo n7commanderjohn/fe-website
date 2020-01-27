@@ -3,6 +3,7 @@ import { environment } from './../../environments/environment';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { User } from '../_models/user';
+import { Gender } from '../_models/gender';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,10 @@ export class UserService {
 
   getUser(id: number): Observable<User> {
     return this.http.get<User>(this.baseUrl + 'users/' + id);
+  }
+
+  getGenders(): Observable<Gender[]> {
+    return this.http.get<Gender[]>(this.baseUrl + 'users/genders');
   }
 
   updateUser(id: number, user: User) {

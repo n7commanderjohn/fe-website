@@ -33,14 +33,14 @@
               .form-group
                 .form-check(*ngFor="let game of allGames")
                   label.form-check-label
-                    input.form-check-input(type="checkbox", name="games", [(ngModel)]="game.selected")
+                    input.form-check-input(type="checkbox", name="games", [(ngModel)]="game.checked")
                     | {{game.description}}
                 button.btn.btn-primary Add New Game
               h4 Favorite Game Genres (WIP)
               .form-group
                 .form-check(*ngFor="let genre of allGenres")
                   label.form-check-label
-                    input.form-check-input(type="checkbox", name="genres", [(ngModel)]="genre.selected")
+                    input.form-check-input(type="checkbox", name="genres", [(ngModel)]="genre.checked")
                     | {{genre.description}}
           tab(heading="Edit Photos")
             app-photo-editor([photos]="user.photos")

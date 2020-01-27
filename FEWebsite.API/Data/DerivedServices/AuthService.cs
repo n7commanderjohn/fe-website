@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using FEWebsite.API.Data.BaseServices;
 using FEWebsite.API.Models;
@@ -27,6 +28,9 @@ namespace FEWebsite.API.Data.DerivedServices
                 return null;
             }
 
+            user.LastLogin = DateTime.Now;
+            await this.Context.SaveChangesAsync().ConfigureAwait(false);
+
             return user;
         }
 
@@ -52,6 +56,8 @@ namespace FEWebsite.API.Data.DerivedServices
         public async Task<User> Register(User user, string password)
         {
             this.CreatePasswordHash(user, password);
+            user.AccountCreated = DateTime.Now;
+            user.LastLogin = DateTime.Now;
 
             await this.Context.Users.AddAsync(user).ConfigureAwait(false);
             await this.Context.SaveChangesAsync().ConfigureAwait(false);

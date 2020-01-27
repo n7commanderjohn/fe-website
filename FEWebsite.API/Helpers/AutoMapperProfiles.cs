@@ -24,19 +24,23 @@ namespace FEWebsite.API.Helpers
 
         private void CreateMapForUser()
         {
+            const string defaultUserPic = "../../assets/defaultUser.png";
             this.CreateMap<User, UserForLoginDto>()
                 .ForMember(destinationMember => destinationMember.PhotoUrl,
-                    memberOptions => memberOptions.MapFrom(sourceMember => sourceMember.Photos.FirstOrDefault(p => p.IsMain).Url));
+                    memberOptions => memberOptions.MapFrom(sourceMember =>
+                    sourceMember.Photos.Count > 0 ? sourceMember.Photos.FirstOrDefault(p => p.IsMain).Url : defaultUserPic));
             this.CreateMap<User, UserForListDto>()
                 .ForMember(destinationMember => destinationMember.PhotoUrl,
-                    memberOptions => memberOptions.MapFrom(sourceMember => sourceMember.Photos.FirstOrDefault(p => p.IsMain).Url))
+                    memberOptions => memberOptions.MapFrom(sourceMember =>
+                    sourceMember.Photos.Count > 0 ? sourceMember.Photos.FirstOrDefault(p => p.IsMain).Url : defaultUserPic))
                 .ForMember(destinationMember => destinationMember.Age,
                     memberOptions => memberOptions.MapFrom(sourceMember => sourceMember.Birthday.CalculateAge()))
                 .ForMember(destinationMember => destinationMember.Gender,
                     memberOptions => memberOptions.MapFrom(sourceMember => sourceMember.Gender.Description));
             this.CreateMap<User, UserForDetailedDto>()
                 .ForMember(destinationMember => destinationMember.PhotoUrl,
-                    memberOptions => memberOptions.MapFrom(sourceMember => sourceMember.Photos.FirstOrDefault(p => p.IsMain).Url))
+                    memberOptions => memberOptions.MapFrom(sourceMember =>
+                    sourceMember.Photos.Count > 0 ? sourceMember.Photos.FirstOrDefault(p => p.IsMain).Url : defaultUserPic))
                 .ForMember(destinationMember => destinationMember.Age,
                     memberOptions => memberOptions.MapFrom(sourceMember => sourceMember.Birthday.CalculateAge()))
                 .ForMember(destinationMember => destinationMember.Gender,
@@ -50,6 +54,11 @@ namespace FEWebsite.API.Helpers
                 .ForMember(destinationMember => destinationMember.ListOfGenres,
                     memberOptions => memberOptions.MapFrom(sourceMember => sourceMember.FavoriteGenres.ToList().Select(fg => fg.GameGenre.Description)));
             this.CreateMap<UserForUpdateDto, User>();
+            this.CreateMap<UserForRegisterDto, User>()
+                .ForMember(destinationMember => destinationMember.Gender,
+                    memberOptions => memberOptions.Ignore())
+                .ForMember(destinationMember => destinationMember.GenderId,
+                    memberOptions => memberOptions.MapFrom(sourceMember => sourceMember.Gender));
         }
     }
 }
