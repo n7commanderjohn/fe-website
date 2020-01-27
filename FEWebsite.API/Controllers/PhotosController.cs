@@ -55,7 +55,7 @@ namespace FEWebsite.API.Controllers
         [HttpPost]
         public async Task<IActionResult> AddPhotoForUser(int userId, [FromForm]PhotoForUploadDto photoForUploadDto)
         {
-            if (this.IsUserMatched(userId))
+            if (!this.IsUserMatched(userId))
             {
                 return this.Unauthorized();
             }

@@ -50,10 +50,16 @@ export class PhotoEditorComponent implements OnInit {
     this.uploader.onSuccessItem = (item, response, status, headers) => {
       if (response) {
         const photo: Photo = JSON.parse(response);
+        if (this.photos.length === 0) {
+          this.setNewMainPhoto(photo, 'Your new photo is now the main photo because it is the only one.');
+        }
         this.photos.push(photo);
       }
     };
-    this.uploader.onCompleteAll = () => { this.uploader.clearQueue(); };
+    this.uploader.onCompleteAll = () => {
+      this.uploader.clearQueue();
+      this.alertify.success('Photo uploads were successful.');
+    };
     this.uploader.response.subscribe((res: string) => this.response = res );
   }
 
@@ -78,11 +84,13 @@ export class PhotoEditorComponent implements OnInit {
         this.alertify.success('The selected photo has been deleted.');
 
         const areThereAnyPhotosLeft = this.photos.length > 0;
-        const thereAreNoMainPhotos = this.photos.find(p => p.isMain) == null;
-        if (areThereAnyPhotosLeft && thereAreNoMainPhotos) {
-          const newMainPhoto = this.photos.find(p => !p.isMain);
+        if (areThereAnyPhotosLeft) {
+          const isThereAMainPhoto = this.photos.find(p => p.isMain) != null;
+          if (!isThereAMainPhoto) {
+            const newMainPhoto = this.photos.find(p => !p.isMain);
+            this.setNewMainPhoto(newMainPhoto, 'Another photo has been selected to be the main photo.');
+          }
 
-          this.setNewMainPhoto(newMainPhoto, 'Another photo has been selected to be the main photo.');
         } else {
           this.setDefaultUserPhoto();
         }
