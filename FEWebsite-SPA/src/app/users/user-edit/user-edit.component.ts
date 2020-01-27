@@ -20,6 +20,7 @@ import { GamesService } from './../../_services/games.service';
 export class UserEditComponent implements OnInit {
   @ViewChild('editForm', {static: true}) editForm: NgForm;
   user: User;
+  photoUrl: string;
   allGames: Game[];
   allGenres: GameGenre[];
 
@@ -46,6 +47,7 @@ export class UserEditComponent implements OnInit {
       this.getGames();
       this.getGameGenres();
     });
+    this.authService.currentPhotoUrl.subscribe(photoUrl => this.photoUrl = photoUrl);
   }
 
   updateUser() {
@@ -63,10 +65,6 @@ export class UserEditComponent implements OnInit {
     }, error => {
       this.alertify.error(error);
     });
-  }
-
-  updateMainPhoto(photoUrl: string) {
-    this.user.photoUrl = photoUrl;
   }
 
   getGames() {

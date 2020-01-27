@@ -9,7 +9,7 @@
   .row
     .col-sm-3
       .card
-        img.card-img-top.img-thumbnail(src="{{user.photoUrl}}" alt="{{user.name}}")
+        img.card-img-top.img-thumbnail(src="{{photoUrl}}" alt="{{user.name}}")
         .card-body
           div
             strong Age:
@@ -43,4 +43,4 @@
                     input.form-check-input(type="checkbox", name="genres", [(ngModel)]="genre.selected")
                     | {{genre.description}}
           tab(heading="Edit Photos")
-            app-photo-editor([photos]="user.photos", (getUserPhotoChange)="updateMainPhoto($event)")
+            app-photo-editor([photos]="user.photos")
