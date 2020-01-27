@@ -45,6 +45,15 @@ namespace FEWebsite.API.Data.DerivedServices
             return users;
         }
 
+        public async Task<IEnumerable<Gender>> GetGenders()
+        {
+            var genders = await this.Context.Genders
+                .ToListAsync()
+                .ConfigureAwait(false);
+
+            return genders;
+        }
+
         public async Task<Photo> GetPhoto(int photoId)
         {
             var photo = await this.Context.Photos

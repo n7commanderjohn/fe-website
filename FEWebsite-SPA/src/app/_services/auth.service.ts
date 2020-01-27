@@ -3,8 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { User } from './../_models/user';
 import { environment } from './../../environments/environment';
+import { User } from './../_models/user';
+import { RegisterUser } from './../_models/registerUser';
 import { LoginResponse } from './../_models/loginResponse';
 import { DecodedJWT } from '../_models/decodedJWT';
 import { LoginCredentials } from '../_models/loginCredentials';
@@ -17,7 +18,7 @@ export class AuthService {
   jwtHelper = new JwtHelperService();
   decodedToken: DecodedJWT;
   currentUser: User;
-  photoUrl = new BehaviorSubject<string>('../../assets/user.png');
+  photoUrl = new BehaviorSubject<string>('../../assets/defaultUser.png');
   currentPhotoUrl = this.photoUrl.asObservable();
 
   constructor(private http: HttpClient) { }
@@ -41,7 +42,7 @@ export class AuthService {
       );
   }
 
-  register(model: any) {
+  register(model: RegisterUser) {
     return this.http.post(this.dotNetAPIURL + 'register', model);
   }
 

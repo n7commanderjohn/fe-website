@@ -15,4 +15,4 @@
   .container(*ngIf="registerMode")
     .row.justify-content-center
       .col-4
-        app-register([gamesFromHome]="games", (cancelRegister)="cancelRegisterMode($event)")
+        app-register((cancelRegister)="cancelRegisterMode($event)")

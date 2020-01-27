@@ -2,13 +2,21 @@ form(#registerForm="ngForm", (ngSubmit)="register();")
   h2.text-center.text-primary Sign Up
   hr
   .form-group
-    input.form-control([(ngModel)]="model.username", required name='username' type='text' placeholder='Username')
+    input.form-control([(ngModel)]="userModel.name", required name='name', type='text', placeholder='Nickname')
   .form-group
-    label(for="favoriteGame") What is your favorite game?
-    select.form-control(id="favoriteGame")
-      option(*ngFor="let game of gamesFromHome", [value]="game") {{game.name}}
+    textarea.form-control([(ngModel)]="userModel.description", cols="30", rows="10", name='name', type='text', placeholder='Your story...')
   .form-group
-    input.form-control([(ngModel)]="model.password", required name='password' type='password' placeholder='Password')
+    label(for="gender") What is your gender?
+    select.form-control([(ngModel)]="userModel.gender", required, name='gender', id="gender")
+      option(*ngFor="let gender of listOfGenders", [value]="gender.id") {{gender.description}}
+  .form-group
+    input.form-control([(ngModel)]="userModel.username", required, name='username', type='text', placeholder='Username')
+  .form-group
+    input.form-control([(ngModel)]="userModel.password", required, name='password', type='password', placeholder='Password')
+  //- .form-group
+  //-   label What is your favorite game?
+  //-   select.form-control
+  //-     option(*ngFor="let game of listOfGames", [value]="game.id") {{game.description}}
   .form-group.text-center
     button.btn.btn-success(type='submit') Register
     button.btn.btn-default(type='button', (click)="cancel();") Cancel

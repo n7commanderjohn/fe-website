@@ -16,6 +16,8 @@ namespace FEWebsite.API.Data.BaseServices
 
         Task<User> GetUser(int userId);
 
+        Task<IEnumerable<Gender>> GetGenders();
+
         Task<Photo> GetPhoto(int photoId);
 
         Task<Photo> GetCurrentMainPhotoForUser(int userId);

@@ -51,6 +51,18 @@ namespace FEWebsite.API.Controllers
             return this.Ok(userDto);
         }
 
+        // GET api/users
+        [AllowAnonymous]
+        [HttpGet("genders")]
+        public async Task<OkObjectResult> GetGenders()
+        {
+            var genders = await this.UserService
+                .GetGenders()
+                .ConfigureAwait(false);
+
+            return this.Ok(genders);
+        }
+
         // PUT api/users/5
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(int id, UserForUpdateDto userForUpdateDto)
