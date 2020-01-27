@@ -10,5 +10,7 @@ namespace FEWebsite.API.Models
         public DateTime DateAdded { get; set; }
 
         public bool IsMain { get; set; }
+
+        public string PublicId { get; set; }
     }
 }

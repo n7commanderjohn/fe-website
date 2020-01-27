@@ -2,7 +2,6 @@
 using System.Text;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +13,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using FEWebsite.API.Helpers;
+using Microsoft.Extensions.Hosting;
+using AutoMapper;
 
 namespace FEWebsite.API
 {
@@ -30,8 +31,14 @@ namespace FEWebsite.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DataContext>(x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddControllers()
+                .AddNewtonsoftJson(opt => {
+                    opt.SerializerSettings.ReferenceLoopHandling =
+                        Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                });
             services.AddCors();
+            services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
+            this.AddAutoMappers(services);
             this.AddServiceScopes(services);
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -46,14 +53,23 @@ namespace FEWebsite.API
                 );
         }
 
+        private void AddAutoMappers(IServiceCollection services)
+        {
+            services.AddAutoMapper(typeof(UserInfoRepositoryService).Assembly);
+            services.AddAutoMapper(typeof(GamesService).Assembly);
+            services.AddAutoMapper(typeof(GameGenresService).Assembly);
+        }
+
         private void AddServiceScopes(IServiceCollection services)
         {
             services.AddScoped<IAuthRepositoryService, AuthRepositoryService>();
-            services.AddScoped<IUserInfoRepository, UserInfoRepository>();
+            services.AddScoped<IUserInfoRepositoryService, UserInfoRepositoryService>();
+            services.AddScoped<IGamesService, GamesService>();
+            services.AddScoped<IGameGenresService, GameGenresService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -77,12 +93,18 @@ namespace FEWebsite.API
             }
 
             // app.UseHttpsRedirection();
+
+            app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+
             app.UseCors(x => x.AllowAnyOrigin()
                 .AllowAnyMethod()
                 .AllowAnyHeader()
             );
-            app.UseAuthentication();
-            app.UseMvc();
+
+            app.UseEndpoints(endpoints => endpoints.MapControllers());
         }
     }
 }

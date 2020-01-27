@@ -14,22 +14,21 @@ namespace FEWebsite.API.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079");
+                .HasAnnotation("ProductVersion", "3.1.0");
 
             modelBuilder.Entity("FEWebsite.API.Models.Game", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
 
-                    b.Property<string>("Name");
-
-                    b.Property<int?>("UserId");
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Games");
                 });
@@ -37,17 +36,16 @@ namespace FEWebsite.API.Migrations
             modelBuilder.Entity("FEWebsite.API.Models.GameGenre", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
 
-                    b.Property<string>("Name");
-
-                    b.Property<int?>("UserId");
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("GameGenres");
                 });
@@ -55,32 +53,73 @@ namespace FEWebsite.API.Migrations
             modelBuilder.Entity("FEWebsite.API.Models.Gender", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(3);
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.ToTable("Genders");
                 });
 
+            modelBuilder.Entity("FEWebsite.API.Models.ManyToManyModels.UserGame", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("GameId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("UserId", "GameId");
+
+                    b.HasIndex("GameId");
+
+                    b.ToTable("UserGames");
+                });
+
+            modelBuilder.Entity("FEWebsite.API.Models.ManyToManyModels.UserGameGenre", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("GameGenreId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("UserId", "GameGenreId");
+
+                    b.HasIndex("GameGenreId");
+
+                    b.ToTable("UserGameGenres");
+                });
+
             modelBuilder.Entity("FEWebsite.API.Models.Photo", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("DateAdded");
+                    b.Property<DateTime>("DateAdded")
+                        .HasColumnType("TEXT");
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
 
-                    b.Property<bool>("IsMain");
+                    b.Property<bool>("IsMain")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
 
-                    b.Property<string>("Url");
+                    b.Property<string>("PublicId")
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("UserId");
+                    b.Property<string>("Url")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -92,28 +131,38 @@ namespace FEWebsite.API.Migrations
             modelBuilder.Entity("FEWebsite.API.Models.User", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("AccountCreated");
+                    b.Property<DateTime>("AccountCreated")
+                        .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("Birthday");
+                    b.Property<DateTime>("Birthday")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
-                        .HasColumnName("AboutMe");
+                        .HasColumnName("AboutMe")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("GenderId")
-                        .HasColumnName("Gender");
+                        .HasColumnName("Gender")
+                        .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("LastLogin");
+                    b.Property<DateTime>("LastLogin")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
-                        .HasColumnName("Alias");
+                        .HasColumnName("Alias")
+                        .HasColumnType("TEXT");
 
-                    b.Property<byte[]>("PasswordHash");
+                    b.Property<byte[]>("PasswordHash")
+                        .HasColumnType("BLOB");
 
-                    b.Property<byte[]>("PasswordSalt");
+                    b.Property<byte[]>("PasswordSalt")
+                        .HasColumnType("BLOB");
 
-                    b.Property<string>("Username");
+                    b.Property<string>("Username")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -122,18 +171,34 @@ namespace FEWebsite.API.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("FEWebsite.API.Models.Game", b =>
+            modelBuilder.Entity("FEWebsite.API.Models.ManyToManyModels.UserGame", b =>
                 {
-                    b.HasOne("FEWebsite.API.Models.User")
+                    b.HasOne("FEWebsite.API.Models.Game", "Game")
+                        .WithMany("UserGames")
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FEWebsite.API.Models.User", "User")
                         .WithMany("FavoriteGames")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
-            modelBuilder.Entity("FEWebsite.API.Models.GameGenre", b =>
+            modelBuilder.Entity("FEWebsite.API.Models.ManyToManyModels.UserGameGenre", b =>
                 {
-                    b.HasOne("FEWebsite.API.Models.User")
+                    b.HasOne("FEWebsite.API.Models.GameGenre", "GameGenre")
+                        .WithMany("UserGameGenres")
+                        .HasForeignKey("GameGenreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FEWebsite.API.Models.User", "User")
                         .WithMany("FavoriteGenres")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("FEWebsite.API.Models.Photo", b =>
@@ -141,7 +206,8 @@ namespace FEWebsite.API.Migrations
                     b.HasOne("FEWebsite.API.Models.User", "User")
                         .WithMany("Photos")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("FEWebsite.API.Models.User", b =>

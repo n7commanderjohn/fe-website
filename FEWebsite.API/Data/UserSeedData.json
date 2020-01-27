@@ -1,98 +1,329 @@
 [
-    {
-      "Username": "Rodriguez",
-      "GenderId": "M",
-      "Birthday": "2018-06-18",
-      "Password": "password",
-      "Name": "Rodriguez",
-      "AccountCreated": "2017-02-19",
-      "LastLogin": "2017-02-19",
-      "Description": "My story is f8581094-f66f-4417-8708-f7fb7aa72e22",
-      "Photos": [
-        {
-          "url": "https://randomuser.me/api/portraits/women/50.jpg",
-          "isMain": true,
-          "description": "Yummy 49501192-3060-405c-a289-fd7dab4269eb"
-        }
-      ],
-      "Games": [
-        {
-          "Rand": 3,
-          "name": "FE3",
-          "description": "Fire Emblem 3"
-        }
-      ]
-    },
-    {
-      "Username": "Mccarthy",
-      "GenderId": "M",
-      "Birthday": "2017-09-11",
-      "Password": "password",
-      "Name": "Mccarthy",
-      "AccountCreated": "2015-03-26",
-      "LastLogin": "2015-03-26",
-      "Description": "My story is 16bb078b-95d9-42a6-9155-4186aed4f7f6",
-      "Photos": [
-        {
-          "url": "https://randomuser.me/api/portraits/women/75.jpg",
-          "isMain": true,
-          "description": "Yummy b5038817-4bc3-41a3-a9bb-f8ff02f2dd21"
-        }
-      ],
-      "Games": [
-        {
-          "Rand": 6,
-          "name": "FE6",
-          "description": "Fire Emblem 6"
-        }
-      ]
-    },
-    {
-      "Username": "Kramer",
-      "GenderId": "M",
-      "Birthday": "2017-10-22",
-      "Password": "password",
-      "Name": "Kramer",
-      "AccountCreated": "2014-08-04",
-      "LastLogin": "2014-08-04",
-      "Description": "My story is adf81c59-e9aa-43f4-9a02-d080db83ffb4",
-      "Photos": [
-        {
-          "url": "https://randomuser.me/api/portraits/women/87.jpg",
-          "isMain": true,
-          "description": "Yummy b4c95222-dd83-4215-8dd5-c6f36966dc05"
-        }
-      ],
-      "Games": [
-        {
-          "Rand": 9,
-          "name": "FE9",
-          "description": "Fire Emblem 9"
-        }
-      ]
-    },
-    {
-      "Username": "Cash",
-      "GenderId": "M",
-      "Birthday": "2016-10-17",
-      "Password": "password",
-      "Name": "Cash",
-      "AccountCreated": "2018-10-22",
-      "LastLogin": "2018-10-22",
-      "Description": "My story is e9c1039e-88bc-41e8-a77c-d69aaae84370",
-      "Photos": [
-        {
-          "url": "https://randomuser.me/api/portraits/women/85.jpg",
-          "isMain": true,
-          "description": "Yummy df89a532-cc6d-4bac-a762-6f7825b472b7"
-        }
-      ],
-      "Games": [
-        {
-          "Rand": 2,
-          "name": "FE2",
-          "description": "Fire Emblem 2"
-        }
-      ]
-    }
-  ]
+  {
+    "Username": "john69",
+    "GenderId": "M",
+    "Birthday": "2000-09-11",
+    "Password": "password",
+    "Name": "John",
+    "AccountCreated": "2015-01-30",
+    "LastLogin": "2015-01-30",
+    "Description": "I am best pro",
+    "Photos": [
+      {
+        "url": "https://randomuser.me/api/portraits/men/47.jpg",
+        "isMain": true,
+        "description": "super mlg hacker tactician"
+      }
+    ],
+    "FavoriteGames": [
+      {
+        "GameId": 7
+      },
+      {
+        "GameId": 8
+      },
+      {
+        "GameId": 16
+      }
+    ],
+    "FavoriteGenres": [
+      {
+        "GameGenreId": 2
+      },
+      {
+        "GameGenreId": 3
+      },
+      {
+        "GameGenreId": 4
+      }
+    ]
+  },
+  {
+    "Username": "Curry",
+    "GenderId": "M",
+    "Birthday": "1991-05-15",
+    "Password": "password",
+    "Name": "Curry",
+    "AccountCreated": "2015-05-15",
+    "LastLogin": "2015-05-15",
+    "Description": "My story is boy325e4f7b-55af-447b-be5a-f619676539f6",
+    "Photos": [
+      {
+        "url": "https://randomuser.me/api/portraits/men/99.jpg",
+        "isMain": true,
+        "description": "Yummy 00da91b0-7284-42a7-9f49-35bcc2bb237a"
+      }
+    ],
+    "FavoriteGames": [
+      {
+        "GameId": 3
+      },
+      {
+        "GameId": 10
+      },
+      {
+        "GameId": 13
+      }
+    ],
+    "FavoriteGenres": [
+      {
+        "GameGenreId": 1
+      },
+      {
+        "GameGenreId": 4
+      }
+    ]
+  },
+  {
+    "Username": "Pope",
+    "GenderId": "M",
+    "Birthday": "1988-08-11",
+    "Password": "password",
+    "Name": "Pope",
+    "AccountCreated": "2016-10-29",
+    "LastLogin": "2016-10-29",
+    "Description": "My story is boy2bb404ed-089a-4614-802b-379afc98f1fd",
+    "Photos": [
+      {
+        "url": "https://randomuser.me/api/portraits/men/50.jpg",
+        "isMain": true,
+        "description": "Yummy 994eed2f-34eb-42f2-93be-e9307f077c54"
+      }
+    ],
+    "FavoriteGames": [
+      {
+        "GameId": 3
+      },
+      {
+        "GameId": 10
+      },
+      {
+        "GameId": 13
+      }
+    ],
+    "FavoriteGenres": [
+      {
+        "GameGenreId": 1
+      },
+      {
+        "GameGenreId": 4
+      }
+    ]
+  },
+  {
+    "Username": "Short",
+    "GenderId": "M",
+    "Birthday": "1995-03-28",
+    "Password": "password",
+    "Name": "Short",
+    "AccountCreated": "2018-05-06",
+    "LastLogin": "2018-05-06",
+    "Description": "My story is boyd1d4492e-ffef-4571-bcfa-676fd6946389",
+    "Photos": [
+      {
+        "url": "https://randomuser.me/api/portraits/men/94.jpg",
+        "isMain": true,
+        "description": "Yummy 2e191c2a-d4cd-4b55-b0bf-843e29e3ea61"
+      }
+    ],
+    "FavoriteGames": [
+      {
+        "GameId": 3
+      },
+      {
+        "GameId": 10
+      },
+      {
+        "GameId": 13
+      }
+    ],
+    "FavoriteGenres": [
+      {
+        "GameGenreId": 1
+      },
+      {
+        "GameGenreId": 4
+      }
+    ]
+  },
+  {
+    "Username": "Mcmahon",
+    "GenderId": "M",
+    "Birthday": "1988-11-05",
+    "Password": "password",
+    "Name": "Mcmahon",
+    "AccountCreated": "2019-09-27",
+    "LastLogin": "2019-09-27",
+    "Description": "My story is boyb36f337b-52aa-4e5b-b9a9-91b4e4f6fe34",
+    "Photos": [
+      {
+        "url": "https://randomuser.me/api/portraits/men/97.jpg",
+        "isMain": true,
+        "description": "Yummy 94bb4abb-1a8d-486d-b98c-db4cd909f1b4"
+      }
+    ],
+    "FavoriteGames": [
+      {
+        "GameId": 3
+      },
+      {
+        "GameId": 10
+      },
+      {
+        "GameId": 13
+      }
+    ],
+    "FavoriteGenres": [
+      {
+        "GameGenreId": 1
+      },
+      {
+        "GameGenreId": 4
+      }
+    ]
+  },
+  {
+    "Username": "Lisa",
+    "GenderId": "F",
+    "Birthday": "1990-06-19",
+    "Password": "password",
+    "Name": "Lisa",
+    "AccountCreated": "2014-02-20",
+    "LastLogin": "2014-02-20",
+    "Description": "My story is girld0f8ee6e-b5e6-4bf5-8e3d-976da871486c",
+    "Photos": [
+      {
+        "url": "https://randomuser.me/api/portraits/women/34.jpg",
+        "isMain": true,
+        "description": "Yummy e7b1f875-fbbe-4793-819d-a823583974c6"
+      }
+    ],
+    "FavoriteGames": [
+      {
+        "GameId": 3
+      },
+      {
+        "GameId": 9
+      },
+      {
+        "GameId": 11
+      }
+    ],
+    "FavoriteGenres": [
+      {
+        "GameGenreId": 1
+      },
+      {
+        "GameGenreId": 3
+      }
+    ]
+  },
+  {
+    "Username": "Lana",
+    "GenderId": "F",
+    "Birthday": "1989-06-07",
+    "Password": "password",
+    "Name": "Lana",
+    "AccountCreated": "2015-07-07",
+    "LastLogin": "2015-07-07",
+    "Description": "My story is girlbc3bf092-d53b-4e05-bc48-4171dd6757f5",
+    "Photos": [
+      {
+        "url": "https://randomuser.me/api/portraits/women/48.jpg",
+        "isMain": true,
+        "description": "Yummy ce972880-0dc9-4f9a-b862-5240f6b3567d"
+      }
+    ],
+    "FavoriteGames": [
+      {
+        "GameId": 3
+      },
+      {
+        "GameId": 9
+      },
+      {
+        "GameId": 11
+      }
+    ],
+    "FavoriteGenres": [
+      {
+        "GameGenreId": 1
+      },
+      {
+        "GameGenreId": 3
+      }
+    ]
+  },
+  {
+    "Username": "Danielle",
+    "GenderId": "F",
+    "Birthday": "1990-05-15",
+    "Password": "password",
+    "Name": "Danielle",
+    "AccountCreated": "2014-01-18",
+    "LastLogin": "2014-01-18",
+    "Description": "My story is girle7fd7605-a151-49d8-abf4-4b71fafc50c3",
+    "Photos": [
+      {
+        "url": "https://randomuser.me/api/portraits/women/74.jpg",
+        "isMain": true,
+        "description": "Yummy 2289c924-adc5-4c13-9f5a-1a729fe63a21"
+      }
+    ],
+    "FavoriteGames": [
+      {
+        "GameId": 3
+      },
+      {
+        "GameId": 9
+      },
+      {
+        "GameId": 11
+      }
+    ],
+    "FavoriteGenres": [
+      {
+        "GameGenreId": 1
+      },
+      {
+        "GameGenreId": 3
+      }
+    ]
+  },
+  {
+    "Username": "Elinor",
+    "GenderId": "F",
+    "Birthday": "1987-04-01",
+    "Password": "password",
+    "Name": "Elinor",
+    "AccountCreated": "2016-03-31",
+    "LastLogin": "2016-03-31",
+    "Description": "My story is girl0e31d38f-7722-43af-8635-beca6194bd2a",
+    "Photos": [
+      {
+        "url": "https://randomuser.me/api/portraits/women/28.jpg",
+        "isMain": true,
+        "description": "Yummy 4399046e-a2bd-465c-9e35-3335eb381bff"
+      }
+    ],
+    "FavoriteGames": [
+      {
+        "GameId": 3
+      },
+      {
+        "GameId": 9
+      },
+      {
+        "GameId": 11
+      }
+    ],
+    "FavoriteGenres": [
+      {
+        "GameGenreId": 1
+      },
+      {
+        "GameGenreId": 3
+      }
+    ]
+  }
+]

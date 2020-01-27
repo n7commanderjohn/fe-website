@@ -1,0 +1,41 @@
+.container.mt-4
+  .row
+    h1 {{user.name}}'s Profile
+  .row
+    .col-sm-3
+      .card
+        img.card-img-top.img-thumbnail(src="{{user.photoUrl}}" alt="{{user.name}}")
+        .card-body
+          div
+            strong Age:
+            p {{user.age}}
+          div
+            strong Last Active:
+            p {{user.lastLogin | date:'MMMM d, y, h:mm:ss a'}}
+          div
+            strong User Since:
+            p {{user.accountCreated | date:'MMMM d, y'}}
+        .card-footer
+          .btn-group.d-flex
+            .btn.btn-primary.w-100 Follow
+            .btn.btn-success.w-100 Message
+    .col-sm-9
+      .tab-panel
+        tabset.user-tabset
+          tab(heading="About {{user.name}}")
+            h4 Description
+            p {{user.description}}
+          tab(heading="Favorite Games")
+            h4 Favorite Games
+            ul
+              li(*ngFor="let game of user.games") {{game.description}}
+          tab(heading="Favorite Game Genres")
+            h4 Favorite Game Genres
+            ul
+              li(*ngFor="let genre of user.genres") {{genre.description}}
+          tab(heading="Photos")
+            h4 Photos
+            ngx-gallery([options]="galleryOptions", [images]="galleryImages")
+          tab(heading="Messages")
+            h4 Messages
+            p add messages

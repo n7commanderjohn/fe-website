@@ -1,6 +1,85 @@
 /* You can add global styles to this file, and also import other style files */
 @import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 @import '../node_modules/bootswatch/dist/darkly/bootstrap.min.css';
-@import '../node_modules/font-awesome/css/font-awesome.min.css';
+@import '../node_modules/@fortawesome/fontawesome-free/css/all.css';
 @import '../node_modules/alertifyjs/build/css/alertify.min.css';
 @import '../node_modules/alertifyjs/build/css/themes/bootstrap.min.css';
+
+.tab-panel {
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.nav-tabs>li.open,
+.user-tabset>.nav-tabs>li:hover {
+  border-bottom: 4px solid #fbcdcf;
+}
+
+.user-tabset>.nav-tabs>li.open>a,
+.user-tabset>.nav-tabs>li:hover>a {
+  border: 0;
+  background: none !important;
+  color: #E95420;
+}
+
+.user-tabset>.nav-tabs>li.open>a>i,
+.user-tabset>.nav-tabs>li:hover>a>i {
+  color: #a6a6a6;
+}
+
+.user-tabset>.nav-tabs>li.open .dropdown-menu,
+.user-tabset>.nav-tabs>li:hover .dropdown-menu {
+  margin-top: 0px;
+}
+
+.user-tabset>.nav-tabs>li.active {
+  border-bottom: 4px solid #E95420;
+  position: relative;
+}
+
+.user-tabset>.nav-tabs>li.active>a {
+  border: 0 !important;
+  color: #E95420;
+}
+
+.user-tabset>.nav-tabs>li.active>a>i {
+  color: #404040;
+}
+
+.user-tabset>.tab-content {
+  margin-top: -3px;
+  background-color: #303030;
+  border: 0;
+  border-top: 1px solid #eee;
+  padding: 15px 0;
+}
+
+button:disabled {
+  opacity: 50%;
+}
+
+hr {
+  overflow: visible; /* For IE */
+  height: 30px;
+  border-style: solid;
+  border-color: white;
+  border-width: 1px 0 0 0;
+  border-radius: 20px;
+  margin-bottom: -15px;
+}
+
+hr:before { /* Not really supposed to work, but does */
+  display: block;
+  content: "";
+  height: 30px;
+  margin-top: -31px;
+  border-style: solid;
+  border-color: white;
+  border-width: 0 0 1px 0;
+  border-radius: 20px;
+}
+
+.my-drop-zone {
+  border-color: white;
+}
