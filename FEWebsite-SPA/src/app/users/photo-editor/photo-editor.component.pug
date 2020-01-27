@@ -6,7 +6,7 @@
        [disabled]="photo.isMain",
        [ngClass]="photo.isMain ? 'btn-light active' : 'btn-info'",
        (click)="setMainPhoto(photo)") Set as Main
-      button.btn-btn-sm.btn-danger(type="button")
+      button.btn-btn-sm.btn-danger(type="button", (click)="deletePhoto(photo.id)")
         i.fas.fa-trash
 hr
 // file uploading
