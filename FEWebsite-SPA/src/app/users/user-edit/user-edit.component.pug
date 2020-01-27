@@ -43,4 +43,4 @@
                     input.form-check-input(type="checkbox", name="genres", [(ngModel)]="genre.selected")
                     | {{genre.description}}
           tab(heading="Edit Photos")
-            app-photo-editor([photos]="user.photos")
+            app-photo-editor([photos]="user.photos", (getUserPhotoChange)="updateMainPhoto($event)")

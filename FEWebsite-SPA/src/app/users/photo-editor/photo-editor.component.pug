@@ -5,7 +5,7 @@
       button.btn-btn-sm.mr-1(type="button",
        [disabled]="photo.isMain",
        [ngClass]="photo.isMain ? 'btn-light active' : 'btn-info'",
-       (click)="setMainPhoto(photo.id)") Set as Main
+       (click)="setMainPhoto(photo)") Set as Main
       button.btn-btn-sm.btn-danger(type="button")
         i.fas.fa-trash
 hr

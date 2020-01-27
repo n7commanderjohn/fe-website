@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { AuthService } from './../../_services/auth.service';
 import { AlertifyService } from './../../_services/alertify.service';
 import { UserService } from 'src/app/_services/user.service';
@@ -13,10 +13,12 @@ import { FileUploader } from 'ng2-file-upload';
 })
 export class PhotoEditorComponent implements OnInit {
   @Input() photos: Photo[];
+  @Output() getUserPhotoChange = new EventEmitter<string>();
   uploader: FileUploader;
   hasBaseDropZoneOver = false;
   response: string;
   baseUrl = environment.apiUrl;
+  currentMain: Photo;
 
   constructor(private authService: AuthService,
               private userService: UserService,
@@ -54,9 +56,13 @@ export class PhotoEditorComponent implements OnInit {
     this.uploader.response.subscribe((res: string) => this.response = res );
   }
 
-  setMainPhoto(photoId: number) {
+  setMainPhoto(photo: Photo) {
     const userId = Number(this.authService.decodedToken.nameid);
-    this.userService.setMainPhoto(userId, photoId).subscribe(() => {
+    this.userService.setMainPhoto(userId, photo.id).subscribe(() => {
+      this.currentMain = this.photos.filter(p => p.isMain)[0];
+      this.currentMain.isMain = false;
+      photo.isMain = true;
+      this.getUserPhotoChange.emit(photo.url);
       this.alertify.success('Photo has been set as main.');
     }, error => {
       this.alertify.error(error);
