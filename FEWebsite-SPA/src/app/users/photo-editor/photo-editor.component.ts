@@ -85,8 +85,8 @@ export class PhotoEditorComponent implements OnInit {
 
         const areThereAnyPhotosLeft = this.photos.length > 0;
         if (areThereAnyPhotosLeft) {
-          const isThereAMainPhoto = this.photos.find(p => p.isMain) != null;
-          if (!isThereAMainPhoto) {
+          const areThereMainPhotos = this.photos.filter(p => p.isMain).length > 0;
+          if (!areThereMainPhotos) {
             const newMainPhoto = this.photos.find(p => !p.isMain);
             this.setNewMainPhoto(newMainPhoto, 'Another photo has been selected to be the main photo.');
           }
