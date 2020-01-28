@@ -15,6 +15,7 @@ import { AppComponent } from './app.component';
 import { NavComponent } from './nav/nav.component';
 import { HomeComponent } from './home/home.component';
 import { RegisterComponent } from './register/register.component';
+import { RegisterReactiveComponent } from './register-reactive/register-reactive.component';
 import { MediaComponent } from './media/media.component';
 import { MessagesComponent } from './messages/messages.component';
 import { UserListComponent } from './users/user-list/user-list.component';
@@ -53,6 +54,7 @@ export class CustomHammerConfig extends HammerGestureConfig  {
       NavComponent,
       HomeComponent,
       RegisterComponent,
+      RegisterReactiveComponent,
       UserListComponent,
       MediaComponent,
       MessagesComponent,
@@ -77,7 +79,7 @@ export class CustomHammerConfig extends HammerGestureConfig  {
            whitelistedDomains: ['localhost:5000'],
            blacklistedRoutes: ['localhost:5000/api/auth/']
          }
-       }),
+      }),
    ],
    providers: [
       AuthService,
