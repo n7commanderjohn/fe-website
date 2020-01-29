@@ -10,7 +10,7 @@ form([formGroup]="registerForm", (ngSubmit)="register();")
     select.form-control(formControlName='{{fs.gender}}', id="gender")
       option(*ngFor="let gender of listOfGenders", [value]="gender.id") {{gender.description}}
   .form-group
-    input.form-control(formControlName='{{fs.dateOfBirth}}', type='date', placeholder='Date of Birth',
+    input.form-control(formControlName='{{fs.dateOfBirth}}', type='text', bsDatepicker, [bsConfig]="bsConfig", placeholder='Date of Birth',
       [ngClass]="{'is-invalid': fgvm.dateOfBirth.hasErrors(registerForm)}")
     .invalid-feedback(*ngIf="fgvm.dateOfBirth.required(registerForm)") Your Date of Birth is required
   .form-group

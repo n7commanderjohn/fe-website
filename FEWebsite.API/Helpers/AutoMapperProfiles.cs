@@ -45,6 +45,8 @@ namespace FEWebsite.API.Helpers
                     memberOptions => memberOptions.MapFrom(sourceMember => sourceMember.Birthday.CalculateAge()))
                 .ForMember(destinationMember => destinationMember.Gender,
                     memberOptions => memberOptions.MapFrom(sourceMember => sourceMember.Gender.Description))
+                .ForMember(destinationMember => destinationMember.GenderId,
+                    memberOptions => memberOptions.MapFrom(sourceMember => sourceMember.Gender.Id))
                 .ForMember(destinationMember => destinationMember.Games,
                     memberOptions => memberOptions.MapFrom(sourceMember => sourceMember.FavoriteGames.ToList().Select(fg => fg.Game)))
                 .ForMember(destinationMember => destinationMember.ListOfGames,

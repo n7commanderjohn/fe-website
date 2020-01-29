@@ -4,9 +4,12 @@ import { GameGenre } from './gamegenre';
 import { Photo } from './photo';
 
 export interface User extends BaseModel {
+    email: string;
     username: string;
     age: number;
+    genderId: string;
     gender: string;
+    birthday: Date;
     accountCreated: Date;
     lastLogin: Date;
     photoUrl: string;

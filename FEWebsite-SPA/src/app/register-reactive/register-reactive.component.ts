@@ -1,5 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { BsDatepickerConfig } from 'ngx-bootstrap';
 
 import { AlertifyService } from '../_services/alertify.service';
 import { AuthService } from '../_services/auth.service';
@@ -22,6 +23,7 @@ export class RegisterReactiveComponent implements OnInit {
   listOfGenders: Gender[];
   registerForm: FormGroup;
   fs = FormStrings;
+  bsConfig: Partial<BsDatepickerConfig>;
 
   constructor(private authService: AuthService,
               private alertify: AlertifyService,
@@ -32,6 +34,9 @@ export class RegisterReactiveComponent implements OnInit {
               public fgvm: FormGroupValidatorMethods) { }
 
   ngOnInit() {
+    this.bsConfig = {
+      containerClass: 'theme-dark-blue'
+    };
     this.createRegisterForm();
     this.getGames();
     this.getGenders();
