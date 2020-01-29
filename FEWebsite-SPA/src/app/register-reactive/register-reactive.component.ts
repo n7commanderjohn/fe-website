@@ -47,7 +47,7 @@ export class RegisterReactiveComponent implements OnInit {
       name: [null],
       description: [null],
       gender: ['M'],
-      dateOfBirth: [null, Validators.required],
+      birthday: [null, Validators.required],
       email: [null, Validators.required],
       username: [null, Validators.required],
       password: [null,

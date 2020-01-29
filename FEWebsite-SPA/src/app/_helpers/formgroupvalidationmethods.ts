@@ -4,7 +4,7 @@ export const FormStrings = {
     gender: 'gender',
     name: 'name',
     description: 'description',
-    dateOfBirth: 'dateOfBirth',
+    birthday: 'birthday',
     required: 'required',
     minlength: 'minlength',
     maxlength: 'maxlength',
@@ -58,12 +58,12 @@ export class FormGroupValidatorMethods {
                 && fg.get(FormStrings.passwordConfirm).touched;
         }
     };
-    dateOfBirth = {
+    birthday = {
         hasErrors(fg: FormGroup) {
-            return fg.get(FormStrings.dateOfBirth).touched && fg.get(FormStrings.dateOfBirth).errors;
+            return fg.get(FormStrings.birthday).touched && fg.get(FormStrings.birthday).errors;
         },
         required(fg: FormGroup) {
-            return fg.get(FormStrings.dateOfBirth).touched && fg.get(FormStrings.dateOfBirth).hasError(FormStrings.required);
+            return fg.get(FormStrings.birthday).touched && fg.get(FormStrings.birthday).hasError(FormStrings.required);
         }
     };
 }
