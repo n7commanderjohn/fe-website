@@ -38,7 +38,6 @@ import { UserListResolver } from './_resolvers/user-list.resolver';
 import { UserDetailResolver } from './_resolvers/user-detail.resolver';
 import { UserEditResolver } from './_resolvers/user-edit.resolver';
 
-import { RegisterUser } from './_models/registerUser';
 import { FormGroupValidatorMethods } from './_helpers/formgroupvalidationmethods';
 
 export function tokenGetter() {
@@ -100,7 +99,6 @@ export class CustomHammerConfig extends HammerGestureConfig  {
       { provide: HAMMER_GESTURE_CONFIG, useClass: CustomHammerConfig },
       GamesService,
       GameGenresService,
-      RegisterUser,
       FormGroupValidatorMethods,
    ],
    bootstrap: [

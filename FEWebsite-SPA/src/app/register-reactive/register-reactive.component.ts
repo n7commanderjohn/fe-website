@@ -8,9 +8,9 @@ import { UserService } from '../_services/user.service';
 import { GamesService } from '../_services/games.service';
 
 import { FormStrings, FormGroupValidatorMethods } from '../_helpers/formgroupvalidationmethods';
-import { RegisterUser } from '../_models/registerUser';
 import { Game } from '../_models/game';
 import { Gender } from '../_models/gender';
+import { User } from '../_models/user';
 
 @Component({
   selector: 'app-register-reactive',
@@ -24,13 +24,13 @@ export class RegisterReactiveComponent implements OnInit {
   registerForm: FormGroup;
   fs = FormStrings;
   bsConfig: Partial<BsDatepickerConfig>;
+  userModel: User;
 
   constructor(private authService: AuthService,
               private alertify: AlertifyService,
               private userService: UserService,
               private gamesService: GamesService,
               private fb: FormBuilder,
-              public userModel: RegisterUser,
               public fgvm: FormGroupValidatorMethods) { }
 
   ngOnInit() {
@@ -57,6 +57,9 @@ export class RegisterReactiveComponent implements OnInit {
   }
 
   register() {
+    if (this.registerForm.valid) {
+
+    }
     // this.authService.register(this.userModel).subscribe((response) => {
     //   this.alertify.success('Registration successful.');
     // }, (error: any) => {
