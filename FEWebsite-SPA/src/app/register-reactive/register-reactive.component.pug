@@ -10,6 +10,14 @@ form([formGroup]="registerForm", (ngSubmit)="register();")
     select.form-control(formControlName='{{fs.gender}}', id="gender")
       option(*ngFor="let gender of listOfGenders", [value]="gender.id") {{gender.description}}
   .form-group
+    input.form-control(formControlName='{{fs.dateOfBirth}}', type='date', placeholder='Date of Birth',
+      [ngClass]="{'is-invalid': fgvm.dateOfBirth.hasErrors(registerForm)}")
+    .invalid-feedback(*ngIf="fgvm.dateOfBirth.required(registerForm)") Your Date of Birth is required
+  .form-group
+    input.form-control(formControlName='{{fs.email}}', type='text', placeholder='Email',
+      [ngClass]="{'is-invalid': fgvm.email.hasErrors(registerForm)}")
+    .invalid-feedback Please enter a username.
+  .form-group
     input.form-control(formControlName='{{fs.username}}', type='text', placeholder='Username',
       [ngClass]="{'is-invalid': fgvm.username.hasErrors(registerForm)}")
     .invalid-feedback Please enter a username.
@@ -25,7 +33,7 @@ form([formGroup]="registerForm", (ngSubmit)="register();")
     .invalid-feedback(*ngIf="fgvm.passwordConfirm.required(registerForm)") Password confirmation is required.
     .invalid-feedback(*ngIf="fgvm.passwordConfirm.mismatch(registerForm)") Confirmation password does not match.
   .form-group.text-center
-    button.btn.btn-success(type='submit') Register
+    button.btn.btn-success(type='submit', [disabled]="!registerForm.valid") Register
     button.btn.btn-default(type='button', (click)="cancel();") Cancel
 
 p Form Value: {{registerForm.value | json}}

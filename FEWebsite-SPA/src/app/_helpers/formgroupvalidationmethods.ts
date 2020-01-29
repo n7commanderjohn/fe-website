@@ -4,9 +4,11 @@ export const FormStrings = {
     gender: 'gender',
     name: 'name',
     description: 'description',
+    dateOfBirth: 'dateOfBirth',
     required: 'required',
     minlength: 'minlength',
     maxlength: 'maxlength',
+    email: 'email',
     username: 'username',
     password: 'password',
     passwordConfirm: 'passwordConfirm',
@@ -14,8 +16,12 @@ export const FormStrings = {
 };
 
 export class FormGroupValidatorMethods {
+    email = {
+        hasErrors(fg: FormGroup) {
+            return fg.get(FormStrings.email).errors && fg.get(FormStrings.email).touched;
+        },
+    };
     username = {
-        username: 'username',
         hasErrors(fg: FormGroup) {
             return fg.get(FormStrings.username).errors && fg.get(FormStrings.username).touched;
         },
@@ -50,6 +56,14 @@ export class FormGroupValidatorMethods {
             return fg.get(FormStrings.passwordConfirm).value
                 && fg.hasError(FormStrings.mismatch)
                 && fg.get(FormStrings.passwordConfirm).touched;
+        }
+    };
+    dateOfBirth = {
+        hasErrors(fg: FormGroup) {
+            return fg.get(FormStrings.dateOfBirth).touched && fg.get(FormStrings.dateOfBirth).errors;
+        },
+        required(fg: FormGroup) {
+            return fg.get(FormStrings.dateOfBirth).touched && fg.get(FormStrings.dateOfBirth).hasError(FormStrings.required);
         }
     };
 }
