@@ -23,6 +23,7 @@ import { UserCardComponent } from './users/user-card/user-card.component';
 import { UserDetailComponent } from './users/user-detail/user-detail.component';
 import { UserEditComponent } from './users/user-edit/user-edit.component';
 import { PhotoEditorComponent } from './users/photo-editor/photo-editor.component';
+
 import { AuthService } from './_services/auth.service';
 import { UserService } from './_services/user.service';
 import { GamesService } from './_services/games.service';
@@ -36,6 +37,9 @@ import { routes } from './routes';
 import { UserListResolver } from './_resolvers/user-list.resolver';
 import { UserDetailResolver } from './_resolvers/user-detail.resolver';
 import { UserEditResolver } from './_resolvers/user-edit.resolver';
+
+import { RegisterUser } from './_models/registerUser';
+import { FormGroupValidatorMethods } from './_helpers/formgroupvalidationmethods';
 
 export function tokenGetter() {
    return localStorage.getItem('token');
@@ -95,6 +99,8 @@ export class CustomHammerConfig extends HammerGestureConfig  {
       { provide: HAMMER_GESTURE_CONFIG, useClass: CustomHammerConfig },
       GamesService,
       GameGenresService,
+      RegisterUser,
+      FormGroupValidatorMethods,
    ],
    bootstrap: [
       AppComponent

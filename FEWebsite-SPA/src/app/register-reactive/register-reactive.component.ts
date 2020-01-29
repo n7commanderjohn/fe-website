@@ -1,11 +1,12 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
-import { AlertifyService } from './../_services/alertify.service';
-import { AuthService } from './../_services/auth.service';
-import { UserService } from 'src/app/_services/user.service';
-import { GamesService } from './../_services/games.service';
+import { AlertifyService } from '../_services/alertify.service';
+import { AuthService } from '../_services/auth.service';
+import { UserService } from '../_services/user.service';
+import { GamesService } from '../_services/games.service';
 
+import { FormStrings, FormGroupValidatorMethods } from '../_helpers/formgroupvalidationmethods';
 import { RegisterUser } from '../_models/registerUser';
 import { Game } from '../_models/game';
 import { Gender } from '../_models/gender';
@@ -19,25 +20,26 @@ export class RegisterReactiveComponent implements OnInit {
   @Output() cancelRegister = new EventEmitter();
   listOfGames: Game[];
   listOfGenders: Gender[];
-  userModel: RegisterUser;
   registerForm: FormGroup;
+  fs = FormStrings;
 
   constructor(private authService: AuthService,
               private alertify: AlertifyService,
               private userService: UserService,
-              private gamesService: GamesService) { }
+              private gamesService: GamesService,
+              public userModel: RegisterUser,
+              public fgvm: FormGroupValidatorMethods) { }
 
   ngOnInit() {
-    this.userModel = new RegisterUser();
     this.registerForm = new FormGroup({
       name: new FormControl(),
       description: new FormControl(),
-      gender: new FormControl(),
+      gender: new FormControl('M'),
       username: new FormControl(null, Validators.required),
       password: new FormControl(null, [Validators.required,
         Validators.minLength(8), Validators.maxLength(16)]),
-      confirmPassword: new FormControl(null, Validators.required),
-    });
+      passwordConfirm: new FormControl(null, Validators.required),
+    }, this.fgvm.passwordConfirm.matches);
     this.getGames();
     this.getGenders();
   }
