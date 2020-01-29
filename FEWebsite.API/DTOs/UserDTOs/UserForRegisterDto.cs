@@ -14,7 +14,6 @@ namespace FEWebsite.API.DTOs.UserDTOs
         [Required]
         public DateTime Birthday { get; set; }
 
-        [Required]
         public string Name { get; set; }
 
         public string Description { get; set; }

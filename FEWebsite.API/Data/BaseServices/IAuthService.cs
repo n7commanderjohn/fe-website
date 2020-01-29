@@ -10,5 +10,7 @@ namespace FEWebsite.API.Data.BaseServices
          Task<User> Login(string username, string password);
 
          Task<bool> UserExists(string username);
+
+         Task<bool> EmailExists(string email);
     }
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using FEWebsite.API.Data.BaseServices;
 using FEWebsite.API.Models;
+using FEWebsite.API.Helpers;
 using FEWebsite.API.DTOs.UserDTOs;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
@@ -31,11 +32,16 @@ namespace FEWebsite.API.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(UserForRegisterDto userForRegisterDto)
         {
-            userForRegisterDto.Username = userForRegisterDto.Username.ToLower();
-
             if (await this.AuthService.UserExists(userForRegisterDto.Username).ConfigureAwait(false))
             {
-                return this.BadRequest("Username already exists.");
+                return this.BadRequest(new StatusCodeResultReturnObject(this.BadRequest(),
+                    "This username is already in use."));
+            }
+
+            if (await this.AuthService.EmailExists(userForRegisterDto.Email).ConfigureAwait(false))
+            {
+                return this.BadRequest(new StatusCodeResultReturnObject(this.BadRequest(),
+                    "This email is already in use."));
             }
 
             var newUser = this.Mapper.Map<User>(userForRegisterDto);
@@ -48,7 +54,8 @@ namespace FEWebsite.API.Controllers
                 return this.CreatedAtRoute("GetUser", new { controller = "Users", id = returnUser.Id }, returnUser);
             }
             else {
-                return this.BadRequest("Registration failed when creating the user.");
+                return this.BadRequest(new StatusCodeResultReturnObject(this.BadRequest(),
+                    "Registration failed when creating the user."));
             }
         }
 
@@ -61,7 +68,8 @@ namespace FEWebsite.API.Controllers
 
             if (authenticatedUser == null)
             {
-                return this.Unauthorized();
+                return this.Unauthorized(new StatusCodeResultReturnObject(this.Unauthorized(),
+                    "Login failed."));
             }
 
             var claims = new[]

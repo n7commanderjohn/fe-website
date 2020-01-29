@@ -1,5 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { Router } from '@angular/router';
 import { BsDatepickerConfig } from 'ngx-bootstrap';
 
 import { AlertifyService } from '../_services/alertify.service';
@@ -8,6 +9,7 @@ import { UserService } from '../_services/user.service';
 import { GamesService } from '../_services/games.service';
 
 import { FormStrings, FormGroupValidatorMethods } from '../_helpers/formgroupvalidationmethods';
+import { StatusCodeResultReturnObject } from '../_models/statusCodeResultReturnObject';
 import { Game } from '../_models/game';
 import { Gender } from '../_models/gender';
 import { User } from '../_models/user';
@@ -31,6 +33,7 @@ export class RegisterReactiveComponent implements OnInit {
               private userService: UserService,
               private gamesService: GamesService,
               private fb: FormBuilder,
+              private router: Router,
               public fgvm: FormGroupValidatorMethods) { }
 
   ngOnInit() {
@@ -58,14 +61,17 @@ export class RegisterReactiveComponent implements OnInit {
 
   register() {
     if (this.registerForm.valid) {
-
+      this.userModel = Object.assign({}, this.registerForm.value);
+      this.authService.register(this.userModel).subscribe((response) => {
+        this.alertify.success('Registration successful.');
+      }, (error: StatusCodeResultReturnObject) => {
+        this.alertify.error(error.response);
+      }, () => {
+        this.authService.login(this.userModel).subscribe(() => {
+          this.router.navigate(['/home']);
+        });
+      });
     }
-    // this.authService.register(this.userModel).subscribe((response) => {
-    //   this.alertify.success('Registration successful.');
-    // }, (error: any) => {
-    //   this.alertify.error(error);
-    // });
-    console.log(this.registerForm.value);
   }
 
   cancel() {

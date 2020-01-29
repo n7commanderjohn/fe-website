@@ -1,9 +1,12 @@
-import { LoginCredentials } from './../_models/loginCredentials';
-import { AlertifyService } from './../_services/alertify.service';
-import { AuthService } from './../_services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
+
+import { AlertifyService } from './../_services/alertify.service';
+import { AuthService } from './../_services/auth.service';
+
+import { StatusCodeResultReturnObject } from './../_models/statusCodeResultReturnObject';
+import { LoginCredentials } from './../_models/loginCredentials';
 
 @Component({
   selector: 'app-nav',
@@ -28,8 +31,8 @@ export class NavComponent implements OnInit {
   login() {
     this.authService.login(this.loginCredentials).subscribe(next => {
       this.alertify.success('Login successful.');
-    }, error => {
-      this.alertify.error(error);
+    }, (error: StatusCodeResultReturnObject) => {
+      this.alertify.error(error.response);
     }, () => {
       this.router.navigate(['/home']);
     });

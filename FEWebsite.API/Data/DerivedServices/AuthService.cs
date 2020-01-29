@@ -56,6 +56,10 @@ namespace FEWebsite.API.Data.DerivedServices
         public async Task<User> Register(User user, string password)
         {
             this.CreatePasswordHash(user, password);
+            if (user.Name == null) {
+                user.Name = user.Username;
+            }
+            user.Username = user.Username.ToLower();
             user.AccountCreated = DateTime.Now;
             user.LastLogin = DateTime.Now;
 
@@ -79,6 +83,13 @@ namespace FEWebsite.API.Data.DerivedServices
         {
             return await this.Context.Users
                 .AnyAsync(u => u.Username == username)
+                .ConfigureAwait(false);
+        }
+
+        public async Task<bool> EmailExists(string email)
+        {
+            return await this.Context.Users
+                .AnyAsync(u => u.Email == email)
                 .ConfigureAwait(false);
         }
     }

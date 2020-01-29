@@ -5,10 +5,9 @@ import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from './../../environments/environment';
 import { User } from './../_models/user';
-import { RegisterUser } from './../_models/registerUser';
 import { LoginResponse } from './../_models/loginResponse';
 import { DecodedJWT } from '../_models/decodedJWT';
-import { LoginCredentials } from '../_models/loginCredentials';
+import { LoginCredentials } from './../_models/loginCredentials';
 
 @Injectable({
   providedIn: 'root'
@@ -27,8 +26,8 @@ export class AuthService {
     this.photoUrl.next(photoUrl);
   }
 
-  login(loginCredentials: LoginCredentials) {
-    return this.http.post(this.dotNetAPIURL + 'login', loginCredentials)
+  login(user: User | LoginCredentials) {
+    return this.http.post(this.dotNetAPIURL + 'login', user)
       .pipe(
         map((loginResponse: LoginResponse) => {
           if (loginResponse) {
@@ -42,8 +41,8 @@ export class AuthService {
       );
   }
 
-  register(model: RegisterUser) {
-    return this.http.post(this.dotNetAPIURL + 'register', model);
+  register(user: User) {
+    return this.http.post(this.dotNetAPIURL + 'register', user);
   }
 
   loggedIn() {
