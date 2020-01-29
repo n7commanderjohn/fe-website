@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 
 import { AlertifyService } from '../_services/alertify.service';
 import { AuthService } from '../_services/auth.service';
@@ -27,21 +27,26 @@ export class RegisterReactiveComponent implements OnInit {
               private alertify: AlertifyService,
               private userService: UserService,
               private gamesService: GamesService,
+              private fb: FormBuilder,
               public userModel: RegisterUser,
               public fgvm: FormGroupValidatorMethods) { }
 
   ngOnInit() {
-    this.registerForm = new FormGroup({
-      name: new FormControl(),
-      description: new FormControl(),
-      gender: new FormControl('M'),
-      username: new FormControl(null, Validators.required),
-      password: new FormControl(null, [Validators.required,
-        Validators.minLength(8), Validators.maxLength(16)]),
-      passwordConfirm: new FormControl(null, Validators.required),
-    }, this.fgvm.passwordConfirm.matches);
+    this.createRegisterForm();
     this.getGames();
     this.getGenders();
+  }
+
+  createRegisterForm() {
+    this.registerForm = this.fb.group({
+      username: [null, Validators.required],
+      password: [null,
+        [Validators.required, Validators.minLength(8), Validators.maxLength(16)]],
+      passwordConfirm: [null, Validators.required],
+      name: [null],
+      description: [null],
+      gender: ['M'],
+    }, {validator: this.fgvm.passwordConfirm.matches});
   }
 
   register() {

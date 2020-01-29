@@ -23,7 +23,7 @@ form([formGroup]="registerForm", (ngSubmit)="register();")
     input.form-control(formControlName='{{fs.passwordConfirm}}', type='password', placeholder='Confirm Password',
       [ngClass]="{'is-invalid': fgvm.passwordConfirm.hasErrors(registerForm)}")
     .invalid-feedback(*ngIf="fgvm.passwordConfirm.required(registerForm)") Password confirmation is required.
-    .invalid-feedback(*ngIf="fgvm.passwordConfirm.mismatch(registerForm)") Passwords are mismatched.
+    .invalid-feedback(*ngIf="fgvm.passwordConfirm.mismatch(registerForm)") Confirmation password does not match.
   .form-group.text-center
     button.btn.btn-success(type='submit') Register
     button.btn.btn-default(type='button', (click)="cancel();") Cancel
