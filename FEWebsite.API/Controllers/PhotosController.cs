@@ -57,7 +57,8 @@ namespace FEWebsite.API.Controllers
         {
             if (!this.IsUserMatched(userId))
             {
-                return this.Unauthorized();
+                return this.Unauthorized(new StatusCodeResultReturnObject(this.Unauthorized(),
+                    "You are not logged in as the user you are trying to upload the photo for."));
             }
 
             var currentUser = await this.UserService.GetUser(userId).ConfigureAwait(false);
@@ -67,7 +68,8 @@ namespace FEWebsite.API.Controllers
             bool doesPhotoExist = file == null;
             if (doesPhotoExist)
             {
-                return this.BadRequest("The photo to be uploaded was not found.");
+                return this.BadRequest(new StatusCodeResultReturnObject(this.BadRequest(),
+                    "The photo to be uploaded was not found."));
             }
             else
             {
@@ -107,7 +109,8 @@ namespace FEWebsite.API.Controllers
                 return this.CreatedAtRoute("GetPhoto", new { userId, photo.Id }, photoToReturn);
             }
 
-            return BadRequest("Photo upload to server failed.");
+            return BadRequest(new StatusCodeResultReturnObject(this.BadRequest(),
+                "Photo upload to server failed."));
         }
 
         [HttpPut("{photoId}/setMain")]

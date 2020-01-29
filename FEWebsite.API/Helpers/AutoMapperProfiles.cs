@@ -24,23 +24,19 @@ namespace FEWebsite.API.Helpers
 
         private void CreateMapForUser()
         {
-            const string defaultUserPic = "../../assets/defaultUser.png";
             this.CreateMap<User, UserForLoginDto>()
                 .ForMember(destinationMember => destinationMember.PhotoUrl,
-                    memberOptions => memberOptions.MapFrom(sourceMember =>
-                    sourceMember.Photos.Count > 0 ? sourceMember.Photos.FirstOrDefault(p => p.IsMain).Url : defaultUserPic));
+                    memberOptions => memberOptions.MapFrom(sourceMember => sourceMember.Photos.FirstOrDefault(p => p.IsMain).Url));
             this.CreateMap<User, UserForListDto>()
                 .ForMember(destinationMember => destinationMember.PhotoUrl,
-                    memberOptions => memberOptions.MapFrom(sourceMember =>
-                    sourceMember.Photos.Count > 0 ? sourceMember.Photos.FirstOrDefault(p => p.IsMain).Url : defaultUserPic))
+                    memberOptions => memberOptions.MapFrom(sourceMember => sourceMember.Photos.FirstOrDefault(p => p.IsMain).Url))
                 .ForMember(destinationMember => destinationMember.Age,
                     memberOptions => memberOptions.MapFrom(sourceMember => sourceMember.Birthday.CalculateAge()))
                 .ForMember(destinationMember => destinationMember.Gender,
                     memberOptions => memberOptions.MapFrom(sourceMember => sourceMember.Gender.Description));
             this.CreateMap<User, UserForDetailedDto>()
                 .ForMember(destinationMember => destinationMember.PhotoUrl,
-                    memberOptions => memberOptions.MapFrom(sourceMember =>
-                    sourceMember.Photos.Count > 0 ? sourceMember.Photos.FirstOrDefault(p => p.IsMain).Url : defaultUserPic))
+                    memberOptions => memberOptions.MapFrom(sourceMember => sourceMember.Photos.FirstOrDefault(p => p.IsMain).Url))
                 .ForMember(destinationMember => destinationMember.Age,
                     memberOptions => memberOptions.MapFrom(sourceMember => sourceMember.Birthday.CalculateAge()))
                 .ForMember(destinationMember => destinationMember.Gender,

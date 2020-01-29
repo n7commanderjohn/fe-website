@@ -1,6 +1,6 @@
 .card.mb-4
   .card-img-wrapper
-    img.card-img-top(src="{{user.photoUrl}}", alt="{{user.name}}")
+    img.card-img-top(src="{{user.photoUrl || '../../../assets/defaultUser.png'}}", alt="{{user.name}}")
     ul.list-inline.member-icons.animate.text-center
       li.list-inline-item
         button.btn.btn-primary([routerLink]="['/users/', user.id]")

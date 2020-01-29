@@ -17,7 +17,7 @@ nav.navbar.navbar-expand-md.navbar-dark.bg-primary
             .dropdown-divider
     button.btn.btn-primary.dropdown(*ngIf="loggedIn();", 'dropdown')
       span.mr-1
-        img(src="{{photoUrl}}", alt="")
+        img(src="{{photoUrl || '../../assets/defaultUser.png'}}", alt="")
       a.dropdown-toggle(dropdownToggle) Welcome {{authService.decodedToken?.unique_name | titlecase}}&nbsp;
       .dropdown-menu.mt-4('*dropdownMenu')
         a.dropdown-item([routerLink]="['/user/edit']")
