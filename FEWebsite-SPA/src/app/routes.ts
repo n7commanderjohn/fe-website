@@ -12,7 +12,7 @@ import { PreventUnsavedChangesGuard } from './_guards/prevent-unsaved-changes.gu
 
 import { UserListResolver } from './_resolvers/user-list.resolver';
 import { UserDetailResolver } from './_resolvers/user-detail.resolver';
-import { UserEditComponent } from './users/user-edit/user-edit.component';
+import { UserEditReactiveComponent } from './users/user-edit-reactive/user-edit-reactive.component';
 
 export const routes: Routes = [
   {
@@ -27,7 +27,8 @@ export const routes: Routes = [
     runGuardsAndResolvers: 'always',
     canActivate: [AuthGuard],
     children: [
-      { path: 'user/edit', component: UserEditComponent, resolve: {user: UserEditResolver}, canDeactivate: [PreventUnsavedChangesGuard] },
+      { path: 'user/edit', component: UserEditReactiveComponent, resolve: {user: UserEditResolver},
+        canDeactivate: [PreventUnsavedChangesGuard] },
       { path: 'users', component: UserListComponent, resolve: {users: UserListResolver} },
       { path: 'users/:id', component: UserDetailComponent, resolve: {user: UserDetailResolver} },
       { path: 'messages', component: MessagesComponent },

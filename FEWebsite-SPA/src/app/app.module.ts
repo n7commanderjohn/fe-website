@@ -22,6 +22,7 @@ import { UserListComponent } from './users/user-list/user-list.component';
 import { UserCardComponent } from './users/user-card/user-card.component';
 import { UserDetailComponent } from './users/user-detail/user-detail.component';
 import { UserEditComponent } from './users/user-edit/user-edit.component';
+import { UserEditReactiveComponent } from './users/user-edit-reactive/user-edit-reactive.component';
 import { PhotoEditorComponent } from './users/photo-editor/photo-editor.component';
 
 import { AuthService } from './_services/auth.service';
@@ -64,6 +65,7 @@ export class CustomHammerConfig extends HammerGestureConfig  {
       UserCardComponent,
       UserDetailComponent,
       UserEditComponent,
+      UserEditReactiveComponent,
       PhotoEditorComponent
    ],
    imports: [
