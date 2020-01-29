@@ -39,7 +39,7 @@ namespace FEWebsite.API.Controllers
         }
 
         // GET api/users/5
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetUser")]
         public async Task<OkObjectResult> GetUser(int id)
         {
             var user = await this.UserService

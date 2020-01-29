@@ -43,7 +43,9 @@ namespace FEWebsite.API.Controllers
 
             if (createdUser != null)
             {
-                return this.Created($"api/users/{createdUser.Id}", createdUser);
+                var returnUser = this.Mapper.Map<UserForDetailedDto>(createdUser);
+                // return this.Created($"api/users/{createdUser.Id}", createdUser);
+                return this.CreatedAtRoute("GetUser", new { controller = "Users", id = returnUser.Id }, returnUser);
             }
             else {
                 return this.BadRequest("Registration failed when creating the user.");
