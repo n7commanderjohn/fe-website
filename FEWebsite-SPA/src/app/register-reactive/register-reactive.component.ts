@@ -45,20 +45,6 @@ export class RegisterReactiveComponent implements OnInit {
     this.getGenders();
   }
 
-  createRegisterForm() {
-    this.registerForm = this.fb.group({
-      name: [null],
-      description: [null],
-      gender: ['M'],
-      birthday: [null, Validators.required],
-      email: [null, Validators.required],
-      username: [null, Validators.required],
-      password: [null,
-        [Validators.required, Validators.minLength(8), Validators.maxLength(16)]],
-      passwordConfirm: [null, Validators.required],
-    }, {validator: this.fgvm.passwordConfirm.matches});
-  }
-
   register() {
     if (this.registerForm.valid) {
       this.userModel = Object.assign({}, this.registerForm.value);
@@ -77,6 +63,20 @@ export class RegisterReactiveComponent implements OnInit {
   cancel() {
     this.cancelRegister.emit(false);
     this.alertify.message('Registration cancelled.');
+  }
+
+  private createRegisterForm() {
+    this.registerForm = this.fb.group({
+      name: [null],
+      description: [null],
+      gender: ['M'],
+      birthday: [null, Validators.required],
+      email: [null, Validators.required],
+      username: [null, Validators.required],
+      password: [null,
+        [Validators.required, Validators.minLength(8), Validators.maxLength(16)]],
+      passwordConfirm: [null, Validators.required],
+    }, {validator: this.fgvm.passwordConfirm.matches});
   }
 
   private getGames() {

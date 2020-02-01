@@ -1,9 +1,9 @@
 .container.mt-4
   .row
     .col-sm-3
-      h1 Your Profile
+      h1 Your Profile (Reactive)
     .col-sm-9
-      .alert.alert-info(*ngIf="editForm.dirty")
+      .alert.alert-info(*ngIf="userEditForm.dirty")
         strong Information:&nbsp;
         | You have made changes. Any unsaved changes will lost!
   .row
@@ -21,26 +21,28 @@
             strong User Since:
             p {{user.accountCreated | date:'MMMM d, y'}}
         .card-footer
-            button.btn.btn-success.btn-block([disabled]="!editForm.dirty", form="editForm") Save Changes
+            button.btn.btn-success.btn-block([disabled]="!userEditForm.dirty", form="editForm") Save Changes
     .col-sm-9
       .tab-panel
         tabset.user-tabset
           tab(heading="Edit Profile")
-            form(#editForm="ngForm", (ngSubmit)="updateUser();", id="editForm")
+            form([formGroup]="userEditForm", (ngSubmit)="updateUser();", id="editForm")
               h4 Description
-              textarea.form-control(name="description", rows="6", [(ngModel)]="user.description") {{user.description}}
+              .form-group
+                textarea.form-control(formControlName='{{fs.description}}' rows="6", placeholder='Your story...')
               h4 Favorite Games (WIP)
-              .form-group
-                .form-check(*ngFor="let game of allGames")
+              .form-group(formArrayName='{{fs.games}}')
+                .form-check(*ngFor="let game of fgvm.games.getFavoriteGames(userEditForm); let i = index")
                   label.form-check-label
-                    input.form-check-input(type="checkbox", name="games", [(ngModel)]="game.checked")
-                    | {{game.description}}
+                    input.form-check-input(type="checkbox", [formControlName]="i")
+                    | {{allGames[i].description}}
                 button.btn.btn-primary Add New Game
-              h4 Favorite Game Genres (WIP)
-              .form-group
-                .form-check(*ngFor="let genre of allGenres")
+              h4 Favorite Genres (WIP)
+              .form-group(formArrayName='{{fs.genres}}')
+                .form-check(*ngFor="let genre of fgvm.genres.getFavoriteGenres(userEditForm); let i = index")
                   label.form-check-label
-                    input.form-check-input(type="checkbox", name="genres", [(ngModel)]="genre.checked")
-                    | {{genre.description}}
+                    input.form-check-input(type="checkbox", [formControlName]="i")
+                    | {{allGenres[i].description}}
+                button.btn.btn-primary Add New Genre
           tab(heading="Edit Photos")
             app-photo-editor([photos]="user.photos")

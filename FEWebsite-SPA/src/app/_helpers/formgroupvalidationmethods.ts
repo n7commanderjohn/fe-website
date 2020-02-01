@@ -1,4 +1,4 @@
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormArray } from '@angular/forms';
 
 export const FormStrings = {
     gender: 'gender',
@@ -12,7 +12,9 @@ export const FormStrings = {
     username: 'username',
     password: 'password',
     passwordConfirm: 'passwordConfirm',
-    mismatch: 'mismatch'
+    mismatch: 'mismatch',
+    games: 'games',
+    genres: 'genres',
 };
 
 export class FormGroupValidatorMethods {
@@ -64,6 +66,16 @@ export class FormGroupValidatorMethods {
         },
         required(fg: FormGroup) {
             return fg.get(FormStrings.birthday).touched && fg.get(FormStrings.birthday).hasError(FormStrings.required);
+        }
+    };
+    games = {
+        getFavoriteGames(fg: FormGroup) {
+            return (fg.get(FormStrings.games) as FormArray).controls;
+        }
+    };
+    genres = {
+        getFavoriteGenres(fg: FormGroup) {
+            return (fg.get(FormStrings.genres) as FormArray).controls;
         }
     };
 }
