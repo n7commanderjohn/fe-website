@@ -9,10 +9,6 @@ img.img-thumbnail {
     margin-bottom: 6px;
 }
 
-.nv-file-over {
-    border: dotted 3px green;
-}
-
 input[type=file] {
     color: transparent;
 }

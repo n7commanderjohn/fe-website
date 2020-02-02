@@ -1,18 +1,20 @@
 import { Component, OnInit, HostListener } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-
-import { User } from 'src/app/_models/user';
-import { Game } from 'src/app/_models/game';
-import { GameGenre } from './../../_models/gamegenre';
+import { BsDatepickerConfig } from 'ngx-bootstrap';
 
 import { AlertifyService } from './../../_services/alertify.service';
-import { UserService } from 'src/app/_services/user.service';
+import { UserService } from './../../_services/user.service';
 import { AuthService } from './../../_services/auth.service';
 import { GameGenresService } from './../../_services/gameGenres.service';
 import { GamesService } from './../../_services/games.service';
 
 import { FormGroupValidatorMethods, FormStrings } from './../../_helpers/formgroupvalidationmethods';
+import { StatusCodeResultReturnObject } from './../../_models/statusCodeResultReturnObject';
+import { User } from './../../_models/user';
+import { Game } from './../../_models/game';
+import { GameGenre } from './../../_models/gamegenre';
+import { Gender } from './../../_models/gender';
 
 @Component({
   selector: 'app-user-edit-reactive',
@@ -24,8 +26,12 @@ export class UserEditReactiveComponent implements OnInit {
   photoUrl: string;
   allGames: Game[];
   allGenres: GameGenre[];
+  listOfGenders: Gender[];
   userEditForm: FormGroup;
   fs = FormStrings;
+  bsConfig: Partial<BsDatepickerConfig>;
+  maxDate = new Date();
+  passwordChangeMode = false;
 
   @HostListener('window:beforeunload', ['$event'])
   unloadNotification($event: any) {
@@ -46,6 +52,9 @@ export class UserEditReactiveComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.bsConfig = {
+      containerClass: 'theme-dark-blue'
+    };
     this.route.data.subscribe(
       data => {
         this.user = data.user;
@@ -53,8 +62,9 @@ export class UserEditReactiveComponent implements OnInit {
         this.createUserEditForm(this.user);
         this.getGames();
         this.getGameGenres();
+        this.getGenders();
       },
-      error => {
+      (error: StatusCodeResultReturnObject) => {
         this.alertify.error(error.response);
       }
     );
@@ -63,52 +73,50 @@ export class UserEditReactiveComponent implements OnInit {
     );
   }
 
+  passwordChangeToggle() {
+    this.passwordChangeMode = !this.passwordChangeMode;
+    this.fgvm.passwordCurrent.toggleOtherPasswordFields(this.userEditForm, this.passwordChangeMode);
+  }
+
   updateUser() {
     if (this.userEditForm.valid) {
-      this.user = Object.assign({}, this.userEditForm.value);
+      this.user = Object.assign(this.user, this.userEditForm.value);
       const userId = Number(this.authService.decodedToken.nameid);
       this.userService.updateUser(userId, this.user).subscribe(
-        (response) => {
+        () => {
             this.alertify.success('Profile updated successfully.');
             this.userEditForm.reset(this.user);
         },
         error => {
           this.alertify.error(error);
-        }
-        );
+      });
     }
   }
 
-  get games() {
-    return this.userEditForm.get(this.fs.games) as FormArray;
-  }
-
-  get genres() {
-    return this.userEditForm.get(this.fs.genres) as FormArray;
-  }
-
   private createUserEditForm(user: User) {
-    this.userEditForm = this.fb.group(
-      {
-        name: [user.name],
-        description: [user.description],
-        gender: [user.genderId],
-        birthday: [user.birthday, Validators.required],
-        email: [user.email, Validators.required],
-        username: [user.username, Validators.required],
-        password: [null,
-          [
-            Validators.required,
-            Validators.minLength(8),
-            Validators.maxLength(16)
-          ]
-        ],
-        passwordConfirm: [null, Validators.required],
-        games: null,
-        genres: null,
-      },
-      { validator: this.fgvm.passwordConfirm.matches }
-    );
+    this.userEditForm = this.fb.group({
+      name: [user.name, Validators.required],
+      description: [user.description],
+      gender: [user.genderId],
+      birthday: [new Date(user.birthday), Validators.required],
+      email: [user.email,
+        [Validators.required, Validators.email]
+      ],
+      username: [user.username, Validators.required],
+      passwordCurrent: null,
+      password: [{value: null, disabled: true},
+        [Validators.minLength(8), Validators.maxLength(16)]
+      ],
+      passwordConfirm: [{value: null, disabled: true}],
+      games: null,
+      genres: null,
+    },
+    { validators: [
+        this.fgvm.customValidators.passwordCurrentRequired,
+        this.fgvm.customValidators.passwordNewRequired,
+        this.fgvm.customValidators.confirmationPasswordMatches,
+      ]
+    });
   }
 
   private getGames() {
@@ -166,5 +174,13 @@ export class UserEditReactiveComponent implements OnInit {
       genre => new FormControl(genre.checked)
     );
     this.userEditForm.setControl(this.fs.genres, this.fb.array(genresInFormControls));
+  }
+
+  private getGenders() {
+    this.userService.getGenders().subscribe(genders => {
+      this.listOfGenders = genders;
+    }, error => {
+      this.alertify.error(error);
+    });
   }
 }

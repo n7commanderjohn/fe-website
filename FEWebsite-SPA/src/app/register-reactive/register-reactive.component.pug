@@ -16,7 +16,7 @@ form([formGroup]="registerForm", (ngSubmit)="register();")
   .form-group
     input.form-control(formControlName='{{fs.email}}', type='text', placeholder='Email',
       [ngClass]="{'is-invalid': fgvm.email.hasErrors(registerForm)}")
-    .invalid-feedback Please enter a username.
+    .invalid-feedback Please enter a email.
   .form-group
     input.form-control(formControlName='{{fs.username}}', type='text', placeholder='Username',
       [ngClass]="{'is-invalid': fgvm.username.hasErrors(registerForm)}")
@@ -35,6 +35,3 @@ form([formGroup]="registerForm", (ngSubmit)="register();")
   .form-group.text-center
     button.btn.btn-success(type='submit', [disabled]="!registerForm.valid") Register
     button.btn.btn-default(type='button', (click)="cancel();") Cancel
-
-p Form Value: {{registerForm.value | json}}
-p Form Status: {{registerForm.status | json}}

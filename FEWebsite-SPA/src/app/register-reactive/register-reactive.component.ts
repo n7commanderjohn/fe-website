@@ -76,7 +76,11 @@ export class RegisterReactiveComponent implements OnInit {
       password: [null,
         [Validators.required, Validators.minLength(8), Validators.maxLength(16)]],
       passwordConfirm: [null, Validators.required],
-    }, {validator: this.fgvm.passwordConfirm.matches});
+    },
+    { validators: [
+        this.fgvm.customValidators.confirmationPasswordMatches
+      ]
+    });
   }
 
   private getGames() {

@@ -80,3 +80,11 @@ hr:before { /* Not really supposed to work, but does */
 .my-drop-zone {
   border-color: white;
 }
+
+.nv-file-over {
+  border: dotted 3px green;
+}
+
+input.ng-dirty[type=text], select.ng-dirty, textarea.ng-dirty {
+  border: solid 3px yellow;
+}

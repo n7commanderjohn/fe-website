@@ -18,4 +18,7 @@ export interface User extends BaseModel {
     listOfGenres?: string[];
     games?: Game[];
     genres?: GameGenre[];
+    passwordCurrent: string;
+    password: string;
+    passwordConfirm: string;
 }
