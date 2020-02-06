@@ -78,19 +78,39 @@ export class UserEditReactiveComponent implements OnInit {
     this.fgvm.passwordCurrent.toggleOtherPasswordFields(this.userEditForm, this.passwordChangeMode);
   }
 
-  updateUser() {
+  updateUser(debug: boolean) {
     if (this.userEditForm.valid) {
-      this.user = Object.assign(this.user, this.userEditForm.value);
-      const userId = Number(this.authService.decodedToken.nameid);
-      this.userService.updateUser(userId, this.user).subscribe(
-        () => {
+      this.assignFormValuesToUser();
+      if (debug) {
+        console.log(this.user);
+        console.log(this.allGames);
+        console.log(this.allGenres);
+      } else {
+        const userId = Number(this.authService.decodedToken.nameid);
+        this.userService.updateUser(userId, this.user).subscribe(
+          () => {
             this.alertify.success('Profile updated successfully.');
-            this.userEditForm.reset(this.user);
-        },
-        error => {
-          this.alertify.error(error);
-      });
+            this.userEditForm.reset(this.userEditForm.value);
+          },
+          error => {
+            this.alertify.error(error);
+          });
+      }
     }
+  }
+
+  private assignFormValuesToUser() {
+    this.user = Object.assign(this.user, this.userEditForm.value);
+    this.user.genderId = this.user.gender;
+    // this.user.gender = null;
+    this.user.games.forEach((element, index) => {
+      this.allGames[index].checked = element as unknown as boolean; // the form returns an array of booleans
+    });
+    this.user.genres.forEach((element, index) => {
+      this.allGenres[index].checked = element as unknown as boolean; // the form returns an array of booleans
+    });
+    this.user.games = this.allGames.filter(g => g.checked);
+    this.user.genres = this.allGenres.filter(g => g.checked);
   }
 
   private createUserEditForm(user: User) {

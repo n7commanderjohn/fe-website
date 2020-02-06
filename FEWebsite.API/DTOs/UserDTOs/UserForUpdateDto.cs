@@ -9,10 +9,20 @@ namespace FEWebsite.API.DTOs.UserDTOs
 
         public string Email { get; set; }
 
-        public string Gender { get; set; }
+        public string GenderId { get; set; }
 
         public string Name { get; set; }
 
+        public string Username { get; set; }
+
+        public string PasswordCurrrent { get; set; }
+
+        public string Password { get; set; }
+
         public string Description { get; set; }
+
+        public Game[] Games { get; set; }
+
+        public GameGenre[] Genres { get; set; }
     }
 }
