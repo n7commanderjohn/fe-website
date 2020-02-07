@@ -22,8 +22,7 @@ namespace FEWebsite.API.Data.DerivedServices
                 .FirstOrDefaultAsync(u => u.Username == username)
                 .ConfigureAwait(false);
 
-            if (user == null
-                || !VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
+            if (!this.ComparePassword(user, password))
             {
                 return null;
             }
@@ -34,12 +33,8 @@ namespace FEWebsite.API.Data.DerivedServices
             return user;
         }
 
-        public async Task<bool> ComparePassword(string username, string password)
+        public bool ComparePassword(User user, string password)
         {
-            var user = await this.Context.Users
-                .FirstOrDefaultAsync(u => u.Username == username)
-                .ConfigureAwait(false);
-
             return user != null && VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt);
         }
 

@@ -70,18 +70,17 @@ namespace FEWebsite.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(int id, UserForUpdateDto userForUpdateDto)
         {
+            bool userIdInTokenMatches = id == int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            if (!userIdInTokenMatches) {
+                return this.Unauthorized();
+            }
+
+            var currentUser = await this.UserService.GetUser(id).ConfigureAwait(false);
             var passwordVerficationPassed = userForUpdateDto.IsPasswordNeeded ?
-                 await this.AuthService
-                    .ComparePassword(userForUpdateDto.Username, userForUpdateDto.PasswordCurrent).ConfigureAwait(false)
+                this.AuthService.ComparePassword(currentUser, userForUpdateDto.PasswordCurrent)
                 : true;
             if (passwordVerficationPassed)
             {
-                if (id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)) {
-                    return this.Unauthorized();
-                }
-
-                var currentUser = await this.UserService.GetUser(id).ConfigureAwait(false);
-
                 this.Mapper.Map(userForUpdateDto, currentUser);
 
                 var usernameExistsForAnotherUser = await this.AuthService
