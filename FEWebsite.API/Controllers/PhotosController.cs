@@ -57,7 +57,7 @@ namespace FEWebsite.API.Controllers
         {
             if (!this.IsUserMatched(userId))
             {
-                return this.Unauthorized(new StatusCodeResultReturnObject(this.Unauthorized(),
+                return this.BadRequest(new StatusCodeResultReturnObject(this.Unauthorized(),
                     "You are not logged in as the user you are trying to upload the photo for."));
             }
 
@@ -208,17 +208,17 @@ namespace FEWebsite.API.Controllers
             }
         }
 
-        private UnauthorizedObjectResult IsUserAndPhotoAuthorized(User user, int photoId)
+        private BadRequestObjectResult IsUserAndPhotoAuthorized(User user, int photoId)
         {
             if (!this.IsUserMatched(user.Id))
             {
-                return this.Unauthorized(new StatusCodeResultReturnObject(this.Unauthorized(),
+                return this.BadRequest(new StatusCodeResultReturnObject(this.Unauthorized(),
                     "This isn't the currently logged in user."));
             }
 
             if (!user.DoesPhotoExist(photoId))
             {
-                return this.Unauthorized(new StatusCodeResultReturnObject(this.Unauthorized(),
+                return this.BadRequest(new StatusCodeResultReturnObject(this.Unauthorized(),
                     "This photo id doesn't match any of the user's photos."));
             }
 

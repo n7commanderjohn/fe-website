@@ -9,8 +9,14 @@ namespace FEWebsite.API.Data.BaseServices
 
          Task<User> Login(string username, string password);
 
-         Task<bool> UserExists(string username);
+         Task<bool> ComparePassword(string username, string password);
+
+         Task<bool> UserNameExists(string username);
+
+         Task<bool> UserNameExistsForAnotherUser(User user);
 
          Task<bool> EmailExists(string email);
+
+         Task<bool> EmailExistsForAnotherUser(User user);
     }
 }

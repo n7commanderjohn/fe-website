@@ -15,7 +15,7 @@ namespace FEWebsite.API.DTOs.UserDTOs
 
         public string Username { get; set; }
 
-        public string PasswordCurrrent { get; set; }
+        public string PasswordCurrent { get; set; }
 
         public string Password { get; set; }
 
@@ -24,5 +24,7 @@ namespace FEWebsite.API.DTOs.UserDTOs
         public Game[] Games { get; set; }
 
         public GameGenre[] Genres { get; set; }
+
+        public bool IsPasswordNeeded { get; set; }
     }
 }

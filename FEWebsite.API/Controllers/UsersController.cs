@@ -1,12 +1,12 @@
-﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Mvc;
+﻿using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using FEWebsite.API.Data.BaseServices;
-using AutoMapper;
 using FEWebsite.API.DTOs.UserDTOs;
-using System.Collections.Generic;
-using System;
+using FEWebsite.API.Helpers;
+using AutoMapper;
 
 namespace FEWebsite.API.Controllers
 {
@@ -19,10 +19,13 @@ namespace FEWebsite.API.Controllers
 
         private IMapper Mapper { get; }
 
-        public UsersController(IUsersService userService, IMapper mapper)
+        private IAuthService AuthService { get; }
+
+        public UsersController(IUsersService userService, IMapper mapper, IAuthService authService)
         {
             this.UserService = userService;
             this.Mapper = mapper;
+            this.AuthService = authService;
         }
 
         // GET api/users
@@ -67,19 +70,53 @@ namespace FEWebsite.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(int id, UserForUpdateDto userForUpdateDto)
         {
-            if (id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)) {
-                return this.Unauthorized();
+            var passwordVerficationPassed = userForUpdateDto.IsPasswordNeeded ?
+                 await this.AuthService
+                    .ComparePassword(userForUpdateDto.Username, userForUpdateDto.PasswordCurrent).ConfigureAwait(false)
+                : true;
+            if (passwordVerficationPassed)
+            {
+                if (id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)) {
+                    return this.Unauthorized();
+                }
+
+                var currentUser = await this.UserService.GetUser(id).ConfigureAwait(false);
+
+                this.Mapper.Map(userForUpdateDto, currentUser);
+
+                var usernameExistsForAnotherUser = await this.AuthService
+                    .UserNameExistsForAnotherUser(currentUser).ConfigureAwait(false);
+                var emailExistsForAnotherUser = await this.AuthService
+                    .EmailExistsForAnotherUser(currentUser).ConfigureAwait(false);
+                if (usernameExistsForAnotherUser)
+                {
+                    var returnObj
+                        = new StatusCodeResultReturnObject(this.BadRequest(), "This username is taken by another user.");
+                    return this.BadRequest(returnObj);
+                }
+                else if (emailExistsForAnotherUser)
+                {
+                    var returnObj
+                        = new StatusCodeResultReturnObject(this.BadRequest(), "This email is taken by another user.");
+                    return this.BadRequest(returnObj);
+                }
+                else if (await this.UserService.SaveAll().ConfigureAwait(false))
+                {
+                    return this.NoContent();
+                }
+                else
+                {
+                    var returnObj
+                        = new StatusCodeResultReturnObject(this.BadRequest(), "Your information failed to save.");
+                    return this.BadRequest(returnObj);
+                }
             }
-
-            var currentUser = await this.UserService.GetUser(id).ConfigureAwait(false);
-
-            this.Mapper.Map(userForUpdateDto, currentUser);
-
-            if (await this.UserService.SaveAll().ConfigureAwait(false)) {
-                return this.NoContent();
+            else
+            {
+                var returnObj
+                    = new StatusCodeResultReturnObject(this.Unauthorized(), "The provided password does not match.");
+                return this.BadRequest(returnObj);
             }
-
-            throw new Exception($"Update user {id} failed on save.");
         }
 
         // DELETE api/users/5

@@ -28,6 +28,7 @@ export class UserEditReactiveComponent implements OnInit {
   allGenres: GameGenre[];
   listOfGenders: Gender[];
   userEditForm: FormGroup;
+  initialFormState: User;
   fs = FormStrings;
   bsConfig: Partial<BsDatepickerConfig>;
   maxDate = new Date();
@@ -78,6 +79,15 @@ export class UserEditReactiveComponent implements OnInit {
     this.fgvm.passwordCurrent.toggleOtherPasswordFields(this.userEditForm, this.passwordChangeMode);
   }
 
+  resetForm(formGroupValue: any, isUpdate: boolean) {
+    this.userEditForm.reset(formGroupValue);
+    if (isUpdate) {
+      this.alertify.success('Profile updated successfully.');
+    } else {
+      this.alertify.message('Pending changes canceled.');
+    }
+  }
+
   updateUser(debug: boolean) {
     if (this.userEditForm.valid) {
       this.assignFormValuesToUser();
@@ -87,14 +97,11 @@ export class UserEditReactiveComponent implements OnInit {
         console.log(this.allGenres);
       } else {
         const userId = Number(this.authService.decodedToken.nameid);
-        this.userService.updateUser(userId, this.user).subscribe(
-          () => {
-            this.alertify.success('Profile updated successfully.');
-            this.userEditForm.reset(this.userEditForm.value);
-          },
-          error => {
-            this.alertify.error(error);
-          });
+        this.userService.updateUser(userId, this.user).subscribe(next => {
+            this.resetForm(this.userEditForm.value, true);
+        }, (error: StatusCodeResultReturnObject) => {
+          this.alertify.error(error.response);
+        });
       }
     }
   }
@@ -111,6 +118,10 @@ export class UserEditReactiveComponent implements OnInit {
     });
     this.user.games = this.allGames.filter(g => g.checked);
     this.user.genres = this.allGenres.filter(g => g.checked);
+
+    const hasEmailBeenChanged = this.initialFormState.email !== this.user.email;
+    const hasUserNameBeenChanged = this.initialFormState.username !== this.user.username;
+    this.user.isPasswordNeeded = this.passwordChangeMode || hasEmailBeenChanged || hasUserNameBeenChanged;
   }
 
   private createUserEditForm(user: User) {
@@ -137,12 +148,14 @@ export class UserEditReactiveComponent implements OnInit {
         this.fgvm.customValidators.confirmationPasswordMatches,
       ]
     });
+    this.initialFormState = this.userEditForm.value;
   }
 
   private getGames() {
     this.gamesService.getGames().subscribe(
       retrievedGames => {
         this.setActiveGamesForUser(retrievedGames);
+        this.initialFormState = this.userEditForm.value;
       },
       error => {
         this.alertify.error('List of Games failed to load.');
@@ -155,6 +168,7 @@ export class UserEditReactiveComponent implements OnInit {
     this.gameGenresService.getGameGenres().subscribe(
       retrievedGenres => {
         this.setActiveGenresForUser(retrievedGenres);
+        this.initialFormState = this.userEditForm.value;
       },
       error => {
         this.alertify.error('List of Game Genres failed to load.');

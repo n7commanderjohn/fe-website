@@ -31,9 +31,11 @@ export class FormGroupValidatorMethods {
         passwordCurrentRequired(fg: FormGroup): ValidationErrors | null {
             const passwordCurrentFilled = fg.get(FormStrings.passwordCurrent).value;
             const newPasswordEnabled = fg.get(FormStrings.password).enabled;
+            const usernameControl = fg.get(FormStrings.username);
             const emailControl = fg.get(FormStrings.email);
 
             return (!passwordCurrentFilled && newPasswordEnabled)
+                || (!passwordCurrentFilled && usernameControl.value && usernameControl.dirty)
                 || (!passwordCurrentFilled && emailControl.value && emailControl.dirty) ?
                 { passwordCurrentRequired: true } : null;
         },
@@ -83,14 +85,20 @@ export class FormGroupValidatorMethods {
                 pwConfControl.reset(value);
             }
         },
-        requiredForPasswordChange(fg: FormGroup) {
-            return fg.get(FormStrings.password).enabled
+        requiredForUserName(fg: FormGroup) {
+            return fg.get(FormStrings.username).value
+                && fg.get(FormStrings.username).dirty
                 && fg.hasError(FormStrings.passwordCurrentRequired);
         },
         requiredForEmail(fg: FormGroup) {
             return fg.get(FormStrings.email).value
+                && fg.get(FormStrings.email).dirty
                 && fg.hasError(FormStrings.passwordCurrentRequired);
-        }
+        },
+        requiredForPasswordChange(fg: FormGroup) {
+            return fg.get(FormStrings.password).enabled
+                && fg.hasError(FormStrings.passwordCurrentRequired);
+        },
     };
     password = {
         hasErrors(fg: FormGroup) {

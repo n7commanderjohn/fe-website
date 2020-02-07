@@ -34,6 +34,15 @@ namespace FEWebsite.API.Data.DerivedServices
             return user;
         }
 
+        public async Task<bool> ComparePassword(string username, string password)
+        {
+            var user = await this.Context.Users
+                .FirstOrDefaultAsync(u => u.Username == username)
+                .ConfigureAwait(false);
+
+            return user != null && VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt);
+        }
+
         private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
         {
             var hMACSHA512 = new System.Security.Cryptography.HMACSHA512(passwordSalt);
@@ -79,7 +88,7 @@ namespace FEWebsite.API.Data.DerivedServices
             }
         }
 
-        public async Task<bool> UserExists(string username)
+        public async Task<bool> UserNameExists(string username)
         {
             return await this.Context.Users
                 .AnyAsync(u => u.Username == username)
@@ -90,6 +99,20 @@ namespace FEWebsite.API.Data.DerivedServices
         {
             return await this.Context.Users
                 .AnyAsync(u => u.Email == email)
+                .ConfigureAwait(false);
+        }
+
+        public async Task<bool> UserNameExistsForAnotherUser(User user)
+        {
+            return await this.Context.Users
+                .AnyAsync(u => u.Username == user.Username && u.Id != user.Id)
+                .ConfigureAwait(false);
+        }
+
+        public async Task<bool> EmailExistsForAnotherUser(User user)
+        {
+            return await this.Context.Users
+                .AnyAsync(u => u.Email == user.Email && u.Id != user.Id)
                 .ConfigureAwait(false);
         }
     }

@@ -23,7 +23,9 @@
             strong User Since:
             p {{user.accountCreated | date:'MMMM d, y'}}
         .card-footer
-            button.btn.btn-success.btn-block([disabled]="!userEditForm.dirty || !userEditForm.valid", form="userEditForm") Save Changes
+          .btn-group.d-flex
+            button.btn.btn-success.w-100([disabled]="!userEditForm.dirty || !userEditForm.valid", form="userEditForm") Save
+            button.btn.btn-primary.w-100([disabled]="!userEditForm.dirty", (click)="resetForm(initialFormState);") Cancel
     .col-sm-9
       .tab-panel
         tabset.user-tabset
@@ -54,8 +56,9 @@
                         button.btn.btn-primary((click)="passwordChangeToggle()") Change Password
                     input.form-control(formControlName='{{fs.passwordCurrent}}', type='password', placeholder='Current Password',
                       [ngClass]="{'is-invalid': fgvm.passwordCurrent.hasErrors(userEditForm)}")
-                    .invalid-feedback(*ngIf="fgvm.passwordCurrent.requiredForEmail(userEditForm)") Current password is required for email change.
-                    .invalid-feedback(*ngIf="fgvm.passwordCurrent.requiredForPasswordChange(userEditForm)") Current Password is required for password change.
+                    .invalid-feedback(*ngIf="fgvm.passwordCurrent.requiredForUserName(userEditForm)") Current password is required for Username Change.
+                    .invalid-feedback(*ngIf="fgvm.passwordCurrent.requiredForEmail(userEditForm)") Current password is required for Email change.
+                    .invalid-feedback(*ngIf="fgvm.passwordCurrent.requiredForPasswordChange(userEditForm)") Current Password is required for Password change.
                 div(*ngIf="passwordChangeMode")
                   .row
                     .form-group.col-sm

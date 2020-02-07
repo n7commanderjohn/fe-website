@@ -21,4 +21,5 @@ export interface User extends BaseModel {
     passwordCurrent: string;
     password: string;
     passwordConfirm: string;
+    isPasswordNeeded: boolean;
 }

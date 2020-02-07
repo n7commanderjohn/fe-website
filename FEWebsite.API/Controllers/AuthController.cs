@@ -32,7 +32,7 @@ namespace FEWebsite.API.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(UserForRegisterDto userForRegisterDto)
         {
-            if (await this.AuthService.UserExists(userForRegisterDto.Username).ConfigureAwait(false))
+            if (await this.AuthService.UserNameExists(userForRegisterDto.Username).ConfigureAwait(false))
             {
                 return this.BadRequest(new StatusCodeResultReturnObject(this.BadRequest(),
                     "This username is already in use."));
@@ -68,7 +68,7 @@ namespace FEWebsite.API.Controllers
 
             if (authenticatedUser == null)
             {
-                return this.Unauthorized(new StatusCodeResultReturnObject(this.Unauthorized(),
+                return this.BadRequest(new StatusCodeResultReturnObject(this.Unauthorized(),
                     "Login failed."));
             }
 
