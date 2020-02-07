@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -99,15 +100,22 @@ namespace FEWebsite.API.Controllers
                         = new StatusCodeResultReturnObject(this.BadRequest(), "This email is taken by another user.");
                     return this.BadRequest(returnObj);
                 }
-                else if (await this.UserService.SaveAll().ConfigureAwait(false))
-                {
-                    return this.NoContent();
-                }
                 else
                 {
-                    var returnObj
-                        = new StatusCodeResultReturnObject(this.BadRequest(), "Your information failed to save.");
-                    return this.BadRequest(returnObj);
+                    try {
+                        this.AuthService.CreatePasswordHash(currentUser, userForUpdateDto.Password);
+                        var userRecordsSaved = await this.UserService.SaveAll().ConfigureAwait(false);
+                        if (userRecordsSaved)
+                            return this.NoContent();
+                        else
+                            throw new Exception();
+                    }
+                    catch (Exception)
+                    {
+                        var returnObj
+                            = new StatusCodeResultReturnObject(this.BadRequest(), "Your information failed to save.");
+                        return this.BadRequest(returnObj);
+                    }
                 }
             }
             else

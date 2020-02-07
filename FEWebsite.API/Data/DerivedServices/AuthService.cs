@@ -60,7 +60,8 @@ namespace FEWebsite.API.Data.DerivedServices
         public async Task<User> Register(User user, string password)
         {
             this.CreatePasswordHash(user, password);
-            if (user.Name == null) {
+            if (user.Name == null)
+            {
                 user.Name = user.Username;
             }
             user.Username = user.Username.ToLower();
@@ -73,7 +74,7 @@ namespace FEWebsite.API.Data.DerivedServices
             return user;
         }
 
-        private void CreatePasswordHash(User user, string password)
+        public void CreatePasswordHash(User user, string password)
         {
             var hMACSHA512 = new System.Security.Cryptography.HMACSHA512();
             using (var hmac = hMACSHA512)

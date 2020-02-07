@@ -7,6 +7,8 @@ namespace FEWebsite.API.Data.BaseServices
     {
          Task<User> Register(User user, string password);
 
+         void CreatePasswordHash(User user, string password);
+
          Task<User> Login(string username, string password);
 
          bool ComparePassword(User user, string password);

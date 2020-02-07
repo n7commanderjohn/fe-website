@@ -63,6 +63,11 @@ namespace FEWebsite.API.Helpers
 
         private void MapNewFaveGamesAndGenres(UserForUpdateDto userForUpdateDto, User currentUser)
         {
+            if (currentUser.Name == null)
+            {
+                currentUser.Name = currentUser.Username;
+            }
+            currentUser.Username = currentUser.Username.ToLower();
             MapGames(userForUpdateDto, currentUser);
             MapGameGenres(userForUpdateDto, currentUser);
 
