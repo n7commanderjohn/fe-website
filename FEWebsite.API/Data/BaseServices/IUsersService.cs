@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using FEWebsite.API.DTOs.UserDTOs;
 using FEWebsite.API.Models;
 
 namespace FEWebsite.API.Data.BaseServices
@@ -15,6 +16,8 @@ namespace FEWebsite.API.Data.BaseServices
         Task<IEnumerable<User>> GetUsers();
 
         Task<User> GetUser(int userId);
+
+        Task<User> GetUserThroughPasswordResetProcess(UserForPasswordResetDto userForPasswordResetDto);
 
         Task<IEnumerable<Gender>> GetGenders();
 

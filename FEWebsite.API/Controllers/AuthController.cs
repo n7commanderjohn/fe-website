@@ -19,12 +19,14 @@ namespace FEWebsite.API.Controllers
     public class AuthController : ControllerBase
     {
         private IAuthService AuthService { get; }
+        private IUsersService UsersService { get; }
         public IConfiguration Config { get; }
         public IMapper Mapper { get; }
 
-        public AuthController(IAuthService authService, IConfiguration config, IMapper mapper)
+        public AuthController(IAuthService authService, IUsersService usersService, IConfiguration config, IMapper mapper)
         {
             this.AuthService = authService;
+            this.UsersService = usersService;
             this.Config = config;
             this.Mapper = mapper;
         }
@@ -99,6 +101,27 @@ namespace FEWebsite.API.Controllers
                 token = tokenHandler.WriteToken(token),
                 user
             });
+        }
+
+        [HttpPut("resetpassword")]
+        public async Task<IActionResult> ResetPassword(UserForPasswordResetDto userForPasswordResetDto)
+        {
+            var matchedUser = await this.UsersService
+                .GetUserThroughPasswordResetProcess(userForPasswordResetDto).ConfigureAwait(false);
+
+            const string generatedTempPassword = "password"; //change this to a random temp password later one.
+            this.AuthService.CreatePasswordHash(matchedUser, generatedTempPassword);
+
+            var passwordResetSuccessful = await this.UsersService.SaveAll().ConfigureAwait(false);
+            if (passwordResetSuccessful)
+            {
+                return this.Ok(new StatusCodeResultReturnObject(this.Ok(),
+                    generatedTempPassword));
+            }
+            else {
+                return this.BadRequest(new StatusCodeResultReturnObject(this.BadRequest(),
+                    "Password reset failed."));
+            }
         }
     }
 }

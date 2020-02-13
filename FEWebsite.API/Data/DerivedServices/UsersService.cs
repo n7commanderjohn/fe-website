@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using FEWebsite.API.Data.BaseServices;
 using FEWebsite.API.Models;
 using Microsoft.EntityFrameworkCore;
+using FEWebsite.API.DTOs.UserDTOs;
 
 namespace FEWebsite.API.Data.DerivedServices
 {
@@ -31,6 +32,16 @@ namespace FEWebsite.API.Data.DerivedServices
         {
             var user = await this.DefaultUserIncludes(expandedInclude: true)
                 .FirstOrDefaultAsync(u => u.Id == userId)
+                .ConfigureAwait(false);
+
+            return user;
+        }
+
+        public async Task<User> GetUserThroughPasswordResetProcess(UserForPasswordResetDto userForPasswordResetDto)
+        {
+            var dto = userForPasswordResetDto;
+            var user = await this.DefaultUserIncludes()
+                .SingleOrDefaultAsync(u => u.Email == dto.Email && u.Username == dto.Username)
                 .ConfigureAwait(false);
 
             return user;
