@@ -24,6 +24,7 @@ import { UserDetailComponent } from './users/user-detail/user-detail.component';
 import { UserEditComponent } from './users/user-edit/user-edit.component';
 import { UserEditReactiveComponent } from './users/user-edit-reactive/user-edit-reactive.component';
 import { PhotoEditorComponent } from './users/photo-editor/photo-editor.component';
+import { PasswordResetComponent } from './users/password-reset/password-reset.component';
 
 import { AuthService } from './_services/auth.service';
 import { UserService } from './_services/user.service';
@@ -66,7 +67,8 @@ export class CustomHammerConfig extends HammerGestureConfig  {
       UserDetailComponent,
       UserEditComponent,
       UserEditReactiveComponent,
-      PhotoEditorComponent
+      PhotoEditorComponent,
+      PasswordResetComponent
    ],
    imports: [
       BrowserModule,

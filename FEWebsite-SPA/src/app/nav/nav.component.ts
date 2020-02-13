@@ -51,4 +51,8 @@ export class NavComponent implements OnInit {
     this.router.navigate(['/home']);
   }
 
+  resetPassword() {
+    this.authService.pwResetMode = true;
+    this.alertify.message('User Password Reset started.');
+  }
 }

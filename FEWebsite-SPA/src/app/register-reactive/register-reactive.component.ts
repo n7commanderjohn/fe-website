@@ -20,7 +20,6 @@ import { User } from '../_models/user';
   styleUrls: ['./register-reactive.component.css']
 })
 export class RegisterReactiveComponent implements OnInit {
-  @Output() cancelRegister = new EventEmitter();
   listOfGames: Game[];
   listOfGenders: Gender[];
   registerForm: FormGroup;
@@ -61,7 +60,7 @@ export class RegisterReactiveComponent implements OnInit {
   }
 
   cancel() {
-    this.cancelRegister.emit(false);
+    this.authService.registerMode = false;
     this.alertify.message('Registration cancelled.');
   }
 

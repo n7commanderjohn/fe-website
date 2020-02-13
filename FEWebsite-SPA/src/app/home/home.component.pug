@@ -6,13 +6,19 @@
     button.btn.btn-primary.btn-lg.mr-2((click)="registerToggle();") Link 1
     button.btn.btn-info.btn-lg Link 2
 .container.mt-5(*ngIf="!loggedIn()")
-  div(*ngIf="!registerMode" style='text-align: center')
-    h1 Become the Expert Tactician people need.
-    p.lead Learn all you need to know to be the best... All you need to do is sign up!
-    .text-center
-      button.btn.btn-primary.btn-lg.mr-2((click)="registerToggle();") Register
-      button.btn.btn-info.btn-lg Learn more
-  .container(*ngIf="registerMode")
+  div(*ngIf="!authService.registerMode; else registerSection" style='text-align: center')
+    div(*ngIf="authService.pwResetMode; else homeSection" style='text-align: center')
+      .container
+        .row.justify-content-center
+          .col-4
+            app-password-reset
+    ng-template(#homeSection)
+      h1 Become the Expert Tactician people need.
+      p.lead Learn all you need to know to be the best... All you need to do is sign up!
+      .text-center
+        button.btn.btn-primary.btn-lg.mr-2((click)="registerToggle();") Register
+        button.btn.btn-info.btn-lg Learn more
+  ng-template.container(#registerSection)
     .row.justify-content-center
       .col-4
-        app-register-reactive((cancelRegister)="cancelRegisterMode($event)")
+        app-register-reactive

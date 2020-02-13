@@ -19,6 +19,8 @@ export class AuthService {
   currentUser: User;
   photoUrl = new BehaviorSubject<string>('../../assets/defaultUser.png');
   currentPhotoUrl = this.photoUrl.asObservable();
+  registerMode = false;
+  pwResetMode = false;
 
   constructor(private http: HttpClient) { }
 
@@ -43,6 +45,10 @@ export class AuthService {
 
   register(user: User) {
     return this.http.post(this.dotNetAPIURL + 'register', user);
+  }
+
+  resetPassword(user: User) {
+    return this.http.put(this.dotNetAPIURL + 'resetpassword', user);
   }
 
   loggedIn() {
