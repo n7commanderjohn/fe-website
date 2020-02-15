@@ -43,6 +43,23 @@ export class AuthService {
       );
   }
 
+  enterRegisterMode() {
+    this.registerMode = true;
+    this.pwResetMode = false;
+  }
+
+  enterPWResetMode() {
+    this.registerMode = true;
+    this.pwResetMode = false;
+  }
+
+  logout() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    this.decodedToken = null;
+    this.currentUser = null;
+  }
+
   register(user: User) {
     return this.http.post(this.dotNetAPIURL + 'register', user);
   }

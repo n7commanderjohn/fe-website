@@ -23,6 +23,8 @@ export class NavComponent implements OnInit {
               private alertify: AlertifyService,
               private router: Router) { }
 
+  isLoggedIn = () => this.authService.loggedIn();
+
   ngOnInit() {
     this.loginCredentials = new LoginCredentials();
     this.authService.currentPhotoUrl.subscribe(photoUrl => this.photoUrl = photoUrl);
@@ -38,22 +40,14 @@ export class NavComponent implements OnInit {
     });
   }
 
-  loggedIn() {
-    return this.authService.loggedIn();
-  }
-
   logout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    this.authService.decodedToken = null;
-    this.authService.currentUser = null;
+    this.authService.logout();
     this.alertify.message('Logged out.');
     this.router.navigate(['/home']);
   }
 
-  resetPassword() {
-    this.authService.pwResetMode = true;
-    this.authService.registerMode = false;
+  enterResetPasswordMode() {
+    this.authService.enterPWResetMode();
     this.alertify.message('User Password Reset started.');
   }
 }
