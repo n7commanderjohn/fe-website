@@ -15,7 +15,7 @@ form([formGroup]="registerForm", (ngSubmit)="register();")
     .invalid-feedback(*ngIf="fgvm.birthday.required(registerForm)") Your Birthday is required
   .form-group
     input.form-control(formControlName='{{fs.email}}', type='text', placeholder='Email',
-      [ngClass]="{'is-invalid': fgvm.email.hasErrors(registerForm)}")
+      [ngClass]="{'is-invalid': fgvm.email.hasErrorsAndTouched(registerForm)}")
     .invalid-feedback Please enter a email.
   .form-group
     input.form-control(formControlName='{{fs.username}}', type='text', placeholder='Username',

@@ -53,6 +53,7 @@ export class NavComponent implements OnInit {
 
   resetPassword() {
     this.authService.pwResetMode = true;
+    this.authService.registerMode = false;
     this.alertify.message('User Password Reset started.');
   }
 }

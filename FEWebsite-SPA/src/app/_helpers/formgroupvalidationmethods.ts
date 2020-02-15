@@ -51,6 +51,10 @@ export class FormGroupValidatorMethods {
         hasErrors(fg: FormGroup) {
             return fg.get(FormStrings.email).errors;
         },
+        hasErrorsAndTouched(fg: FormGroup) {
+            const emailControl = fg.get(FormStrings.email);
+            return emailControl.errors && emailControl.touched;
+        },
     };
     name = {
         hasErrors(fg: FormGroup) {

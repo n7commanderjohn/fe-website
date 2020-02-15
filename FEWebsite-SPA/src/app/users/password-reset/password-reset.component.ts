@@ -1,10 +1,11 @@
 import { FormGroupValidatorMethods, FormStrings } from './../../_helpers/formgroupvalidationmethods';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { AuthService } from './../../_services/auth.service';
 import { AlertifyService } from './../../_services/alertify.service';
-import { User } from 'src/app/_models/user';
+import { User } from './../../_models/user';
+import { StatusCodeResultReturnObject } from './../../_models/statusCodeResultReturnObject';
 
 @Component({
   selector: 'app-password-reset',
@@ -27,14 +28,21 @@ export class PasswordResetComponent implements OnInit {
 
   private createPasswordResetForm() {
     this.passwordResetForm = this.fb.group({
-      email: [null, Validators.required],
+      email: [null, [Validators.required, Validators.email]],
       username: [null, Validators.required],
     });
   }
 
   changePassword() {
     this.userModel = Object.assign({}, this.passwordResetForm.value);
-    this.authService.resetPassword(this.userModel);
+    this.authService.resetPassword(this.userModel).subscribe(
+      (response: StatusCodeResultReturnObject) => {
+        this.alertify.success('Your new temporary password is "' + response.response + '".');
+      },
+      (error: StatusCodeResultReturnObject) => {
+        this.alertify.error(error.response);
+      }
+    );
   }
 
   cancel() {

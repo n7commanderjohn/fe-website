@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BsDatepickerConfig } from 'ngx-bootstrap';
@@ -70,7 +70,7 @@ export class RegisterReactiveComponent implements OnInit {
       description: [null],
       gender: ['M'],
       birthday: [null, Validators.required],
-      email: [null, Validators.required],
+      email: [null, [Validators.required, Validators.email]],
       username: [null, Validators.required],
       password: [null,
         [Validators.required, Validators.minLength(8), Validators.maxLength(16)]],

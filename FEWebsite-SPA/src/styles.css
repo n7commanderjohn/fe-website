@@ -85,6 +85,8 @@ hr:before { /* Not really supposed to work, but does */
   border: dotted 3px green;
 }
 
-input.ng-dirty[type=text], select.ng-dirty, textarea.ng-dirty {
+input.ng-dirty[type=text]:not(.is-invalid),
+select.ng-dirty:not(.is-invalid),
+textarea.ng-dirty:not(.is-invalid) {
   border: solid 3px yellow;
 }

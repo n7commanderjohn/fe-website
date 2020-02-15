@@ -109,7 +109,13 @@ namespace FEWebsite.API.Controllers
             var matchedUser = await this.UsersService
                 .GetUserThroughPasswordResetProcess(userForPasswordResetDto).ConfigureAwait(false);
 
-            const string generatedTempPassword = "password"; //change this to a random temp password later one.
+            if (matchedUser == null)
+            {
+                return this.BadRequest(new StatusCodeResultReturnObject(this.BadRequest(),
+                "No user was found with the given information."));
+            }
+
+            const string generatedTempPassword = "password"; //change this to a random temp password later on.
             this.AuthService.CreatePasswordHash(matchedUser, generatedTempPassword);
 
             var passwordResetSuccessful = await this.UsersService.SaveAll().ConfigureAwait(false);
