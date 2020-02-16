@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace FEWebsite.API.DTOs.UserDTOs
 {
     public class UserForLoginDto

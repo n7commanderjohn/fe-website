@@ -4,6 +4,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using FEWebsite.API.Data.BaseServices;
 using FEWebsite.API.DTOs.UserDTOs;
 using FEWebsite.API.Helpers;
@@ -17,16 +18,16 @@ namespace FEWebsite.API.Controllers
     public class UsersController : ControllerBase
     {
         private IUsersService UserService { get; }
-
+        private IAuthService AuthService { get; }
+        private IConfiguration Config { get; }
         private IMapper Mapper { get; }
 
-        private IAuthService AuthService { get; }
-
-        public UsersController(IUsersService userService, IMapper mapper, IAuthService authService)
+        public UsersController(IUsersService userService, IAuthService authService, IConfiguration config, IMapper mapper)
         {
             this.UserService = userService;
-            this.Mapper = mapper;
             this.AuthService = authService;
+            this.Config = config;
+            this.Mapper = mapper;
         }
 
         // GET api/users
@@ -103,14 +104,21 @@ namespace FEWebsite.API.Controllers
                 else
                 {
                     try {
-                        if (userForUpdateDto.IsPasswordNeeded)
+                        bool hasUpdatedPassword = userForUpdateDto.Password != null;
+                        if (hasUpdatedPassword)
                         {
                             this.AuthService.CreatePasswordHash(currentUser, userForUpdateDto.Password);
                         }
                         var userRecordsSaved = await this.UserService.SaveAll().ConfigureAwait(false);
                         if (userRecordsSaved)
                         {
-                            return this.NoContent();
+                            var token = this.AuthService.CreateUserToken(currentUser, this.Config.GetAppSettingsToken());
+                            var user = this.Mapper.Map<UserForDetailedDto>(currentUser);
+                            return this.Ok(new
+                            {
+                                token,
+                                userAge = user.Age
+                            });
                         }
                         else
                         {

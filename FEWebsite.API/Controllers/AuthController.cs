@@ -1,14 +1,9 @@
-using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using FEWebsite.API.Data.BaseServices;
 using FEWebsite.API.Models;
 using FEWebsite.API.Helpers;
 using FEWebsite.API.DTOs.UserDTOs;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
 using AutoMapper;
 
@@ -74,31 +69,12 @@ namespace FEWebsite.API.Controllers
                     "Login failed."));
             }
 
-            var claims = new[]
-            {
-                new Claim(ClaimTypes.NameIdentifier, authenticatedUser.Id.ToString()),
-                new Claim(ClaimTypes.Name, authenticatedUser.Username),
-            };
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.Config.GetSection("AppSettings:Token").Value));
-
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-
-            var tokenDescriptor = new SecurityTokenDescriptor()
-            {
-                Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddDays(1),
-                SigningCredentials = creds,
-            };
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-
+            var token = this.AuthService.CreateUserToken(authenticatedUser, this.Config.GetAppSettingsToken());
             var user = this.Mapper.Map<UserForLoginDto>(authenticatedUser);
 
-            return this.Ok(new {
-                token = tokenHandler.WriteToken(token),
+            return this.Ok(new
+            {
+                token,
                 user
             });
         }

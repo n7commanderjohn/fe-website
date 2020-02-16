@@ -9,6 +9,8 @@ namespace FEWebsite.API.Data.BaseServices
 
          void CreatePasswordHash(User user, string password);
 
+         string CreateUserToken(User authenticatedUser, string appSettingsToken);
+
          Task<User> Login(string username, string password);
 
          bool ComparePassword(User user, string password);

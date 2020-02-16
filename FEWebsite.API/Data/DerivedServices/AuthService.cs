@@ -1,8 +1,12 @@
 using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using FEWebsite.API.Data.BaseServices;
 using FEWebsite.API.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace FEWebsite.API.Data.DerivedServices
 {
@@ -43,7 +47,7 @@ namespace FEWebsite.API.Data.DerivedServices
             var hMACSHA512 = new System.Security.Cryptography.HMACSHA512(passwordSalt);
             using (var hmac = hMACSHA512)
             {
-                var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
 
                 for (int i = 0; i < computedHash.Length; i++)
                 {
@@ -82,6 +86,31 @@ namespace FEWebsite.API.Data.DerivedServices
                 user.PasswordSalt = hmac.Key;
                 user.PasswordHash = hmac.ComputeHash(buffer: System.Text.Encoding.UTF8.GetBytes(password));
             }
+        }
+
+        public string CreateUserToken(User authenticatedUser, string appSettingsToken)
+        {
+            var claims = new[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, authenticatedUser.Id.ToString()),
+                new Claim(ClaimTypes.Name, authenticatedUser.Username),
+            };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(appSettingsToken));
+
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+
+            var tokenDescriptor = new SecurityTokenDescriptor()
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.Now.AddDays(1),
+                SigningCredentials = creds,
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+
+            return tokenHandler.WriteToken(token);
         }
 
         public async Task<bool> UserNameExists(string username)

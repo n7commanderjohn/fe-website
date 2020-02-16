@@ -80,6 +80,7 @@ export class UserEditReactiveComponent implements OnInit {
   }
 
   resetForm(formGroupValue: any, isUpdate: boolean) {
+    this.userEditForm.patchValue({passwordCurrent: undefined});
     this.userEditForm.reset(formGroupValue);
     if (isUpdate) {
       this.alertify.success('Profile updated successfully.');
@@ -97,8 +98,10 @@ export class UserEditReactiveComponent implements OnInit {
         console.log(this.allGenres);
       } else {
         const userId = Number(this.authService.decodedToken.nameid);
-        this.userService.updateUser(userId, this.user).subscribe(next => {
-            this.resetForm(this.userEditForm.value, true);
+        this.userService.updateUser(userId, this.user).subscribe(response => {
+          this.resetForm(this.userEditForm.value, true);
+          this.authService.updateTokenAndUserDetails(response);
+          this.user.age = response.userAge;
         }, (error: StatusCodeResultReturnObject) => {
           this.alertify.error(error.response);
         });

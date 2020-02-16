@@ -3,11 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
+
 import { environment } from './../../environments/environment';
+
 import { User } from './../_models/user';
-import { LoginResponse } from './../_models/loginResponse';
 import { DecodedJWT } from '../_models/decodedJWT';
 import { LoginCredentials } from './../_models/loginCredentials';
+import { LoginResponse } from './../_models/loginResponse';
+import { UpdateResponse } from '../_models/updateResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -29,18 +32,29 @@ export class AuthService {
   }
 
   login(user: User | LoginCredentials) {
-    return this.http.post(this.dotNetAPIURL + 'login', user)
+    return this.http.post<LoginResponse>(this.dotNetAPIURL + 'login', user)
       .pipe(
-        map((loginResponse: LoginResponse) => {
-          if (loginResponse) {
-            localStorage.setItem('token', loginResponse.token);
-            localStorage.setItem('user', JSON.stringify(loginResponse.user));
-            this.decodedToken = this.jwtHelper.decodeToken(loginResponse.token);
-            this.currentUser = loginResponse.user;
-            this.changeUserPhoto(this.currentUser.photoUrl);
-          }
-        })
+        map((loginResponse) => this.updateTokenAndUserDetails(loginResponse))
       );
+  }
+
+  updateTokenAndUserDetails(response: LoginResponse | UpdateResponse) {
+    if (response) {
+      localStorage.setItem('token', response.token);
+      this.decodedToken = this.jwtHelper.decodeToken(response.token);
+
+      if (this.isLoginResponse(response)) {
+        const loginResponse = response as LoginResponse;
+        localStorage.setItem('user', JSON.stringify(loginResponse.user));
+        this.currentUser = loginResponse.user;
+        this.changeUserPhoto(this.currentUser.photoUrl);
+      }
+    }
+
+  }
+
+  private isLoginResponse(response: LoginResponse | UpdateResponse) {
+    return (response as LoginResponse).user !== undefined;
   }
 
   enterRegisterMode() {
