@@ -103,12 +103,19 @@ namespace FEWebsite.API.Controllers
                 else
                 {
                     try {
-                        this.AuthService.CreatePasswordHash(currentUser, userForUpdateDto.Password);
+                        if (userForUpdateDto.IsPasswordNeeded)
+                        {
+                            this.AuthService.CreatePasswordHash(currentUser, userForUpdateDto.Password);
+                        }
                         var userRecordsSaved = await this.UserService.SaveAll().ConfigureAwait(false);
                         if (userRecordsSaved)
+                        {
                             return this.NoContent();
+                        }
                         else
+                        {
                             throw new Exception();
+                        }
                     }
                     catch (Exception)
                     {
