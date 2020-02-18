@@ -1,8 +1,12 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { environment } from './../../environments/environment';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+
+import { environment } from './../../environments/environment';
+
+import { Gender } from '../_models/gender';
 import { User } from '../_models/user';
+import { UpdateResponse } from '../_models/updateResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -20,8 +24,20 @@ export class UserService {
     return this.http.get<User>(this.baseUrl + 'users/' + id);
   }
 
-  updateUser(id: number, user: User) {
-    return this.http.put(this.baseUrl + 'users/' + id, user);
+  getGenders(): Observable<Gender[]> {
+    return this.http.get<Gender[]>(this.baseUrl + 'users/genders');
+  }
+
+  updateUser(id: number, user: User): Observable<UpdateResponse> {
+    return this.http.put<UpdateResponse>(this.baseUrl + 'users/' + id, user);
+  }
+
+  setMainPhoto(userId: number, photoId: number) {
+    return this.http.put(this.baseUrl + 'users/' + userId + '/photos/' + photoId + '/setMain', null);
+  }
+
+  deletePhoto(userId: number, photoId: number) {
+    return this.http.delete(this.baseUrl + 'users/' + userId + '/photos/' + photoId);
   }
 
 }

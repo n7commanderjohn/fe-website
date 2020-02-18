@@ -19,13 +19,13 @@ namespace FEWebsite.API.Controllers
     [ApiController]
     public class PhotosController : ControllerBase
     {
-        public IUserInfoRepositoryService UserService { get; }
+        public IUsersService UserService { get; }
         public IMapper Mapper { get; }
         public IOptions<CloudinarySettings> CloudinaryConfig { get; }
 
         public Cloudinary Cloudinary { get; }
 
-        public PhotosController(IUserInfoRepositoryService userService,
+        public PhotosController(IUsersService userService,
             IMapper mapper,
             IOptions<CloudinarySettings> cloudinaryConfig)
         {
@@ -55,33 +55,38 @@ namespace FEWebsite.API.Controllers
         [HttpPost]
         public async Task<IActionResult> AddPhotoForUser(int userId, [FromForm]PhotoForUploadDto photoForUploadDto)
         {
-            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+            if (!this.IsUserMatched(userId))
             {
-                return this.Unauthorized();
+                return this.BadRequest(new StatusCodeResultReturnObject(this.Unauthorized(),
+                    "You are not logged in as the user you are trying to upload the photo for."));
             }
 
             var currentUser = await this.UserService.GetUser(userId).ConfigureAwait(false);
-
             var file = photoForUploadDto.File;
-
             var uploadResult = new ImageUploadResult();
 
-            if (file == null)
+            bool doesPhotoExist = file == null;
+            if (doesPhotoExist)
             {
-                return this.BadRequest("The photo to be uploaded was not found.");
+                return this.BadRequest(new StatusCodeResultReturnObject(this.BadRequest(),
+                    "The photo to be uploaded was not found."));
             }
-            else if (file.Length > 0)
+            else
             {
-                using(var stream = file.OpenReadStream())
+                bool doesPhotoHaveData = file.Length > 0;
+                if (doesPhotoHaveData)
                 {
-                    var uploadParams = new ImageUploadParams()
+                    using (var stream = file.OpenReadStream())
                     {
-                        File = new FileDescription(file.Name, stream),
-                        Transformation = new Transformation()
-                        .Width(500).Height(500).Crop("fill").Gravity(CloudinaryDotNet.Gravity.Face)
-                    };
+                        var uploadParams = new ImageUploadParams()
+                        {
+                            File = new FileDescription(file.Name, stream),
+                            Transformation = new Transformation()
+                            .Width(500).Height(500).Crop("fill").Gravity(CloudinaryDotNet.Gravity.Face)
+                        };
 
-                    uploadResult = this.Cloudinary.Upload(uploadParams);
+                        uploadResult = this.Cloudinary.Upload(uploadParams);
+                    }
                 }
             }
 
@@ -89,22 +94,140 @@ namespace FEWebsite.API.Controllers
             photoForUploadDto.PublicId = uploadResult.PublicId;
 
             var photo = this.Mapper.Map<Photo>(photoForUploadDto);
-
-            if (!currentUser.Photos.Any(u => u.IsMain))
+            bool AreNoneOfUserPhotosSetToMain = !currentUser.Photos.Any(u => u.IsMain);
+            if (AreNoneOfUserPhotosSetToMain)
             {
                 photo.IsMain = true;
             }
 
             currentUser.Photos.Add(photo);
-
-            if (await this.UserService.SaveAll().ConfigureAwait(false))
+            bool isDatabaseSaveSuccessful = await this.UserService.SaveAll().ConfigureAwait(false);
+            if (isDatabaseSaveSuccessful)
             {
                 var photoToReturn = this.Mapper.Map<PhotoForReturnDto>(photo);
 
                 return this.CreatedAtRoute("GetPhoto", new { userId, photo.Id }, photoToReturn);
             }
 
-            return BadRequest("Photo upload to server failed.");
+            return BadRequest(new StatusCodeResultReturnObject(this.BadRequest(),
+                "Photo upload to server failed."));
+        }
+
+        [HttpPut("{photoId}/setMain")]
+        public async Task<IActionResult> SetMainPhoto(int userId, int photoId)
+        {
+            var user = await this.UserService.GetUser(userId).ConfigureAwait(false);
+            var unauthorizedObj = this.IsUserAndPhotoAuthorized(user, photoId);
+
+            bool isRequestAuthorized = unauthorizedObj == null;
+            if (isRequestAuthorized)
+            {
+                var photoToSetAsMain = await this.UserService.GetPhoto(photoId).ConfigureAwait(false);
+                if (photoToSetAsMain.IsMain)
+                {
+                    return this.BadRequest(new StatusCodeResultReturnObject(this.BadRequest(),
+                        "This photo is already the user's main photo."));
+                }
+
+                this.UserService.SetUserPhotoAsMain(userId, photoToSetAsMain);
+
+                bool isDatabaseSaveSuccessful = await this.UserService.SaveAll().ConfigureAwait(false);
+                if (isDatabaseSaveSuccessful)
+                {
+                    return this.NoContent();
+                }
+            }
+            else
+            {
+                return unauthorizedObj;
+            }
+
+            return this.BadRequest(new StatusCodeResultReturnObject(this.BadRequest(),
+                "Setting the selected photo as the main photo failed."));
+        }
+
+        [HttpDelete("{photoId}")]
+        public async Task<IActionResult> DeletePhoto(int userId, int photoId)
+        {
+            const string failureBase = "Failed to delete the selected photo from the ";
+            var user = await this.UserService.GetUser(userId).ConfigureAwait(false);
+            var unauthorizedObj = this.IsUserAndPhotoAuthorized(user, photoId);
+
+            bool isRequestAuthorized = unauthorizedObj == null;
+            if (isRequestAuthorized)
+            {
+                var photoToDelete = await this.UserService.GetPhoto(photoId).ConfigureAwait(false);
+                if (photoToDelete.IsMain)
+                {
+                    // return this.BadRequest(new StatusCodeResultReturnObject(this.BadRequest()){
+                    //     Response = "You can not delete your main photo."
+                    // }); // for now, deletion will be allowed.
+                    var photoToReplaceAsMain = user.Photos.FirstOrDefault(p => !p.IsMain);
+                    if (photoToReplaceAsMain != null)
+                    {
+                        photoToReplaceAsMain.IsMain = true;
+                    }
+                    photoToDelete.IsMain = false;
+                }
+
+                bool isPhotoOnCloudinary = photoToDelete.PublicId != null;
+                if (isPhotoOnCloudinary)
+                {
+                    var deletionParams = new DeletionParams(photoToDelete.PublicId);
+                    var result = this.Cloudinary.Destroy(deletionParams);
+
+                    bool isPhotoDestructionOnCloudinarySuccessful = result.Result.Equals("ok");
+                    if (isPhotoDestructionOnCloudinarySuccessful)
+                    {
+                        this.UserService.Delete(photoToDelete);
+                    }
+                    else
+                    {
+                        return this.BadRequest(new StatusCodeResultReturnObject(this.BadRequest(),
+                            failureBase + "cloud server."));
+                    }
+                }
+                else
+                {
+                    this.UserService.Delete(photoToDelete);
+                }
+
+                bool isDatabaseSaveSuccessful = await this.UserService.SaveAll().ConfigureAwait(false);
+                if (isDatabaseSaveSuccessful)
+                {
+                    return this.Ok();
+                }
+                else {
+                    return this.BadRequest(new StatusCodeResultReturnObject(this.BadRequest(),
+                        failureBase + "database."));
+                }
+            }
+            else
+            {
+                return unauthorizedObj;
+            }
+        }
+
+        private BadRequestObjectResult IsUserAndPhotoAuthorized(User user, int photoId)
+        {
+            if (!this.IsUserMatched(user.Id))
+            {
+                return this.BadRequest(new StatusCodeResultReturnObject(this.Unauthorized(),
+                    "This isn't the currently logged in user."));
+            }
+
+            if (!user.DoesPhotoExist(photoId))
+            {
+                return this.BadRequest(new StatusCodeResultReturnObject(this.Unauthorized(),
+                    "This photo id doesn't match any of the user's photos."));
+            }
+
+            return null;
+        }
+
+        private bool IsUserMatched(int userId)
+        {
+            return userId == int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
         }
     }
 }

@@ -1,14 +1,11 @@
-using System;
-using System.Text;
-using System.Security.Claims;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using FEWebsite.API.Data.BaseServices;
-using System.Threading.Tasks;
 using FEWebsite.API.Models;
+using FEWebsite.API.Helpers;
 using FEWebsite.API.DTOs.UserDTOs;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
-using System.IdentityModel.Tokens.Jwt;
+using AutoMapper;
 
 namespace FEWebsite.API.Controllers
 {
@@ -16,76 +13,97 @@ namespace FEWebsite.API.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private IAuthRepositoryService RepoUser { get; }
+        private IAuthService AuthService { get; }
+        private IUsersService UsersService { get; }
         public IConfiguration Config { get; }
+        public IMapper Mapper { get; }
 
-        public AuthController(IAuthRepositoryService repoUser, IConfiguration config)
+        public AuthController(IAuthService authService, IUsersService usersService, IConfiguration config, IMapper mapper)
         {
-            this.RepoUser = repoUser;
+            this.AuthService = authService;
+            this.UsersService = usersService;
             this.Config = config;
+            this.Mapper = mapper;
         }
 
         [HttpPost("register")]
         public async Task<IActionResult> Register(UserForRegisterDto userForRegisterDto)
         {
-            userForRegisterDto.Username = userForRegisterDto.Username.ToLower();
-
-            if (await this.RepoUser.UserExists(userForRegisterDto.Username).ConfigureAwait(false))
+            if (await this.AuthService.UserNameExists(userForRegisterDto.Username).ConfigureAwait(false))
             {
-                return this.BadRequest("Username already exists.");
+                return this.BadRequest(new StatusCodeResultReturnObject(this.BadRequest(),
+                    "This username is already in use."));
             }
 
-            var newUser = new User() {
-                Username = userForRegisterDto.Username,
-            };
+            if (await this.AuthService.EmailExists(userForRegisterDto.Email).ConfigureAwait(false))
+            {
+                return this.BadRequest(new StatusCodeResultReturnObject(this.BadRequest(),
+                    "This email is already in use."));
+            }
 
-            var createdUser = await this.RepoUser.Register(newUser, userForRegisterDto.Password).ConfigureAwait(false);
+            var newUser = this.Mapper.Map<User>(userForRegisterDto);
+            var createdUser = await this.AuthService.Register(newUser, userForRegisterDto.Password).ConfigureAwait(false);
 
             if (createdUser != null)
             {
-                return this.Created($"api/users/{createdUser.Id}", createdUser);
+                var returnUser = this.Mapper.Map<UserForDetailedDto>(createdUser);
+                // return this.Created($"api/users/{createdUser.Id}", createdUser);
+                return this.CreatedAtRoute("GetUser", new { controller = "Users", id = returnUser.Id }, returnUser);
             }
             else {
-                return this.BadRequest("Registration failed when creating the user.");
+                return this.BadRequest(new StatusCodeResultReturnObject(this.BadRequest(),
+                    "Registration failed when creating the user."));
             }
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserForLoginDto userForLoginDto)
         {
-            var userFromRepo = await this.RepoUser
+            var authenticatedUser = await this.AuthService
                 .Login(userForLoginDto.Username.ToLower(), userForLoginDto.Password)
                 .ConfigureAwait(false);
 
-            if (userFromRepo == null)
+            if (authenticatedUser == null)
             {
-                return this.Unauthorized();
+                return this.BadRequest(new StatusCodeResultReturnObject(this.Unauthorized(),
+                    "Login failed."));
             }
 
-            var claims = new[]
+            var token = this.AuthService.CreateUserToken(authenticatedUser, this.Config.GetAppSettingsToken());
+            var user = this.Mapper.Map<UserForLoginDto>(authenticatedUser);
+
+            return this.Ok(new
             {
-                new Claim(ClaimTypes.NameIdentifier, userFromRepo.Id.ToString()),
-                new Claim(ClaimTypes.Name, userFromRepo.Username),
-            };
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.Config.GetSection("AppSettings:Token").Value));
-
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-
-            var tokenDescriptor = new SecurityTokenDescriptor()
-            {
-                Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddDays(1),
-                SigningCredentials = creds,
-            };
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-
-            return this.Ok(new {
-                token = tokenHandler.WriteToken(token)
+                token,
+                user
             });
+        }
+
+        [HttpPut("resetpassword")]
+        public async Task<IActionResult> ResetPassword(UserForPasswordResetDto userForPasswordResetDto)
+        {
+            var matchedUser = await this.UsersService
+                .GetUserThroughPasswordResetProcess(userForPasswordResetDto).ConfigureAwait(false);
+
+            if (matchedUser == null)
+            {
+                return this.BadRequest(new StatusCodeResultReturnObject(this.BadRequest(),
+                "No user was found with the given information."));
+            }
+
+            const string generatedTempPassword = "password"; //change this to a random temp password later on.
+            this.AuthService.CreatePasswordHash(matchedUser, generatedTempPassword);
+
+            var passwordResetSuccessful = await this.UsersService.SaveAll().ConfigureAwait(false);
+            if (passwordResetSuccessful)
+            {
+                return this.Ok(new StatusCodeResultReturnObject(this.Ok(),
+                    generatedTempPassword));
+            }
+            else {
+                return this.BadRequest(new StatusCodeResultReturnObject(this.BadRequest(),
+                    "Password reset failed."));
+            }
         }
     }
 }

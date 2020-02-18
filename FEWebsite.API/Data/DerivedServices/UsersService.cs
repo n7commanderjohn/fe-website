@@ -1,15 +1,17 @@
+using System.Threading;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FEWebsite.API.Data.BaseServices;
 using FEWebsite.API.Models;
 using Microsoft.EntityFrameworkCore;
+using FEWebsite.API.DTOs.UserDTOs;
 
 namespace FEWebsite.API.Data.DerivedServices
 {
-    public class UserInfoRepositoryService : BaseService, IUserInfoRepositoryService
+    public class UsersService : BaseService, IUsersService
     {
-        public UserInfoRepositoryService(DataContext context)
+        public UsersService(DataContext context)
         {
             Context = context;
         }
@@ -35,6 +37,16 @@ namespace FEWebsite.API.Data.DerivedServices
             return user;
         }
 
+        public async Task<User> GetUserThroughPasswordResetProcess(UserForPasswordResetDto userForPasswordResetDto)
+        {
+            var dto = userForPasswordResetDto;
+            var user = await this.DefaultUserIncludes()
+                .SingleOrDefaultAsync(u => u.Email == dto.Email && u.Username == dto.Username)
+                .ConfigureAwait(false);
+
+            return user;
+        }
+
         public async Task<IEnumerable<User>> GetUsers()
         {
             var users = await this.DefaultUserIncludes()
@@ -42,6 +54,15 @@ namespace FEWebsite.API.Data.DerivedServices
                 .ConfigureAwait(false);
 
             return users;
+        }
+
+        public async Task<IEnumerable<Gender>> GetGenders()
+        {
+            var genders = await this.Context.Genders
+                .ToListAsync()
+                .ConfigureAwait(false);
+
+            return genders;
         }
 
         public async Task<Photo> GetPhoto(int photoId)
@@ -79,6 +100,20 @@ namespace FEWebsite.API.Data.DerivedServices
             return await this.Context
                 .SaveChangesAsync()
                 .ConfigureAwait(false) > 0;
+        }
+
+        public async Task<Photo> GetCurrentMainPhotoForUser(int userId)
+        {
+            return await this.Context.Photos
+                .FirstOrDefaultAsync(p => p.UserId == userId && p.IsMain)
+                .ConfigureAwait(false);
+        }
+
+        public async void SetUserPhotoAsMain(int userId, Photo photoToBeSet)
+        {
+            var currentMainPhoto = await this.GetCurrentMainPhotoForUser(userId).ConfigureAwait(false);
+            currentMainPhoto.IsMain = false;
+            photoToBeSet.IsMain = true;
         }
     }
 }

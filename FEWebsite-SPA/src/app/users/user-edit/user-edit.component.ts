@@ -20,6 +20,7 @@ import { GamesService } from './../../_services/games.service';
 export class UserEditComponent implements OnInit {
   @ViewChild('editForm', {static: true}) editForm: NgForm;
   user: User;
+  photoUrl: string;
   allGames: Game[];
   allGenres: GameGenre[];
 
@@ -46,13 +47,14 @@ export class UserEditComponent implements OnInit {
       this.getGames();
       this.getGameGenres();
     });
+    this.authService.currentPhotoUrl.subscribe(photoUrl => this.photoUrl = photoUrl);
   }
 
   updateUser() {
     console.log(this.user);
     console.log(this.allGames);
     console.log(this.allGames.filter(game => {
-      if (game.selected) {
+      if (game.checked) {
         return game;
       }})
     );
@@ -63,7 +65,6 @@ export class UserEditComponent implements OnInit {
     }, error => {
       this.alertify.error(error);
     });
-
   }
 
   getGames() {
@@ -84,11 +85,11 @@ export class UserEditComponent implements OnInit {
     });
 
     retrievedGames.forEach(game => {
-      game.selected = userGameIds.includes(game.id);
+      game.checked = userGameIds.includes(game.id);
     });
 
     const activeGames = retrievedGames.filter(game => {
-      if (game.selected) {
+      if (game.checked) {
         return game;
       }
     });

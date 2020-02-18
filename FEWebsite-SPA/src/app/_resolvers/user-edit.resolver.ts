@@ -21,7 +21,7 @@ export class UserEditResolver implements Resolve<User> {
         const currentUserId: number = Number(this.authService.decodedToken.nameid);
         return this.userService.getUser(currentUserId).pipe(
             catchError(error => {
-                this.alertify.error('Error trying to retreive your editable data.');
+                this.alertify.error('Error occured while trying to retrieve your editable user data.');
                 this.router.navigate(['/users']);
                 return of(null);
             })

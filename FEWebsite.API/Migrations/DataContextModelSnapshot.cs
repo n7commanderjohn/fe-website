@@ -144,6 +144,9 @@ namespace FEWebsite.API.Migrations
                         .HasColumnName("AboutMe")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Email")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("GenderId")
                         .HasColumnName("Gender")
                         .HasColumnType("TEXT");
