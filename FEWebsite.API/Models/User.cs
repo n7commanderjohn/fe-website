@@ -9,6 +9,8 @@ namespace FEWebsite.API.Models
 {
     public class User : BaseModel
     {
+        public string Email { get; set; }
+
         public string Username { get; set; }
 
         public byte[] PasswordHash { get; set; }

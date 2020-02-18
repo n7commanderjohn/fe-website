@@ -3,9 +3,9 @@ import { AlertifyService } from './../_services/alertify.service';
 import { AuthService } from './../_services/auth.service';
 import { UserService } from 'src/app/_services/user.service';
 import { GamesService } from './../_services/games.service';
-import { RegisterUser } from '../_models/registerUser';
 import { Game } from '../_models/game';
 import { Gender } from '../_models/gender';
+import { User } from '../_models/user';
 
 @Component({
   selector: 'app-register',
@@ -16,7 +16,7 @@ export class RegisterComponent implements OnInit {
   @Output() cancelRegister = new EventEmitter();
   listOfGames: Game[];
   listOfGenders: Gender[];
-  userModel: RegisterUser;
+  userModel: User;
 
   constructor(private authService: AuthService,
               private alertify: AlertifyService,
@@ -24,7 +24,6 @@ export class RegisterComponent implements OnInit {
               private gamesService: GamesService) { }
 
   ngOnInit() {
-    this.userModel = new RegisterUser();
     this.getGames();
     this.getGenders();
   }

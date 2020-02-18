@@ -4,6 +4,7 @@
 @import '../node_modules/@fortawesome/fontawesome-free/css/all.css';
 @import '../node_modules/alertifyjs/build/css/alertify.min.css';
 @import '../node_modules/alertifyjs/build/css/themes/bootstrap.min.css';
+@import '../node_modules/ngx-bootstrap/datepicker/bs-datepicker.css';
 
 .tab-panel {
   border: 1px solid #ddd;
@@ -78,4 +79,14 @@ hr:before { /* Not really supposed to work, but does */
 
 .my-drop-zone {
   border-color: white;
+}
+
+.nv-file-over {
+  border: dotted 3px green;
+}
+
+input.ng-dirty[type=text]:not(.is-invalid),
+select.ng-dirty:not(.is-invalid),
+textarea.ng-dirty:not(.is-invalid) {
+  border: solid 3px yellow;
 }

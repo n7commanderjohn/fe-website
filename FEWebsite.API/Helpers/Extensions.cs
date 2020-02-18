@@ -1,5 +1,6 @@
 using System;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 
 namespace FEWebsite.API.Helpers
 {
@@ -25,6 +26,15 @@ namespace FEWebsite.API.Helpers
             }
 
             return age;
+        }
+
+        /// <summary>
+        /// Quick method to get the AppSettings token.
+        /// </summary>
+        /// <param name="config">the config</param>
+        public static string GetAppSettingsToken(this IConfiguration config)
+        {
+            return config.GetSection("AppSettings:Token").Value;
         }
     }
 }

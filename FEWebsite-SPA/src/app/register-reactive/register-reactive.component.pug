@@ -1,0 +1,37 @@
+form([formGroup]="registerForm", (ngSubmit)="register();")
+  h2.text-center.text-primary Sign Up (Reactive)
+  hr
+  .form-group
+    input.form-control(formControlName='{{fs.name}}', type='text', placeholder='Nickname')
+  .form-group
+    textarea.form-control(formControlName='{{fs.description}}', type='text', cols="30", rows="10", placeholder='Your story...')
+  .form-group
+    label(for="gender") What is your gender?
+    select.form-control(formControlName='{{fs.gender}}', id="gender")
+      option(*ngFor="let gender of listOfGenders", [value]="gender.id") {{gender.description}}
+  .form-group
+    input.form-control(formControlName='{{fs.birthday}}', type='text', bsDatepicker, [bsConfig]="bsConfig", placeholder='Birthday',
+      [ngClass]="{'is-invalid': fgvm.birthday.hasErrors(registerForm)}")
+    .invalid-feedback(*ngIf="fgvm.birthday.required(registerForm)") Your Birthday is required
+  .form-group
+    input.form-control(formControlName='{{fs.email}}', type='text', placeholder='Email',
+      [ngClass]="{'is-invalid': fgvm.email.hasErrorsAndTouched(registerForm)}")
+    .invalid-feedback Please enter a email.
+  .form-group
+    input.form-control(formControlName='{{fs.username}}', type='text', placeholder='Username',
+      [ngClass]="{'is-invalid': fgvm.username.hasErrors(registerForm)}")
+    .invalid-feedback Please enter a username.
+  .form-group
+    input.form-control(formControlName='{{fs.password}}', type='password', placeholder='Password',
+      [ngClass]="{'is-invalid': fgvm.password.hasErrors(registerForm)}")
+    .invalid-feedback(*ngIf="fgvm.password.required(registerForm)") Password is required.
+    .invalid-feedback(*ngIf="fgvm.password.minLength(registerForm)") Password must be at least 8 characters.
+    .invalid-feedback(*ngIf="fgvm.password.maxLength(registerForm)") Password can't excced 16 characters.
+  .form-group
+    input.form-control(formControlName='{{fs.passwordConfirm}}', type='password', placeholder='Confirm Password',
+      [ngClass]="{'is-invalid': fgvm.passwordConfirm.hasErrors(registerForm)}")
+    .invalid-feedback(*ngIf="fgvm.passwordConfirm.required(registerForm)") Password confirmation is required.
+    .invalid-feedback(*ngIf="fgvm.passwordConfirm.confirmationPasswordMatches(registerForm)") Confirmation password does not match.
+  .form-group.text-center
+    button.btn.btn-success(type='submit', [disabled]="!registerForm.valid") Register
+    button.btn.btn-default(type='button', (click)="cancel();") Cancel

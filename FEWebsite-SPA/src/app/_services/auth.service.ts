@@ -3,12 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
+
 import { environment } from './../../environments/environment';
+
 import { User } from './../_models/user';
-import { RegisterUser } from './../_models/registerUser';
-import { LoginResponse } from './../_models/loginResponse';
 import { DecodedJWT } from '../_models/decodedJWT';
-import { LoginCredentials } from '../_models/loginCredentials';
+import { LoginCredentials } from './../_models/loginCredentials';
+import { LoginResponse } from './../_models/loginResponse';
+import { UpdateResponse } from '../_models/updateResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +22,8 @@ export class AuthService {
   currentUser: User;
   photoUrl = new BehaviorSubject<string>('../../assets/defaultUser.png');
   currentPhotoUrl = this.photoUrl.asObservable();
+  registerMode = false;
+  pwResetMode = false;
 
   constructor(private http: HttpClient) { }
 
@@ -27,23 +31,55 @@ export class AuthService {
     this.photoUrl.next(photoUrl);
   }
 
-  login(loginCredentials: LoginCredentials) {
-    return this.http.post(this.dotNetAPIURL + 'login', loginCredentials)
+  login(user: User | LoginCredentials) {
+    return this.http.post<LoginResponse>(this.dotNetAPIURL + 'login', user)
       .pipe(
-        map((loginResponse: LoginResponse) => {
-          if (loginResponse) {
-            localStorage.setItem('token', loginResponse.token);
-            localStorage.setItem('user', JSON.stringify(loginResponse.user));
-            this.decodedToken = this.jwtHelper.decodeToken(loginResponse.token);
-            this.currentUser = loginResponse.user;
-            this.changeUserPhoto(this.currentUser.photoUrl);
-          }
-        })
+        map((loginResponse) => this.updateTokenAndUserDetails(loginResponse))
       );
   }
 
-  register(model: RegisterUser) {
-    return this.http.post(this.dotNetAPIURL + 'register', model);
+  updateTokenAndUserDetails(response: LoginResponse | UpdateResponse) {
+    if (response) {
+      localStorage.setItem('token', response.token);
+      this.decodedToken = this.jwtHelper.decodeToken(response.token);
+
+      if (this.isLoginResponse(response)) {
+        const loginResponse = response as LoginResponse;
+        localStorage.setItem('user', JSON.stringify(loginResponse.user));
+        this.currentUser = loginResponse.user;
+        this.changeUserPhoto(this.currentUser.photoUrl);
+      }
+    }
+
+  }
+
+  private isLoginResponse(response: LoginResponse | UpdateResponse) {
+    return (response as LoginResponse).user !== undefined;
+  }
+
+  enterRegisterMode() {
+    this.registerMode = true;
+    this.pwResetMode = false;
+  }
+
+  enterPWResetMode() {
+    this.registerMode = true;
+    this.pwResetMode = false;
+  }
+
+  logout() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    this.decodedToken = null;
+    this.currentUser = null;
+  }
+
+  register(user: User) {
+    return this.http.post(this.dotNetAPIURL + 'register', user);
+  }
+
+  resetPassword(user: User) {
+    return this.http.put(this.dotNetAPIURL + 'resetpassword', user);
   }
 
   loggedIn() {

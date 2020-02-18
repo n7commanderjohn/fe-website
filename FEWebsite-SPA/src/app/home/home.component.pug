@@ -1,18 +1,25 @@
-.container.mt-5(*ngIf="loggedIn()")
-  div(*ngIf="!registerMode" style='text-align: center')
-  h1 You are logged in.
-  p.lead (Home Page News WIP)
-  .text-center
-    button.btn.btn-primary.btn-lg.mr-2((click)="registerToggle();") Link 1
-    button.btn.btn-info.btn-lg Link 2
-.container.mt-5(*ngIf="!loggedIn()")
-  div(*ngIf="!registerMode" style='text-align: center')
-    h1 Become the Expert Tactician people need.
-    p.lead Learn all you need to know to be the best... All you need to do is sign up!
-    .text-center
-      button.btn.btn-primary.btn-lg.mr-2((click)="registerToggle();") Register
-      button.btn.btn-info.btn-lg Learn more
-  .container(*ngIf="registerMode")
-    .row.justify-content-center
-      .col-4
-        app-register((cancelRegister)="cancelRegisterMode($event)")
+.text-center
+  .container.mt-5(*ngIf="isLoggedIn()")
+    div(*ngIf="!isRegisterMode()" style='text-align: center')
+    h1 You are logged in.
+    p.lead (Home Page News WIP)
+    .btn-group
+      button.btn.btn-primary.btn-lg.mr-2((click)="registerToggle();") Link 1
+      button.btn.btn-info.btn-lg Link 2
+  .container.mt-5(*ngIf="!isLoggedIn()")
+    div(*ngIf="isRegisterMode(); else registerSection")
+      .row.justify-content-center
+        .col-4
+          app-register-reactive
+    ng-template.container("#registerSection")
+      div(*ngIf="isPWResetMode(); else homeSection")
+        .container
+          .row.justify-content-center
+            .col-4
+              app-password-reset
+      ng-template(#homeSection)
+        h1 Become the Expert Tactician people need.
+        p.lead Learn all you need to know to be the best... All you need to do is sign up!
+        .btn-group
+          button.btn.btn-primary.btn-lg.mr-2((click)="enterRegisterMode();") Register
+          button.btn.btn-info.btn-lg Learn more

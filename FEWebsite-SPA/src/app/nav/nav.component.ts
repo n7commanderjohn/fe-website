@@ -1,9 +1,12 @@
-import { LoginCredentials } from './../_models/loginCredentials';
-import { AlertifyService } from './../_services/alertify.service';
-import { AuthService } from './../_services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
+
+import { AlertifyService } from './../_services/alertify.service';
+import { AuthService } from './../_services/auth.service';
+
+import { StatusCodeResultReturnObject } from './../_models/statusCodeResultReturnObject';
+import { LoginCredentials } from './../_models/loginCredentials';
 
 @Component({
   selector: 'app-nav',
@@ -20,6 +23,8 @@ export class NavComponent implements OnInit {
               private alertify: AlertifyService,
               private router: Router) { }
 
+  isLoggedIn = () => this.authService.loggedIn();
+
   ngOnInit() {
     this.loginCredentials = new LoginCredentials();
     this.authService.currentPhotoUrl.subscribe(photoUrl => this.photoUrl = photoUrl);
@@ -28,24 +33,21 @@ export class NavComponent implements OnInit {
   login() {
     this.authService.login(this.loginCredentials).subscribe(next => {
       this.alertify.success('Login successful.');
-    }, error => {
-      this.alertify.error(error);
+    }, (error: StatusCodeResultReturnObject) => {
+      this.alertify.error(error.response);
     }, () => {
       this.router.navigate(['/home']);
     });
   }
 
-  loggedIn() {
-    return this.authService.loggedIn();
-  }
-
   logout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    this.authService.decodedToken = null;
-    this.authService.currentUser = null;
+    this.authService.logout();
     this.alertify.message('Logged out.');
     this.router.navigate(['/home']);
   }
 
+  enterResetPasswordMode() {
+    this.authService.enterPWResetMode();
+    this.alertify.message('User Password Reset started.');
+  }
 }

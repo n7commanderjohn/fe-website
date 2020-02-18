@@ -57,7 +57,8 @@ namespace FEWebsite.API.Controllers
         {
             if (!this.IsUserMatched(userId))
             {
-                return this.Unauthorized();
+                return this.BadRequest(new StatusCodeResultReturnObject(this.Unauthorized(),
+                    "You are not logged in as the user you are trying to upload the photo for."));
             }
 
             var currentUser = await this.UserService.GetUser(userId).ConfigureAwait(false);
@@ -67,7 +68,8 @@ namespace FEWebsite.API.Controllers
             bool doesPhotoExist = file == null;
             if (doesPhotoExist)
             {
-                return this.BadRequest("The photo to be uploaded was not found.");
+                return this.BadRequest(new StatusCodeResultReturnObject(this.BadRequest(),
+                    "The photo to be uploaded was not found."));
             }
             else
             {
@@ -107,7 +109,8 @@ namespace FEWebsite.API.Controllers
                 return this.CreatedAtRoute("GetPhoto", new { userId, photo.Id }, photoToReturn);
             }
 
-            return BadRequest("Photo upload to server failed.");
+            return BadRequest(new StatusCodeResultReturnObject(this.BadRequest(),
+                "Photo upload to server failed."));
         }
 
         [HttpPut("{photoId}/setMain")]
@@ -122,9 +125,8 @@ namespace FEWebsite.API.Controllers
                 var photoToSetAsMain = await this.UserService.GetPhoto(photoId).ConfigureAwait(false);
                 if (photoToSetAsMain.IsMain)
                 {
-                    return this.BadRequest(new StatusCodeResultReturnObject(this.BadRequest()){
-                        Response = "This photo is already the user's main photo."
-                    });
+                    return this.BadRequest(new StatusCodeResultReturnObject(this.BadRequest(),
+                        "This photo is already the user's main photo."));
                 }
 
                 this.UserService.SetUserPhotoAsMain(userId, photoToSetAsMain);
@@ -140,9 +142,8 @@ namespace FEWebsite.API.Controllers
                 return unauthorizedObj;
             }
 
-            return this.BadRequest(new StatusCodeResultReturnObject(this.BadRequest()){
-                Response = "Setting the selected photo as the main photo failed."
-            });
+            return this.BadRequest(new StatusCodeResultReturnObject(this.BadRequest(),
+                "Setting the selected photo as the main photo failed."));
         }
 
         [HttpDelete("{photoId}")]
@@ -182,10 +183,8 @@ namespace FEWebsite.API.Controllers
                     }
                     else
                     {
-                        return this.BadRequest(new StatusCodeResultReturnObject(this.BadRequest())
-                        {
-                            Response = failureBase + "cloud server."
-                        });
+                        return this.BadRequest(new StatusCodeResultReturnObject(this.BadRequest(),
+                            failureBase + "cloud server."));
                     }
                 }
                 else
@@ -199,10 +198,8 @@ namespace FEWebsite.API.Controllers
                     return this.Ok();
                 }
                 else {
-                    return this.BadRequest(new StatusCodeResultReturnObject(this.BadRequest())
-                    {
-                        Response = failureBase + "database."
-                    });
+                    return this.BadRequest(new StatusCodeResultReturnObject(this.BadRequest(),
+                        failureBase + "database."));
                 }
             }
             else
@@ -211,20 +208,18 @@ namespace FEWebsite.API.Controllers
             }
         }
 
-        private UnauthorizedObjectResult IsUserAndPhotoAuthorized(User user, int photoId)
+        private BadRequestObjectResult IsUserAndPhotoAuthorized(User user, int photoId)
         {
             if (!this.IsUserMatched(user.Id))
             {
-                return this.Unauthorized(new StatusCodeResultReturnObject(this.Unauthorized()){
-                    Response = "This isn't the currently logged in user."
-                });
+                return this.BadRequest(new StatusCodeResultReturnObject(this.Unauthorized(),
+                    "This isn't the currently logged in user."));
             }
 
             if (!user.DoesPhotoExist(photoId))
             {
-                return this.Unauthorized(new StatusCodeResultReturnObject(this.Unauthorized()){
-                    Response = "This photo id doesn't match any of the user's photos."
-                });
+                return this.BadRequest(new StatusCodeResultReturnObject(this.Unauthorized(),
+                    "This photo id doesn't match any of the user's photos."));
             }
 
             return null;

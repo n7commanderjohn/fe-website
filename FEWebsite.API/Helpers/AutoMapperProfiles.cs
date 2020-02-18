@@ -6,6 +6,7 @@ using FEWebsite.API.DTOs.MiscDTOs;
 using FEWebsite.API.DTOs.PhotoDTOs;
 using FEWebsite.API.DTOs.UserDTOs;
 using FEWebsite.API.Models;
+using FEWebsite.API.Models.ManyToManyModels;
 
 namespace FEWebsite.API.Helpers
 {
@@ -24,41 +25,161 @@ namespace FEWebsite.API.Helpers
 
         private void CreateMapForUser()
         {
-            const string defaultUserPic = "../../assets/defaultUser.png";
             this.CreateMap<User, UserForLoginDto>()
-                .ForMember(destinationMember => destinationMember.PhotoUrl,
-                    memberOptions => memberOptions.MapFrom(sourceMember =>
-                    sourceMember.Photos.Count > 0 ? sourceMember.Photos.FirstOrDefault(p => p.IsMain).Url : defaultUserPic));
+                .ForMember(dest => dest.PhotoUrl,
+                    source => source.MapFrom(source => source.Photos.FirstOrDefault(p => p.IsMain).Url));
             this.CreateMap<User, UserForListDto>()
-                .ForMember(destinationMember => destinationMember.PhotoUrl,
-                    memberOptions => memberOptions.MapFrom(sourceMember =>
-                    sourceMember.Photos.Count > 0 ? sourceMember.Photos.FirstOrDefault(p => p.IsMain).Url : defaultUserPic))
-                .ForMember(destinationMember => destinationMember.Age,
-                    memberOptions => memberOptions.MapFrom(sourceMember => sourceMember.Birthday.CalculateAge()))
-                .ForMember(destinationMember => destinationMember.Gender,
-                    memberOptions => memberOptions.MapFrom(sourceMember => sourceMember.Gender.Description));
+                .ForMember(dest => dest.PhotoUrl,
+                    source => source.MapFrom(source => source.Photos.FirstOrDefault(p => p.IsMain).Url))
+                .ForMember(dest => dest.Age,
+                    source => source.MapFrom(source => source.Birthday.CalculateAge()))
+                .ForMember(dest => dest.Gender,
+                    source => source.MapFrom(source => source.Gender.Description));
             this.CreateMap<User, UserForDetailedDto>()
-                .ForMember(destinationMember => destinationMember.PhotoUrl,
-                    memberOptions => memberOptions.MapFrom(sourceMember =>
-                    sourceMember.Photos.Count > 0 ? sourceMember.Photos.FirstOrDefault(p => p.IsMain).Url : defaultUserPic))
-                .ForMember(destinationMember => destinationMember.Age,
-                    memberOptions => memberOptions.MapFrom(sourceMember => sourceMember.Birthday.CalculateAge()))
-                .ForMember(destinationMember => destinationMember.Gender,
-                    memberOptions => memberOptions.MapFrom(sourceMember => sourceMember.Gender.Description))
-                .ForMember(destinationMember => destinationMember.Games,
-                    memberOptions => memberOptions.MapFrom(sourceMember => sourceMember.FavoriteGames.ToList().Select(fg => fg.Game)))
-                .ForMember(destinationMember => destinationMember.ListOfGames,
-                    memberOptions => memberOptions.MapFrom(sourceMember => sourceMember.FavoriteGames.ToList().Select(fg => fg.Game.Description)))
-                .ForMember(destinationMember => destinationMember.Genres,
-                    memberOptions => memberOptions.MapFrom(sourceMember => sourceMember.FavoriteGenres.ToList().Select(fg => fg.GameGenre)))
-                .ForMember(destinationMember => destinationMember.ListOfGenres,
-                    memberOptions => memberOptions.MapFrom(sourceMember => sourceMember.FavoriteGenres.ToList().Select(fg => fg.GameGenre.Description)));
-            this.CreateMap<UserForUpdateDto, User>();
+                .ForMember(dest => dest.PhotoUrl,
+                    source => source.MapFrom(source => source.Photos.FirstOrDefault(p => p.IsMain).Url))
+                .ForMember(dest => dest.Age,
+                    source => source.MapFrom(source => source.Birthday.CalculateAge()))
+                .ForMember(dest => dest.Gender,
+                    source => source.MapFrom(source => source.Gender.Description))
+                .ForMember(dest => dest.GenderId,
+                    source => source.MapFrom(source => source.Gender.Id))
+                .ForMember(dest => dest.Games,
+                    source => source.MapFrom(source => source.FavoriteGames.ToList().Select(fg => fg.Game)))
+                .ForMember(dest => dest.ListOfGames,
+                    source => source.MapFrom(source => source.FavoriteGames.ToList().Select(fg => fg.Game.Description)))
+                .ForMember(dest => dest.Genres,
+                    source => source.MapFrom(source => source.FavoriteGenres.ToList().Select(fg => fg.GameGenre)))
+                .ForMember(dest => dest.ListOfGenres,
+                    source => source.MapFrom(source => source.FavoriteGenres.ToList().Select(fg => fg.GameGenre.Description)));
+            this.CreateMap<UserForUpdateDto, User>()
+                .AfterMap(this.MapNewFaveGamesAndGenres);
             this.CreateMap<UserForRegisterDto, User>()
-                .ForMember(destinationMember => destinationMember.Gender,
-                    memberOptions => memberOptions.Ignore())
-                .ForMember(destinationMember => destinationMember.GenderId,
-                    memberOptions => memberOptions.MapFrom(sourceMember => sourceMember.Gender));
+                .ForMember(dest => dest.Gender,
+                    source => source.Ignore())
+                .ForMember(dest => dest.GenderId,
+                    source => source.MapFrom(source => source.Gender));
         }
+
+        private void MapNewFaveGamesAndGenres(UserForUpdateDto userForUpdateDto, User currentUser)
+        {
+            if (currentUser.Name == null)
+            {
+                currentUser.Name = currentUser.Username;
+            }
+            currentUser.Username = currentUser.Username.ToLower();
+            MapGames(userForUpdateDto, currentUser);
+            MapGameGenres(userForUpdateDto, currentUser);
+
+            static void MapGames(UserForUpdateDto userForUpdateDto, User currentUser)
+            {
+                var currFaveGames = currentUser.FavoriteGames.ToList();
+                var newFaveGames = userForUpdateDto.Games.Select(game => new UserGame()
+                {
+                    Game = game,
+                    GameId = game.Id,
+                    User = currentUser,
+                    UserId = currentUser.Id,
+                });
+                foreach (var game in newFaveGames)
+                {
+                    var isThisANewFavorite = !currFaveGames.Any(fg => fg.GameId == game.GameId);
+                    if (isThisANewFavorite)
+                    {
+                        currentUser.FavoriteGames.Add(game);
+                    }
+                }
+                foreach (var game in currFaveGames)
+                {
+                    var isThisExistingFavoriteNoMore = !newFaveGames.Any(g => g.GameId == game.GameId);
+                    if (isThisExistingFavoriteNoMore)
+                    {
+                        currentUser.FavoriteGames.Remove(game);
+                    }
+                }
+            }
+
+            static void MapGameGenres(UserForUpdateDto userForUpdateDto, User currentUser)
+            {
+                var currFaveGenres = currentUser.FavoriteGenres.ToList();
+                var newFaveGenres = userForUpdateDto.Genres.Select(genre => new UserGameGenre()
+                {
+                    GameGenre = genre,
+                    GameGenreId = genre.Id,
+                    User = currentUser,
+                    UserId = currentUser.Id,
+                });
+                foreach (var genre in newFaveGenres)
+                {
+                    var isThisANewFavorite = !currFaveGenres.Any(fg => fg.GameGenreId == genre.GameGenreId);
+                    if (isThisANewFavorite)
+                    {
+                        currentUser.FavoriteGenres.Add(genre);
+                    }
+                }
+                foreach (var genre in currFaveGenres)
+                {
+                    var isThisExistingFavoriteNoMore = !newFaveGenres.Any(g => g.GameGenreId == genre.GameGenreId);
+                    if (isThisExistingFavoriteNoMore)
+                    {
+                        currentUser.FavoriteGenres.Remove(genre);
+                    }
+                }
+            }
+        }
+
+        // keeping this for now just in case the other way doesn't work???
+        // private void MapNewFaveGamesAndGenres_backup(UserForUpdateDto userForUpdateDto, User currentUser)
+        // {
+        //     var faveGames = currentUser.FavoriteGames.ToList();
+        //     foreach (var game in userForUpdateDto.Games)
+        //     {
+        //         var isThisANewFavorite = !faveGames.Any(fg => fg.GameId == game.Id);
+        //         if (isThisANewFavorite)
+        //         {
+        //             var newGame = new UserGame()
+        //             {
+        //                 Game = game,
+        //                 GameId = game.Id,
+        //                 User = currentUser,
+        //                 UserId = currentUser.Id,
+        //             };
+        //             currentUser.FavoriteGames.Add(newGame);
+        //         }
+        //     }
+        //     foreach (var game in faveGames)
+        //     {
+        //         var isThisExistingFavoriteNoMore = !userForUpdateDto.Games.Any(g => g.Id == game.GameId);
+        //         if (isThisExistingFavoriteNoMore)
+        //         {
+        //             currentUser.FavoriteGames.Remove(game);
+        //         }
+        //     }
+
+        //     var faveGenres = currentUser.FavoriteGenres.ToList();
+        //     foreach (var genre in userForUpdateDto.Genres)
+        //     {
+        //         var isThisANewFavorite = !faveGenres.Any(fg => fg.GameGenreId == genre.Id);
+        //         if (isThisANewFavorite)
+        //         {
+        //             var newGenre = new UserGameGenre()
+        //             {
+        //                 GameGenre = genre,
+        //                 GameGenreId = genre.Id,
+        //                 User = currentUser,
+        //                 UserId = currentUser.Id,
+        //             };
+        //             currentUser.FavoriteGenres.Add(newGenre);
+        //         }
+        //     }
+        //     foreach (var genre in faveGenres)
+        //     {
+        //         var isThisExistingFavoriteNoMore = !userForUpdateDto.Genres.Any(g => g.Id == genre.GameGenreId);
+        //         if (isThisExistingFavoriteNoMore)
+        //         {
+        //             currentUser.FavoriteGenres.Remove(genre);
+        //         }
+        //     }
+        // }
     }
 }

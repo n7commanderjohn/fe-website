@@ -10,13 +10,19 @@ namespace FEWebsite.API.DTOs.UserDTOs
 {
     public class UserForDetailedDto : BaseDto
     {
+        public string Email { get; set; }
+
         public string Username { get; set; }
 
         public int Age { get; set; }
 
+        public DateTime Birthday { get; set; }
+
         public DateTime AccountCreated { get; set; }
 
         public DateTime LastLogin { get; set; }
+
+        public string GenderId { get; set; }
 
         public string Gender { get; set; }
 
