@@ -18,7 +18,7 @@
             p {{user.age}}
           div
             strong Last Active:
-            p {{user.lastLogin | date:'MMMM d, y, h:mm:ss a'}}
+            p {{user.lastLogin | timeAgo}}
           div
             strong User Since:
             p {{user.accountCreated | date:'MMMM d, y'}}
