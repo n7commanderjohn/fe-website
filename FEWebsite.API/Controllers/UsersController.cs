@@ -12,6 +12,7 @@ using AutoMapper;
 
 namespace FEWebsite.API.Controllers
 {
+    [ServiceFilter(typeof(LogUserActivity))]
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
