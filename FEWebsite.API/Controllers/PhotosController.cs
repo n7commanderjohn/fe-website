@@ -1,5 +1,4 @@
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +6,7 @@ using Microsoft.Extensions.Options;
 using AutoMapper;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
+
 using FEWebsite.API.Data.BaseServices;
 using FEWebsite.API.DTOs.PhotoDTOs;
 using FEWebsite.API.Helpers;
@@ -227,7 +227,7 @@ namespace FEWebsite.API.Controllers
 
         private bool IsUserMatched(int userId)
         {
-            return userId == int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            return userId == this.GetUserIdFromClaim();
         }
     }
 }

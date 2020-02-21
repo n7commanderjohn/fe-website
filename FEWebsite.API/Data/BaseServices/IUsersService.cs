@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+
 using FEWebsite.API.DTOs.UserDTOs;
+using FEWebsite.API.Helpers;
 using FEWebsite.API.Models;
 
 namespace FEWebsite.API.Data.BaseServices
@@ -13,7 +15,7 @@ namespace FEWebsite.API.Data.BaseServices
 
         Task<bool> SaveAll();
 
-        Task<IEnumerable<User>> GetUsers();
+        Task<PagedList<User>> GetUsers(UserParams userParams);
 
         Task<User> GetUser(int userId);
 

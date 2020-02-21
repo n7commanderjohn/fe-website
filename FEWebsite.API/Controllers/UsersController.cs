@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using AutoMapper;
+
 using FEWebsite.API.Data.BaseServices;
 using FEWebsite.API.DTOs.UserDTOs;
 using FEWebsite.API.Helpers;
-using AutoMapper;
 
 namespace FEWebsite.API.Controllers
 {
@@ -33,13 +33,20 @@ namespace FEWebsite.API.Controllers
 
         // GET api/users
         [HttpGet]
-        public async Task<OkObjectResult> GetUsers()
+        public async Task<OkObjectResult> GetUsers([FromQuery]UserParams userParams)
         {
+            var currentUserId = this.GetUserIdFromClaim();
+            // var retrievedUser = await this.UserService.GetUser(currentUserId).ConfigureAwait(false);
+
+            userParams.UserId = currentUserId;
+
             var users = await this.UserService
-                .GetUsers()
+                .GetUsers(userParams)
                 .ConfigureAwait(false);
 
             var usersDto = this.Mapper.Map<IEnumerable<UserForListDto>>(users);
+
+            Response.AddPagination(users);
 
             return this.Ok(usersDto);
         }
@@ -73,7 +80,7 @@ namespace FEWebsite.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(int id, UserForUpdateDto userForUpdateDto)
         {
-            bool userIdInTokenMatches = id == int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            bool userIdInTokenMatches = id == this.GetUserIdFromClaim();
             if (!userIdInTokenMatches) {
                 return this.Unauthorized();
             }
