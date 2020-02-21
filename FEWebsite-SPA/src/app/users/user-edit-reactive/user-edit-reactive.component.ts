@@ -33,6 +33,7 @@ export class UserEditReactiveComponent implements OnInit {
   bsConfig: Partial<BsDatepickerConfig>;
   maxDate = new Date();
   passwordChangeMode = false;
+  debug = false;
 
   @HostListener('window:beforeunload', ['$event'])
   unloadNotification($event: any) {
@@ -89,10 +90,10 @@ export class UserEditReactiveComponent implements OnInit {
     }
   }
 
-  updateUser(debug: boolean) {
+  updateUser() {
     if (this.userEditForm.valid) {
       this.assignFormValuesToUser();
-      if (debug) {
+      if (this.debug) {
         console.log(this.user);
         console.log(this.allGames);
         console.log(this.allGenres);
@@ -112,7 +113,6 @@ export class UserEditReactiveComponent implements OnInit {
   private assignFormValuesToUser() {
     this.user = Object.assign(this.user, this.userEditForm.value);
     this.user.genderId = this.user.gender;
-    // this.user.gender = null;
     this.user.games.forEach((element, index) => {
       this.allGames[index].checked = element as unknown as boolean; // the form returns an array of booleans
     });
