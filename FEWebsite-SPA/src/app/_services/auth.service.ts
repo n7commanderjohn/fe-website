@@ -63,8 +63,8 @@ export class AuthService {
   }
 
   enterPWResetMode() {
-    this.registerMode = true;
-    this.pwResetMode = false;
+    this.registerMode = false;
+    this.pwResetMode = true;
   }
 
   logout() {
