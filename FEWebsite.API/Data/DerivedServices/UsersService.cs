@@ -47,10 +47,8 @@ namespace FEWebsite.API.Data.DerivedServices
 
         public async Task<User> GetUserThroughPasswordResetProcess(UserForPasswordResetDto userForPasswordResetDto)
         {
-            var dto = userForPasswordResetDto;
-
             var user = await Context.Users
-                .SingleOrDefaultAsync(UsernameAndEmailMatches(dto))
+                .SingleOrDefaultAsync(UsernameAndEmailMatches(userForPasswordResetDto))
                 .ConfigureAwait(false);
 
             return user;
@@ -71,6 +69,15 @@ namespace FEWebsite.API.Data.DerivedServices
                 users = users.Where(GenderIdMatches(userParams));
             }
 
+            bool ageParamsAreNonDefault = userParams.MinAge != 18 || userParams.MaxAge != 99;
+            if (ageParamsAreNonDefault)
+            {
+                var minDob = DateTime.Today.AddYears(-userParams.MaxAge - 1);
+                var maxDob = DateTime.Today.AddYears(-userParams.MinAge);
+
+                users = users.Where(UsersAreWithinAgeFilters(minDob, maxDob));
+            }
+
             var userList = await PagedList<User>
                 .CreateAsync(users, userParams.PageNumber, userParams.PageSize)
                 .ConfigureAwait(false);
@@ -85,6 +92,11 @@ namespace FEWebsite.API.Data.DerivedServices
             static Expression<Func<User, bool>> GenderIdMatches(UserParams userParams)
             {
                 return u => u.Gender.Id == userParams.GenderId;
+            }
+
+            static Expression<Func<User, bool>> UsersAreWithinAgeFilters(DateTime minDob, DateTime maxDob)
+            {
+                return u => u.Birthday >= minDob && u.Birthday <= maxDob;
             }
         }
 

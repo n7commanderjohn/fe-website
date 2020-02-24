@@ -15,5 +15,7 @@ namespace FEWebsite.API.Helpers
 
         public int UserId { get; set; }
         public string GenderId { get; set; }
+        public int MinAge { get; set; } = 18;
+        public int MaxAge { get; set; } = 99;
     }
 }
