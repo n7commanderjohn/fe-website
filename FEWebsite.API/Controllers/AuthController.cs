@@ -70,7 +70,7 @@ namespace FEWebsite.API.Controllers
             }
 
             var token = this.AuthService.CreateUserToken(authenticatedUser, this.Config.GetAppSettingsToken());
-            var user = this.Mapper.Map<UserForLoginDto>(authenticatedUser);
+            var user = this.Mapper.Map<UserForLoginResponseDto>(authenticatedUser);
 
             return this.Ok(new
             {

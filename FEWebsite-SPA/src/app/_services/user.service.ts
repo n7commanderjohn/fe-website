@@ -7,6 +7,7 @@ import { environment } from './../../environments/environment';
 
 import { Gender } from '../_models/gender';
 import { User } from '../_models/user';
+import { UserParams } from './../_models/userParams';
 import { UpdateResponse } from '../_models/updateResponse';
 import { PaginatedResult } from './../_models/pagination';
 
@@ -18,14 +19,20 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  getUsers(page?: number, itemsPerPage?: number): Observable<PaginatedResult<User[]>> {
+  getUsers(page?: number, itemsPerPage?: number, userParams?: UserParams): Observable<PaginatedResult<User[]>> {
     const paginatedResult = new PaginatedResult<User[]>();
 
     let params = new HttpParams();
 
-    if (page != null && itemsPerPage != null) {
+    if (page && itemsPerPage) {
       params = params.append('pageNumber', page.toString());
       params = params.append('pageSize', itemsPerPage.toString());
+    }
+
+    if (userParams) {
+      params = params.append('minAge', userParams.minAge.toString());
+      params = params.append('maxAge', userParams.maxAge.toString());
+      params = params.append('genderId', userParams.genderId);
     }
 
     return this.http.get<User[]>(this.baseUrl + 'users', { observe: 'response', params })
@@ -33,7 +40,7 @@ export class UserService {
         map(response => {
           paginatedResult.result = response.body;
           const pagination = 'Pagination';
-          if (response.headers.get(pagination) != null) {
+          if (response.headers.get(pagination)) {
             paginatedResult.pagination = JSON.parse(response.headers.get(pagination));
           }
 

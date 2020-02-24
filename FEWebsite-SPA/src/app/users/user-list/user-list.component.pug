@@ -1,4 +1,20 @@
-.container.mt-5
+.text-center.mt-3
+  h2 Users List - {{pagination.totalItems}} Found
+.container.mt-3
+  .row.mb-3
+    form.form-inline(novalidate, #filterForm="ngForm", (ngSubmit)="loadUsers()")
+      .form-group
+        label(for="minAge") Age From
+        input.form-control.ml-1.input-number#minAge(type="number", name="minAge", [(ngModel)]="userParams.minAge")
+      .form-group.px-2
+        label(for="maxAge") Age To
+        input.form-control.ml-1.input-number#maxAge(type="number", name="maxAge", [(ngModel)]="userParams.maxAge")
+      .form-group.px-2
+        label(for="genderId") Show:
+        select.form-control.ml-1.input-select#gender(name="genderId", [(ngModel)]="userParams.genderId")
+          option(*ngFor="let gender of listOfGenders", [value]="gender.id") {{gender.description}}
+      button.btn.btn-primary.ml-2(type="submit") Apply Filters
+      button.btn.btn-info.ml-3(type="button", (click)="resetFilters(filterForm)") Reset Filter
   .row
     .col-lg-2.col-md-3.col-sm-6(*ngFor="let user of users")
       app-user-card(*ngIf="user.name", [user]="user")

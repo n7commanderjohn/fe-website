@@ -216,8 +216,8 @@ export class UserEditReactiveComponent implements OnInit {
   private getGenders() {
     this.userService.getGenders().subscribe(genders => {
       this.listOfGenders = genders;
-    }, error => {
-      this.alertify.error(error);
+    }, (error: StatusCodeResultReturnObject) => {
+      this.alertify.error(error.response);
     });
   }
 }
