@@ -65,7 +65,7 @@ export class PhotoEditorComponent implements OnInit {
 
   setMainPhoto(newMainPhoto: Photo) {
     const userId = Number(this.authService.decodedToken.nameid);
-    this.userService.setMainPhoto(userId, newMainPhoto.id).subscribe(() => {
+    this.userService.setMainPhoto(userId, newMainPhoto.id as number).subscribe(() => {
       this.currentMain = this.photos.filter(p => p.isMain)[0];
       this.currentMain.isMain = false;
 

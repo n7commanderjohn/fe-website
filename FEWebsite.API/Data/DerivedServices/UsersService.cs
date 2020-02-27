@@ -69,6 +69,12 @@ namespace FEWebsite.API.Data.DerivedServices
                 users = users.Where(GenderIdMatches(userParams));
             }
 
+            users = userParams.OrderBy switch
+            {
+                "created" => users.OrderByDescending(u => u.AccountCreated),
+                _ => users.OrderByDescending(u => u.LastLogin),
+            };
+
             bool ageParamsAreNonDefault = userParams.MinAge != 18 || userParams.MaxAge != 99;
             if (ageParamsAreNonDefault)
             {

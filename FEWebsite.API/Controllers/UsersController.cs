@@ -35,10 +35,7 @@ namespace FEWebsite.API.Controllers
         [HttpGet]
         public async Task<OkObjectResult> GetUsers([FromQuery]UserParams userParams)
         {
-            var currentUserId = this.GetUserIdFromClaim();
-            // var retrievedUser = await this.UserService.GetUser(currentUserId).ConfigureAwait(false);
-
-            userParams.UserId = currentUserId;
+            userParams.UserId = this.GetUserIdFromClaim();
 
             var users = await this.UserService
                 .GetUsers(userParams)
