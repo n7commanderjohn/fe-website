@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FEWebsite.API.Data.BaseServices;
-using FEWebsite.API.Models;
+using FEWebsite.API.Models.ManyToManyModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace FEWebsite.API.Data.DerivedServices

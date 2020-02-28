@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using FEWebsite.API.Models;
+using FEWebsite.API.Models.ManyToManyModels;
 
 namespace FEWebsite.API.Data.BaseServices
 {

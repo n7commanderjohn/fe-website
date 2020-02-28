@@ -7,6 +7,7 @@ using FEWebsite.API.DTOs.PhotoDTOs;
 using FEWebsite.API.DTOs.UserDTOs;
 using FEWebsite.API.Models;
 using FEWebsite.API.Models.ManyToManyModels;
+using FEWebsite.API.Models.ManyToManyModels.ComboModels;
 
 namespace FEWebsite.API.Helpers
 {

@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using FEWebsite.API.Models;
 using FEWebsite.API.Models.ManyToManyModels;
+using FEWebsite.API.Models.ManyToManyModels.ComboModels;
 
 namespace FEWebsite.API.Data
 {
