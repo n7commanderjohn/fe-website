@@ -15,6 +15,7 @@ namespace FEWebsite.API.Helpers
     {
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
+            var resultContext = await next().ConfigureAwait(false);
             var actionsToSkip = new List<string>() {
                 nameof(UsersController) + "." + nameof(UsersController.GetGenders)
             };
@@ -24,8 +25,6 @@ namespace FEWebsite.API.Helpers
             if (actionShouldBeSkipped) {
                 return;
             }
-
-            var resultContext = await next().ConfigureAwait(false);
 
             var userId = int.Parse(resultContext.HttpContext.User
                 .FindFirst(ClaimTypes.NameIdentifier).Value);

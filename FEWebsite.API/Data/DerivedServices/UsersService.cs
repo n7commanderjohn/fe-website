@@ -1,11 +1,14 @@
-using System.Threading;
+using System;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+
 using FEWebsite.API.Data.BaseServices;
 using FEWebsite.API.Models;
-using Microsoft.EntityFrameworkCore;
 using FEWebsite.API.DTOs.UserDTOs;
+using FEWebsite.API.Helpers;
 
 namespace FEWebsite.API.Data.DerivedServices
 {
@@ -31,29 +34,92 @@ namespace FEWebsite.API.Data.DerivedServices
         public async Task<User> GetUser(int userId)
         {
             var user = await this.DefaultUserIncludes(expandedInclude: true)
-                .FirstOrDefaultAsync(u => u.Id == userId)
+                .FirstOrDefaultAsync(UserIdMatches(userId))
                 .ConfigureAwait(false);
 
             return user;
+
+            static Expression<Func<User, bool>> UserIdMatches(int userId)
+            {
+                return u => u.Id == userId;
+            }
         }
 
         public async Task<User> GetUserThroughPasswordResetProcess(UserForPasswordResetDto userForPasswordResetDto)
         {
-            var dto = userForPasswordResetDto;
-            var user = await this.DefaultUserIncludes()
-                .SingleOrDefaultAsync(u => u.Email == dto.Email && u.Username == dto.Username)
+            var user = await Context.Users
+                .SingleOrDefaultAsync(UsernameAndEmailMatches(userForPasswordResetDto))
                 .ConfigureAwait(false);
 
             return user;
+
+            static Expression<Func<User, bool>> UsernameAndEmailMatches(UserForPasswordResetDto dto)
+            {
+                return u => u.Email == dto.Email && u.Username == dto.Username;
+            }
         }
 
-        public async Task<IEnumerable<User>> GetUsers()
+        public async Task<PagedList<User>> GetUsers(UserParams userParams)
         {
-            var users = await this.DefaultUserIncludes()
-                .ToListAsync()
+            IQueryable<User> users = GetUsersFromContext(userParams);
+
+            var userList = await PagedList<User>
+                .CreateAsync(users, userParams.PageNumber, userParams.PageSize)
                 .ConfigureAwait(false);
 
-            return users;
+            return userList;
+
+            IQueryable<User> GetUsersFromContext(UserParams userParams)
+            {
+                var users = this.DefaultUserIncludes()
+                    .Where(NotUserIdMatches(userParams));
+
+                if (!string.IsNullOrEmpty(userParams.GenderId))
+                {
+                    users = users.Where(GenderIdMatches(userParams));
+                }
+
+                var orderBy = userParams.OrderBy.ToLower();
+                if (orderBy == nameof(User.AccountCreated).ToLower())
+                {
+                    users = users.OrderByDescending(u => u.AccountCreated);
+                }
+                else if (orderBy == nameof(User.LastLogin).ToLower())
+                {
+                    users = users.OrderByDescending(u => u.LastLogin);
+                }
+                else
+                {
+                    users = users.OrderByDescending(u => u.LastLogin);
+                }
+
+                bool ageParamsAreNonDefault = userParams.MinAge != 18 || userParams.MaxAge != 99;
+                if (ageParamsAreNonDefault)
+                {
+                    // this subtracts ages by the current date to get the user age range.
+                    var minDob = DateTime.Today.AddYears(-userParams.MaxAge - 1);
+                    var maxDob = DateTime.Today.AddYears(-userParams.MinAge);
+
+                    users = users.Where(UsersAreWithinAgeFilters(minDob, maxDob));
+                }
+
+                return users;
+            }
+
+            static Expression<Func<User, bool>> NotUserIdMatches(UserParams userParams)
+            {
+                return u => u.Id != userParams.UserId;
+            }
+
+            static Expression<Func<User, bool>> GenderIdMatches(UserParams userParams)
+            {
+                return u => u.Gender.Id == userParams.GenderId;
+            }
+
+            static Expression<Func<User, bool>> UsersAreWithinAgeFilters(DateTime minDob, DateTime maxDob)
+            {
+                return u => u.Birthday >= minDob && u.Birthday <= maxDob;
+            }
         }
 
         public async Task<IEnumerable<Gender>> GetGenders()
@@ -67,11 +133,16 @@ namespace FEWebsite.API.Data.DerivedServices
 
         public async Task<Photo> GetPhoto(int photoId)
         {
-            var photo = await this.Context.Photos
-                .FirstOrDefaultAsync(p => p.Id == photoId)
+            var photo = await Context.Photos
+                .FirstOrDefaultAsync(PhotoIdMatches(photoId))
                 .ConfigureAwait(false);
 
             return photo;
+
+            static Expression<Func<Photo, bool>> PhotoIdMatches(int photoId)
+            {
+                return p => p.Id == photoId;
+            }
         }
 
         private IQueryable<User> DefaultUserIncludes(bool expandedInclude = false) {
@@ -104,9 +175,14 @@ namespace FEWebsite.API.Data.DerivedServices
 
         public async Task<Photo> GetCurrentMainPhotoForUser(int userId)
         {
-            return await this.Context.Photos
-                .FirstOrDefaultAsync(p => p.UserId == userId && p.IsMain)
+            return await Context.Photos
+                .FirstOrDefaultAsync(UserIdMatchesAndPhotoIsMain(userId))
                 .ConfigureAwait(false);
+
+            static Expression<Func<Photo, bool>> UserIdMatchesAndPhotoIsMain(int userId)
+            {
+                return p => p.UserId == userId && p.IsMain;
+            }
         }
 
         public async void SetUserPhotoAsMain(int userId, Photo photoToBeSet)

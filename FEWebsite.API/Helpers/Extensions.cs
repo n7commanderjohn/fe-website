@@ -1,6 +1,10 @@
 using System;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace FEWebsite.API.Helpers
 {
@@ -11,6 +15,23 @@ namespace FEWebsite.API.Helpers
             response.Headers.Add("Application-Error", message);
             response.Headers.Add("Access-Control-Expose-Headers", "Application-Error");
             response.Headers.Add("Access-Control-Allow-Origin", "*");
+        }
+
+        public static void AddPagination<T>(this HttpResponse response, PagedList<T> pagedList)
+        {
+            AddPagination(response,
+                pagedList.CurrentPage, pagedList.PageSize, pagedList.TotalCount, pagedList.TotalPages);
+        }
+
+        public static void AddPagination(this HttpResponse response,
+            int currentPage, int pageSize, int totalCount, int totalPages)
+        {
+            var pHeader = new PaginationHeader(currentPage, pageSize, totalCount, totalPages);
+            var camelCaseFormatter = new JsonSerializerSettings(){
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            };
+            response.Headers.Add("Pagination", JsonConvert.SerializeObject(pHeader, camelCaseFormatter));
+            response.Headers.Add("Access-Control-Expose-Headers", "Pagination");
         }
 
         /// <summary>
@@ -35,6 +56,10 @@ namespace FEWebsite.API.Helpers
         public static string GetAppSettingsToken(this IConfiguration config)
         {
             return config.GetSection("AppSettings:Token").Value;
+        }
+
+        public static int GetUserIdFromClaim(this ControllerBase controllerBase) {
+            return int.Parse(controllerBase.User.FindFirst(ClaimTypes.NameIdentifier).Value);
         }
     }
 }
