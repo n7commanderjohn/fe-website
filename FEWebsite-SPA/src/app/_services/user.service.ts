@@ -33,6 +33,7 @@ export class UserService {
       params = params.append('minAge', userParams.minAge.toString());
       params = params.append('maxAge', userParams.maxAge.toString());
       params = params.append('genderId', userParams.genderId);
+      params = params.append('orderBy', userParams.orderBy);
     }
 
     return this.http.get<User[]>(this.baseUrl + 'users', { observe: 'response', params })

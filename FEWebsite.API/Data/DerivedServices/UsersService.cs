@@ -61,34 +61,50 @@ namespace FEWebsite.API.Data.DerivedServices
 
         public async Task<PagedList<User>> GetUsers(UserParams userParams)
         {
-            var users = this.DefaultUserIncludes()
-                .Where(NotUserIdMatches(userParams));
-
-            if (!string.IsNullOrEmpty(userParams.GenderId))
-            {
-                users = users.Where(GenderIdMatches(userParams));
-            }
-
-            users = userParams.OrderBy switch
-            {
-                "created" => users.OrderByDescending(u => u.AccountCreated),
-                _ => users.OrderByDescending(u => u.LastLogin),
-            };
-
-            bool ageParamsAreNonDefault = userParams.MinAge != 18 || userParams.MaxAge != 99;
-            if (ageParamsAreNonDefault)
-            {
-                var minDob = DateTime.Today.AddYears(-userParams.MaxAge - 1);
-                var maxDob = DateTime.Today.AddYears(-userParams.MinAge);
-
-                users = users.Where(UsersAreWithinAgeFilters(minDob, maxDob));
-            }
+            IQueryable<User> users = GetUsersFromContext(userParams);
 
             var userList = await PagedList<User>
                 .CreateAsync(users, userParams.PageNumber, userParams.PageSize)
                 .ConfigureAwait(false);
 
             return userList;
+
+            IQueryable<User> GetUsersFromContext(UserParams userParams)
+            {
+                var users = this.DefaultUserIncludes()
+                    .Where(NotUserIdMatches(userParams));
+
+                if (!string.IsNullOrEmpty(userParams.GenderId))
+                {
+                    users = users.Where(GenderIdMatches(userParams));
+                }
+
+                var orderBy = userParams.OrderBy.ToLower();
+                if (orderBy == nameof(User.AccountCreated).ToLower())
+                {
+                    users = users.OrderByDescending(u => u.AccountCreated);
+                }
+                else if (orderBy == nameof(User.LastLogin).ToLower())
+                {
+                    users = users.OrderByDescending(u => u.LastLogin);
+                }
+                else
+                {
+                    users = users.OrderByDescending(u => u.LastLogin);
+                }
+
+                bool ageParamsAreNonDefault = userParams.MinAge != 18 || userParams.MaxAge != 99;
+                if (ageParamsAreNonDefault)
+                {
+                    // this subtracts ages by the current date to get the user age range.
+                    var minDob = DateTime.Today.AddYears(-userParams.MaxAge - 1);
+                    var maxDob = DateTime.Today.AddYears(-userParams.MinAge);
+
+                    users = users.Where(UsersAreWithinAgeFilters(minDob, maxDob));
+                }
+
+                return users;
+            }
 
             static Expression<Func<User, bool>> NotUserIdMatches(UserParams userParams)
             {
