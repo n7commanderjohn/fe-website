@@ -32,6 +32,10 @@ namespace FEWebsite.API.Models
 
         public ICollection<UserGameGenre> FavoriteGenres { get; set; }
 
+        public ICollection<UserLike> Likers { get; set; }
+
+        public ICollection<UserLike> Likees { get; set; }
+
         public ICollection<Photo> Photos { get; set; }
 
         [Column("AboutMe")]

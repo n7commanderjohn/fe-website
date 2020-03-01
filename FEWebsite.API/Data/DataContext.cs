@@ -11,24 +11,46 @@ namespace FEWebsite.API.Data
         {
         }
 
-        public DbSet<Game> Games { get; set; }
-
+        #region Models
+        #region StandardModels
         public DbSet<User> Users { get; set; }
+        public DbSet<Gender> Genders { get; set; } // should make this many to many eventually for *diversi-REEEEE*
+        #endregion StandardModels
 
-        public DbSet<GameGenre> GameGenres { get; set; }
-
+        #region OneToManyModels
         public DbSet<Photo> Photos { get; set; }
+        #endregion OneToManyModels
 
-        public DbSet<Gender> Genders { get; set; }
+        #region ManyToManyModels
+        public DbSet<Game> Games { get; set; }
+        public DbSet<GameGenre> GameGenres { get; set; }
+        #endregion ManyToManyModels
 
+        #region ManyToManyComboModels
         public DbSet<UserGame> UserGames { get; set; }
-
         public DbSet<UserGameGenre> UserGameGenres { get; set; }
+        public DbSet<UserLike> UserLikes { get; set; }
+        #endregion ManyToManyComboModels
+        #endregion Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            #region SetUpManytoManyRelationships
             modelBuilder.Entity<UserGame>().HasKey(ug => new { ug.UserId, ug.GameId });
             modelBuilder.Entity<UserGameGenre>().HasKey(ug => new { ug.UserId, ug.GameGenreId });
+
+            modelBuilder.Entity<UserLike>().HasKey(ul => new { ul.LikerId, ul.LikeeId });
+            modelBuilder.Entity<UserLike>()
+                .HasOne(ul => ul.Likee)
+                .WithMany(u => u.Likers)
+                .HasForeignKey(ul => ul.LikeeId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<UserLike>()
+                .HasOne(ul => ul.Liker)
+                .WithMany(u => u.Likees)
+                .HasForeignKey(ul => ul.LikerId)
+                .OnDelete(DeleteBehavior.Restrict);
+            #endregion SetUpManytoManyRelationships
         }
     }
 }
