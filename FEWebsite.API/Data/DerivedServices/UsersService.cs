@@ -79,7 +79,7 @@ namespace FEWebsite.API.Data.DerivedServices
                     users = users.Where(GenderIdMatches(userParams));
                 }
 
-                var orderBy = userParams.OrderBy.ToLower();
+                var orderBy = userParams.OrderBy?.ToLower() ?? nameof(User.LastLogin).ToLower();
                 if (orderBy == nameof(User.AccountCreated).ToLower())
                 {
                     users = users.OrderByDescending(u => u.AccountCreated);
