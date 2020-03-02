@@ -9,6 +9,7 @@ using FEWebsite.API.Data.BaseServices;
 using FEWebsite.API.Models;
 using FEWebsite.API.DTOs.UserDTOs;
 using FEWebsite.API.Helpers;
+using FEWebsite.API.Models.ManyToManyModels.ComboModels;
 
 namespace FEWebsite.API.Data.DerivedServices
 {
@@ -34,7 +35,7 @@ namespace FEWebsite.API.Data.DerivedServices
         public async Task<User> GetUser(int userId)
         {
             var user = await this.DefaultUserIncludes(expandedInclude: true)
-                .FirstOrDefaultAsync(UserIdMatches(userId))
+                .SingleOrDefaultAsync(UserIdMatches(userId))
                 .ConfigureAwait(false);
 
             return user;
@@ -190,6 +191,18 @@ namespace FEWebsite.API.Data.DerivedServices
             var currentMainPhoto = await this.GetCurrentMainPhotoForUser(userId).ConfigureAwait(false);
             currentMainPhoto.IsMain = false;
             photoToBeSet.IsMain = true;
+        }
+
+        public async Task<UserLike> GetLike(int userId, int recipientId)
+        {
+            return await Context.UserLikes.FirstOrDefaultAsync(
+                    GetSelectedLikeOfCurrentUser(userId, recipientId))
+                .ConfigureAwait(false);
+
+            static Expression<Func<UserLike, bool>> GetSelectedLikeOfCurrentUser(int userId, int recipientId)
+            {
+                return u => u.LikerId == userId && u.LikeeId == recipientId;
+            }
         }
     }
 }
