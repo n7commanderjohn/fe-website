@@ -12,14 +12,14 @@ using FEWebsite.API.Helpers;
 
 namespace FEWebsite.API.Data.DerivedServices
 {
-    public class UsersService : BaseService, IUsersService
+    public class UserService : BaseService, IUserService
     {
-        public UsersService(DataContext context)
-        {
-            Context = context;
-        }
-
         private DataContext Context { get; }
+
+        public UserService(DataContext context)
+        {
+            this.Context = context;
+        }
 
         public void Add<T>(T entity) where T : class
         {

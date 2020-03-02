@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -16,14 +16,14 @@ namespace FEWebsite.API.Controllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class UserController : ControllerBase
     {
-        private IUsersService UserService { get; }
+        private IUserService UserService { get; }
         private IAuthService AuthService { get; }
         private IConfiguration Config { get; }
         private IMapper Mapper { get; }
 
-        public UsersController(IUsersService userService, IAuthService authService, IConfiguration config, IMapper mapper)
+        public UserController(IUserService userService, IAuthService authService, IConfiguration config, IMapper mapper)
         {
             this.UserService = userService;
             this.AuthService = authService;

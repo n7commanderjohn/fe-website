@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FEWebsite.API.Data.DerivedServices
 {
-    public class GameGenresService : BaseService, IGameGenresService
+    public class GameGenreService : BaseService, IGameGenreService
     {
-        public GameGenresService(DataContext context)
+        public GameGenreService(DataContext context)
         {
             Context = context;
         }

@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FEWebsite.API.Data.DerivedServices
 {
-    public class GamesService : BaseService, IGamesService
+    public class GameService : BaseService, IGameService
     {
-        public GamesService(DataContext context)
+        public GameService(DataContext context)
         {
             Context = context;
         }
