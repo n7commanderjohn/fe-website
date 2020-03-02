@@ -14,8 +14,8 @@ import { StatusCodeResultReturnObject } from './../../_models/statusCodeResultRe
 })
 export class UserCardComponent implements OnInit {
   @Input() user: User;
+  @Input() userliked: boolean;
   currentUserId = Number(this.authService.decodedToken.nameid);
-
 
   constructor(private authService: AuthService,
               private userService: UserService,
@@ -27,10 +27,14 @@ export class UserCardComponent implements OnInit {
   toggleLike(recepientId: number) {
     this.userService.toggleLike(this.currentUserId, recepientId)
     .subscribe((next: StatusCodeResultReturnObject) => {
+      this.userliked = !this.userliked;
       this.alertify.success(next.response);
     }, (error: StatusCodeResultReturnObject) => {
       this.alertify.error(error.response);
     });
   }
 
+  isUserLiked() {
+    return this.userliked;
+  }
 }

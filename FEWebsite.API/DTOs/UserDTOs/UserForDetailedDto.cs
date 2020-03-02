@@ -32,6 +32,8 @@ namespace FEWebsite.API.DTOs.UserDTOs
 
         public ICollection<string> ListOfGenres { get; set; }
 
+        public ICollection<int> ListOfLikees { get; set; }
+
         public ICollection<GameForDetailedDto> Games { get; set; }
 
         public ICollection<GameGenreForDetailedDto> Genres { get; set; }

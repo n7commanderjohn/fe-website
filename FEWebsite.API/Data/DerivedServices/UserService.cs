@@ -244,5 +244,20 @@ namespace FEWebsite.API.Data.DerivedServices
                 return u => u.LikerId == userId && u.LikeeId == recipientId;
             }
         }
+
+        public async Task<IEnumerable<int>> GetLikes(int userId)
+        {
+            var likes = await GetLikesForSelectedUser(userId)
+                .ToListAsync().ConfigureAwait(false);
+
+            return likes;
+
+            IQueryable<int> GetLikesForSelectedUser(int userId)
+            {
+                return this.Context.UserLikes
+                    .Where(ul => ul.LikerId == userId)
+                    .Select(ul => ul.LikeeId);
+            }
+        }
     }
 }

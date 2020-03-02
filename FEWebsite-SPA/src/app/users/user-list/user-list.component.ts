@@ -3,6 +3,7 @@ import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import { AlertifyService } from './../../_services/alertify.service';
+import { AuthService } from './../../_services/auth.service';
 import { UserService } from './../../_services/user.service';
 
 import { StatusCodeResultReturnObject } from './../../_models/statusCodeResultReturnObject';
@@ -19,12 +20,14 @@ import { Gender } from './../../_models/gender';
 })
 export class UserListComponent implements OnInit {
   users: User[];
-  user: User = JSON.parse(localStorage.getItem('user'));
+  loggedInUser: User = JSON.parse(localStorage.getItem('user'));
+  loggedInUserId = Number(this.authService.decodedToken.nameid);
   listOfGenders: Gender[];
   userParams: UserParams;
   pagination: Pagination;
 
   constructor(private route: ActivatedRoute,
+              private authService: AuthService,
               private userService: UserService,
               private alertify: AlertifyService) { }
 
@@ -34,14 +37,26 @@ export class UserListComponent implements OnInit {
       this.users = users.result;
       this.pagination = users.pagination;
     });
+    this.getUserLikes();
 
     this.getGenders();
     this.setUserParams();
   }
 
+  isUserLiked(recepientId: number) {
+    return this.loggedInUser.listOfLikees.includes(recepientId);
+  }
+
+  private getUserLikes() {
+    this.userService.getLikes(this.loggedInUserId)
+    .subscribe(likes => {
+      this.loggedInUser.listOfLikees = likes;
+    });
+  }
+
   private setUserParams() {
     let genderId: string;
-    switch (this.user.genderId) {
+    switch (this.loggedInUser.genderId) {
       case 'NA':
         genderId = ''; break;
       case 'F':
@@ -92,6 +107,7 @@ export class UserListComponent implements OnInit {
     .subscribe((response) => {
       this.users = response.result;
       this.pagination = response.pagination;
+      this.getUserLikes();
     }, (error: StatusCodeResultReturnObject) => {
       this.alertify.error(error.response);
     });

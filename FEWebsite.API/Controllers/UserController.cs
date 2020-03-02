@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -32,7 +32,7 @@ namespace FEWebsite.API.Controllers
             this.Mapper = mapper;
         }
 
-        // GET api/users
+        // GET api/user
         [HttpGet]
         public async Task<OkObjectResult> GetUsers([FromQuery]UserParams userParams)
         {
@@ -49,7 +49,7 @@ namespace FEWebsite.API.Controllers
             return this.Ok(usersDto);
         }
 
-        // GET api/users/5
+        // GET api/user/5
         [HttpGet("{id}", Name = "GetUser")]
         public async Task<OkObjectResult> GetUser(int id)
         {
@@ -62,7 +62,18 @@ namespace FEWebsite.API.Controllers
             return this.Ok(userDto);
         }
 
-        // GET api/users
+        // GET api/user/5
+        [HttpGet("{id}/like")]
+        public async Task<OkObjectResult> GetUserLikes(int id)
+        {
+            var likes = await this.UserService
+                .GetLikes(id)
+                .ConfigureAwait(false);
+
+            return this.Ok(likes);
+        }
+
+        // GET api/user
         [AllowAnonymous]
         [HttpGet("genders")]
         public async Task<OkObjectResult> GetGenders()
@@ -74,7 +85,7 @@ namespace FEWebsite.API.Controllers
             return this.Ok(genders);
         }
 
-        // PUT api/users/5
+        // PUT api/user/5
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(int id, UserForUpdateDto userForUpdateDto)
         {
@@ -188,7 +199,7 @@ namespace FEWebsite.API.Controllers
             }
         }
 
-        // DELETE api/users/5
+        // DELETE api/user/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {

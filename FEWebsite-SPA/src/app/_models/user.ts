@@ -22,4 +22,5 @@ export interface User extends BaseModel {
     password: string;
     passwordConfirm: string;
     isPasswordNeeded: boolean;
+    listOfLikees?: number[];
 }

@@ -78,4 +78,8 @@ export class UserService {
     return this.http.post(this.baseUrl + this.user + '/' + userId + '/' + this.like + '/' + recepientId, {});
   }
 
+  getLikes(userId: number): Observable<number[]> {
+    return this.http.get<number[]>(this.baseUrl + this.user + '/' + userId + '/' + this.like);
+  }
+
 }

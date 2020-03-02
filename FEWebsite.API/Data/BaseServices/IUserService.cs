@@ -31,5 +31,7 @@ namespace FEWebsite.API.Data.BaseServices
         void SetUserPhotoAsMain(int userId, Photo photoToBeSet);
 
         Task<UserLike> GetLike(int userId, int recipientId);
+
+        Task<IEnumerable<int>> GetLikes(int userId);
     }
 }
