@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -154,6 +154,7 @@ namespace FEWebsite.API.Controllers
             }
 
             var like = await this.UserService.GetLike(id, recipientId).ConfigureAwait(false);
+            var recipient = await this.UserService.GetUser(recipientId).ConfigureAwait(false);
             string likeStatusMessage;
             if (like != null)
             {
@@ -161,7 +162,7 @@ namespace FEWebsite.API.Controllers
                 //     = new StatusCodeResultReturnObject(this.BadRequest(), "You already like this user.");
                 // return this.BadRequest(returnObj);
                 this.UserService.Delete(like); // should untoggle the like by removing it from the Likes table.
-                likeStatusMessage = "Like removed.";
+                likeStatusMessage = $"Like removed from {recipient.Name}.";
             }
             else
             {
@@ -171,7 +172,7 @@ namespace FEWebsite.API.Controllers
                     LikeeId = recipientId,
                 };
                 this.UserService.Add(like);
-                likeStatusMessage = "Like added.";
+                likeStatusMessage = $"Like added to {recipient.Name}.";
             }
 
             var userRecordsSaved = await this.UserService.SaveAll().ConfigureAwait(false);

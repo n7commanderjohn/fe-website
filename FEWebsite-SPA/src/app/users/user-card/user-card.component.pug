@@ -6,7 +6,7 @@
         button.btn.btn-primary([routerLink]="['/users/', user.id]")
           i.fa.fa-user
       li.list-inline-item
-        button.btn.btn-primary
+        button.btn.btn-primary((click)="toggleLike(user.id)")
           i.fa.fa-heart
       li.list-inline-item
         button.btn.btn-primary

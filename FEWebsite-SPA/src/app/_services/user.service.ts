@@ -19,6 +19,7 @@ export class UserService {
   user = 'user';
   photo = 'photo';
   genders = 'genders';
+  like = 'like';
 
   constructor(private http: HttpClient) { }
 
@@ -71,6 +72,10 @@ export class UserService {
 
   deletePhoto(userId: number, photoId: number) {
     return this.http.delete(this.baseUrl + this.user + '/' + userId + '/' + this.photo + '/' + photoId);
+  }
+
+  toggleLike(userId: number, recepientId: number) {
+    return this.http.post(this.baseUrl + this.user + '/' + userId + '/' + this.like + '/' + recepientId, {});
   }
 
 }

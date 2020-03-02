@@ -188,7 +188,8 @@ namespace FEWebsite.API.Data.DerivedServices
                     .Include(u => u.FavoriteGames)
                         .ThenInclude(ug => ug.Game)
                     .Include(u => u.FavoriteGenres)
-                        .ThenInclude(ugg => ugg.GameGenre);
+                        .ThenInclude(ugg => ugg.GameGenre)
+                    .Include(u => u.Likees);
             }
             else //for some reason when calling all users, it will never finish the api call
             {
@@ -234,7 +235,7 @@ namespace FEWebsite.API.Data.DerivedServices
 
         public async Task<UserLike> GetLike(int userId, int recipientId)
         {
-            return await Context.UserLikes.FirstOrDefaultAsync(
+            return await this.Context.UserLikes.FirstOrDefaultAsync(
                     GetSelectedLikeOfCurrentUser(userId, recipientId))
                 .ConfigureAwait(false);
 

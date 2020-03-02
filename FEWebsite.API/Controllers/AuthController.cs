@@ -48,7 +48,7 @@ namespace FEWebsite.API.Controllers
             {
                 var returnUser = this.Mapper.Map<UserForDetailedDto>(createdUser);
                 // return this.Created($"api/users/{createdUser.Id}", createdUser);
-                return this.CreatedAtRoute("GetUser", new { controller = "Users", id = returnUser.Id }, returnUser);
+                return this.CreatedAtRoute("GetUser", new { controller = "User", id = returnUser.Id }, returnUser);
             }
             else {
                 return this.BadRequest(new StatusCodeResultReturnObject(this.BadRequest(),
