@@ -16,6 +16,9 @@ import { PaginatedResult } from './../_models/pagination';
 })
 export class UserService {
   baseUrl = environment.apiUrl;
+  user = 'user';
+  photo = 'photo';
+  genders = 'genders';
 
   constructor(private http: HttpClient) { }
 
@@ -36,7 +39,7 @@ export class UserService {
       params = params.append('orderBy', userParams.orderBy);
     }
 
-    return this.http.get<User[]>(this.baseUrl + 'users', { observe: 'response', params })
+    return this.http.get<User[]>(this.baseUrl + this.user, { observe: 'response', params })
       .pipe(
         map(response => {
           paginatedResult.result = response.body;
@@ -51,23 +54,23 @@ export class UserService {
   }
 
   getUser(id: number): Observable<User> {
-    return this.http.get<User>(this.baseUrl + 'users/' + id);
+    return this.http.get<User>(this.baseUrl + this.user + '/' + id);
   }
 
   getGenders(): Observable<Gender[]> {
-    return this.http.get<Gender[]>(this.baseUrl + 'users/genders');
+    return this.http.get<Gender[]>(this.baseUrl + this.user + '/' +  this.genders);
   }
 
   updateUser(id: number, user: User): Observable<UpdateResponse> {
-    return this.http.put<UpdateResponse>(this.baseUrl + 'users/' + id, user);
+    return this.http.put<UpdateResponse>(this.baseUrl + this.user + '/' + id, user);
   }
 
   setMainPhoto(userId: number, photoId: number) {
-    return this.http.put(this.baseUrl + 'users/' + userId + '/photos/' + photoId + '/setMain', null);
+    return this.http.put(this.baseUrl + this.user + '/' + userId + '/' + this.photo + '/' + photoId + '/setMain', null);
   }
 
   deletePhoto(userId: number, photoId: number) {
-    return this.http.delete(this.baseUrl + 'users/' + userId + '/photos/' + photoId);
+    return this.http.delete(this.baseUrl + this.user + '/' + userId + '/' + this.photo + '/' + photoId);
   }
 
 }

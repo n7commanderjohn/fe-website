@@ -15,7 +15,7 @@ using FEWebsite.API.Models;
 namespace FEWebsite.API.Controllers
 {
     [Authorize]
-    [Route("api/users/{userId}/photos")]
+    [Route("api/user/{userId}/[controller]")]
     [ApiController]
     public class PhotoController : ControllerBase
     {
