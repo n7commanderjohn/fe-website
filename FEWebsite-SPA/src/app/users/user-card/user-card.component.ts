@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import { UserService } from './../../_services/user.service';
 import { AuthService } from './../../_services/auth.service';
@@ -15,6 +15,7 @@ import { StatusCodeResultReturnObject } from './../../_models/statusCodeResultRe
 export class UserCardComponent implements OnInit {
   @Input() user: User;
   @Input() userliked: boolean;
+  @Output() likeToggled = new EventEmitter();
   currentUserId = Number(this.authService.decodedToken.nameid);
 
   constructor(private authService: AuthService,
@@ -28,6 +29,7 @@ export class UserCardComponent implements OnInit {
     this.userService.toggleLike(this.currentUserId, recepientId)
     .subscribe((next: StatusCodeResultReturnObject) => {
       this.userliked = !this.userliked;
+      this.likeToggled.emit();
       this.alertify.success(next.response);
     }, (error: StatusCodeResultReturnObject) => {
       this.alertify.error(error.response);

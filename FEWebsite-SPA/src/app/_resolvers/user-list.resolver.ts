@@ -12,14 +12,15 @@ import { Observable, of } from 'rxjs';
 @Injectable()
 export class UserListResolver implements Resolve<User[]> {
     pageNumber = 1;
-    pageSize = 5;
+    pageSize = 6;
+    showLikesOnly = true;
 
     constructor(private userService: UserService,
                 private router: Router,
                 private alertify: AlertifyService) {}
 
     resolve(route: ActivatedRouteSnapshot): Observable<User[]> {
-        return this.userService.getUsers(this.pageNumber, this.pageSize).pipe(
+        return this.userService.getUsers(this.pageNumber, this.pageSize, null).pipe(
             catchError(error => {
                 this.alertify.error('Error occured while trying to retrieve user data.');
                 this.router.navigate(['/home']);

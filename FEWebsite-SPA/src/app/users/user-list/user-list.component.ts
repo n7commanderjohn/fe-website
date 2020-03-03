@@ -10,7 +10,7 @@ import { StatusCodeResultReturnObject } from './../../_models/statusCodeResultRe
 import { PageChanged } from './../../_models/pageChanged';
 import { PaginatedResult, Pagination } from './../../_models/pagination';
 import { User } from './../../_models/user';
-import { UserParams } from './../../_models/userParams';
+import { UserParams, UserParamsOptions } from './../../_models/userParams';
 import { Gender } from './../../_models/gender';
 
 @Component({
@@ -25,6 +25,7 @@ export class UserListComponent implements OnInit {
   listOfGenders: Gender[];
   userParams: UserParams;
   pagination: Pagination;
+  upo = UserParamsOptions;
 
   constructor(private route: ActivatedRoute,
               private authService: AuthService,
@@ -70,7 +71,8 @@ export class UserListComponent implements OnInit {
       genderId,
       minAge: 18,
       maxAge: 99,
-      orderBy: 'lastActive'
+      orderBy: this.upo.OrderBy.lastLogin,
+      likeFilter: this.upo.LikeFilter.all
     };
   }
 
@@ -92,6 +94,13 @@ export class UserListComponent implements OnInit {
     filterForm.resetForm(this.userParams);
     this.setUserParams();
     this.loadUsers();
+  }
+
+  likeToggled() {
+    const showingLikesOnly = this.userParams.likeFilter === this.upo.LikeFilter.likees;
+    if (showingLikesOnly) {
+      this.loadUsers();
+    }
   }
 
   loadUsers(event?: PageChanged) {

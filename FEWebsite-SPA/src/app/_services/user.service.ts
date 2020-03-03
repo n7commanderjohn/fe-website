@@ -7,7 +7,7 @@ import { environment } from './../../environments/environment';
 
 import { Gender } from '../_models/gender';
 import { User } from '../_models/user';
-import { UserParams } from './../_models/userParams';
+import { UserParams, UserParamsOptions as UPO } from './../_models/userParams';
 import { UpdateResponse } from '../_models/updateResponse';
 import { PaginatedResult } from './../_models/pagination';
 
@@ -38,6 +38,12 @@ export class UserService {
       params = params.append('maxAge', userParams.maxAge.toString());
       params = params.append('genderId', userParams.genderId);
       params = params.append('orderBy', userParams.orderBy);
+      if (userParams.likeFilter === UPO.LikeFilter.likees) {
+        params = params.append('likees', 'true');
+      }
+      if (userParams.likeFilter === UPO.LikeFilter.likers) {
+        params = params.append('likers', 'true');
+      }
     }
 
     return this.http.get<User[]>(this.baseUrl + this.user, { observe: 'response', params })
