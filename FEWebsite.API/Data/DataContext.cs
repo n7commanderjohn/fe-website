@@ -30,6 +30,7 @@ namespace FEWebsite.API.Data
         public DbSet<UserGame> UserGames { get; set; }
         public DbSet<UserGameGenre> UserGameGenres { get; set; }
         public DbSet<UserLike> UserLikes { get; set; }
+        public DbSet<UserMessage> UserMessages { get; set; }
         #endregion ManyToManyComboModels
         #endregion Models
 
@@ -49,6 +50,14 @@ namespace FEWebsite.API.Data
                 .HasOne(ul => ul.Liker)
                 .WithMany(u => u.Likees)
                 .HasForeignKey(ul => ul.LikerId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<UserMessage>()
+                .HasOne(um => um.Sender)
+                .WithMany(u => u.MessagesSent)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<UserMessage>()
+                .HasOne(um => um.Recipient)
+                .WithMany(u => u.MessagesRecieved)
                 .OnDelete(DeleteBehavior.Restrict);
             #endregion SetUpManytoManyRelationships
         }

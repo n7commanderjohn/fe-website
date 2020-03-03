@@ -38,6 +38,10 @@ namespace FEWebsite.API.Models
 
         public ICollection<Photo> Photos { get; set; }
 
+        public ICollection<UserMessage> MessagesSent { get; set; }
+
+        public ICollection<UserMessage> MessagesRecieved { get; set; }
+
         [Column("AboutMe")]
         public override string Description { get; set; }
 
