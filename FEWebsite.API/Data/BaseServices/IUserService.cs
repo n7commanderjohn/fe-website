@@ -33,5 +33,11 @@ namespace FEWebsite.API.Data.BaseServices
         Task<UserLike> GetLike(int userId, int recipientId);
 
         Task<IEnumerable<int>> GetLikes(int userId);
+
+        Task<UserMessage> GetMessage(int id);
+
+        Task<PagedList<UserMessage>> GetMessagesForUser();
+
+        Task<IEnumerable<UserMessage>> GetMessageThread(int userId, int recipientId);
     }
 }

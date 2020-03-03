@@ -259,5 +259,22 @@ namespace FEWebsite.API.Data.DerivedServices
                     .Select(ul => ul.LikeeId);
             }
         }
+
+        public async Task<UserMessage> GetMessage(int id)
+        {
+            return await this.Context.UserMessages
+                .FirstOrDefaultAsync(m => m.Id == id)
+                .ConfigureAwait(false);
+        }
+
+        public Task<PagedList<UserMessage>> GetMessagesForUser()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<UserMessage>> GetMessageThread(int userId, int recipientId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
