@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using FEWebsite.API.Models;
+using FEWebsite.API.Models.ManyToManyModels;
 
 namespace FEWebsite.API.Data.BaseServices
 {
-    public interface IGamesService
+    public interface IGameGenreService
     {
         void Add<T>(T entity) where T : class;
 
@@ -12,8 +12,8 @@ namespace FEWebsite.API.Data.BaseServices
 
         Task<bool> SaveAll();
 
-        Task<IEnumerable<Game>> GetGames();
+        Task<IEnumerable<GameGenre>> GetGameGenres();
 
-        Task<Game> GetGame(int gameId);
+        Task<GameGenre> GetGameGenre(int gameGenreId);
     }
 }

@@ -1,6 +1,6 @@
 using FEWebsite.API.Models.AbstractModels;
 
-namespace FEWebsite.API.Models.ManyToManyModels
+namespace FEWebsite.API.Models.ManyToManyModels.ComboModels
 {
     public class UserGameGenre : ManyToManyWithUser
     {

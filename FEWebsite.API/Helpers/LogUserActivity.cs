@@ -17,7 +17,7 @@ namespace FEWebsite.API.Helpers
         {
             var resultContext = await next().ConfigureAwait(false);
             var actionsToSkip = new List<string>() {
-                nameof(UsersController) + "." + nameof(UsersController.GetGenders)
+                nameof(UserController) + "." + nameof(UserController.GetGenders)
             };
 
             var currentAction = context.ActionDescriptor.DisplayName;
@@ -28,7 +28,7 @@ namespace FEWebsite.API.Helpers
 
             var userId = int.Parse(resultContext.HttpContext.User
                 .FindFirst(ClaimTypes.NameIdentifier).Value);
-            var userService = resultContext.HttpContext.RequestServices.GetService<IUsersService>();
+            var userService = resultContext.HttpContext.RequestServices.GetService<IUserService>();
             var user = await userService.GetUser(userId).ConfigureAwait(false);
 
             user.LastLogin = DateTime.Now;

@@ -7,6 +7,7 @@ using FEWebsite.API.DTOs.PhotoDTOs;
 using FEWebsite.API.DTOs.UserDTOs;
 using FEWebsite.API.Models;
 using FEWebsite.API.Models.ManyToManyModels;
+using FEWebsite.API.Models.ManyToManyModels.ComboModels;
 
 namespace FEWebsite.API.Helpers
 {
@@ -45,13 +46,15 @@ namespace FEWebsite.API.Helpers
                 .ForMember(dest => dest.GenderId,
                     source => source.MapFrom(source => source.Gender.Id))
                 .ForMember(dest => dest.Games,
-                    source => source.MapFrom(source => source.FavoriteGames.ToList().Select(fg => fg.Game)))
+                    source => source.MapFrom(source => source.FavoriteGames.Select(fg => fg.Game)))
                 .ForMember(dest => dest.ListOfGames,
-                    source => source.MapFrom(source => source.FavoriteGames.ToList().Select(fg => fg.Game.Description)))
+                    source => source.MapFrom(source => source.FavoriteGames.Select(fg => fg.Game.Description)))
                 .ForMember(dest => dest.Genres,
-                    source => source.MapFrom(source => source.FavoriteGenres.ToList().Select(fg => fg.GameGenre)))
+                    source => source.MapFrom(source => source.FavoriteGenres.Select(fg => fg.GameGenre)))
                 .ForMember(dest => dest.ListOfGenres,
-                    source => source.MapFrom(source => source.FavoriteGenres.ToList().Select(fg => fg.GameGenre.Description)));
+                    source => source.MapFrom(source => source.FavoriteGenres.Select(fg => fg.GameGenre.Description)))
+                .ForMember(dest => dest.ListOfLikees,
+                    source => source.MapFrom(source => source.Likees.Select(l => l.LikeeId)));
             this.CreateMap<UserForUpdateDto, User>()
                 .AfterMap(this.MapNewFaveGamesAndGenres);
             this.CreateMap<UserForRegisterDto, User>()

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using FEWebsite.API.Models.AbstractModels;
-using FEWebsite.API.Models.ManyToManyModels;
+using FEWebsite.API.Models.ManyToManyModels.ComboModels;
 
 namespace FEWebsite.API.Models
 {
@@ -31,6 +31,10 @@ namespace FEWebsite.API.Models
         public ICollection<UserGame> FavoriteGames { get; set; }
 
         public ICollection<UserGameGenre> FavoriteGenres { get; set; }
+
+        public ICollection<UserLike> Likers { get; set; }
+
+        public ICollection<UserLike> Likees { get; set; }
 
         public ICollection<Photo> Photos { get; set; }
 

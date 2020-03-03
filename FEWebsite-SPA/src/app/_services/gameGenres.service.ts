@@ -11,15 +11,16 @@ import { GameGenre } from '../_models/gameGenre';
 })
 export class GameGenresService {
   baseUrl = environment.apiUrl;
+  gameGenre = 'gameGenre';
 
   constructor(private http: HttpClient) { }
 
   getGameGenres(): Observable<GameGenre[]> {
-    return this.http.get<GameGenre[]>(this.baseUrl + 'gameGenres');
+    return this.http.get<GameGenre[]>(this.baseUrl + this.gameGenre);
   }
 
   getGameGenre(id: number): Observable<GameGenre> {
-    return this.http.get<GameGenre>(this.baseUrl + 'gameGenres/' + id);
+    return this.http.get<GameGenre>(this.baseUrl + this.gameGenre + '/' + id);
   }
 
 }

@@ -1,14 +1,14 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FEWebsite.API.Data.BaseServices;
-using FEWebsite.API.Models;
+using FEWebsite.API.Models.ManyToManyModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace FEWebsite.API.Data.DerivedServices
 {
-    public class GamesService : BaseService, IGamesService
+    public class GameGenreService : BaseService, IGameGenreService
     {
-        public GamesService(DataContext context)
+        public GameGenreService(DataContext context)
         {
             Context = context;
         }
@@ -25,22 +25,22 @@ namespace FEWebsite.API.Data.DerivedServices
             this.Context.Remove(entity);
         }
 
-        public async Task<Game> GetGame(int gameId)
+        public async Task<GameGenre> GetGameGenre(int gameGenreId)
         {
-            var game = await this.Context.Games
-                .FirstOrDefaultAsync(u => u.Id == gameId)
+            var gameGenre = await this.Context.GameGenres
+                .FirstOrDefaultAsync(u => u.Id == gameGenreId)
                 .ConfigureAwait(false);
 
-            return game;
+            return gameGenre;
         }
 
-        public async Task<IEnumerable<Game>> GetGames()
+        public async Task<IEnumerable<GameGenre>> GetGameGenres()
         {
-            var games = await this.Context.Games
+            var gameGenres = await this.Context.GameGenres
                 .ToListAsync()
                 .ConfigureAwait(false);
 
-            return games;
+            return gameGenres;
         }
 
         public async Task<bool> SaveAll()

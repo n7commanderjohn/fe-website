@@ -1,0 +1,51 @@
+-- Doesn't work in SQLite
+    -- DECLARE @uid int, @gid int;
+    -- DECLARE @ggids Table(id int);
+    -- SET @uid = 2;
+    -- SET @gid = 8;
+    -- INSERT @ggids(id) values(1, 4);
+
+-- SQLite compatibility
+PRAGMA foreign_keys = ON;
+PRAGMA foreign_keys;
+
+-- deletes
+delete from Users
+where id = 2;
+
+-- delete from games
+-- where id = 8;
+
+-- delete from GameGenres
+-- where id in (1, 4);
+
+-- delete from UserGames
+-- where id = 2;
+
+-- delete from UserGameGenres
+-- where id = 2;
+
+-- selects
+select * from Genders;
+
+select * from Users
+where id = 2;
+
+select * from games
+where id = 8;
+
+select * from GameGenres
+where id in (1, 4);
+
+select * from UserGames
+where userid = 2;
+
+select * from UserGameGenres
+where userid = 2;
+
+select * from Photos
+where userid = 2;
+
+-- SQLite compatibility
+PRAGMA foreign_keys = OFF;
+PRAGMA foreign_keys;

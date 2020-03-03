@@ -9,6 +9,7 @@ using AutoMapper;
 using FEWebsite.API.Data.BaseServices;
 using FEWebsite.API.DTOs.UserDTOs;
 using FEWebsite.API.Helpers;
+using FEWebsite.API.Models.ManyToManyModels.ComboModels;
 
 namespace FEWebsite.API.Controllers
 {
@@ -16,14 +17,14 @@ namespace FEWebsite.API.Controllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class UserController : ControllerBase
     {
-        private IUsersService UserService { get; }
+        private IUserService UserService { get; }
         private IAuthService AuthService { get; }
         private IConfiguration Config { get; }
         private IMapper Mapper { get; }
 
-        public UsersController(IUsersService userService, IAuthService authService, IConfiguration config, IMapper mapper)
+        public UserController(IUserService userService, IAuthService authService, IConfiguration config, IMapper mapper)
         {
             this.UserService = userService;
             this.AuthService = authService;
@@ -31,7 +32,7 @@ namespace FEWebsite.API.Controllers
             this.Mapper = mapper;
         }
 
-        // GET api/users
+        // GET api/user
         [HttpGet]
         public async Task<OkObjectResult> GetUsers([FromQuery]UserParams userParams)
         {
@@ -48,7 +49,7 @@ namespace FEWebsite.API.Controllers
             return this.Ok(usersDto);
         }
 
-        // GET api/users/5
+        // GET api/user/5
         [HttpGet("{id}", Name = "GetUser")]
         public async Task<OkObjectResult> GetUser(int id)
         {
@@ -61,7 +62,18 @@ namespace FEWebsite.API.Controllers
             return this.Ok(userDto);
         }
 
-        // GET api/users
+        // GET api/user/5
+        [HttpGet("{id}/like")]
+        public async Task<OkObjectResult> GetUserLikes(int id)
+        {
+            var likes = await this.UserService
+                .GetLikes(id)
+                .ConfigureAwait(false);
+
+            return this.Ok(likes);
+        }
+
+        // GET api/user
         [AllowAnonymous]
         [HttpGet("genders")]
         public async Task<OkObjectResult> GetGenders()
@@ -73,7 +85,7 @@ namespace FEWebsite.API.Controllers
             return this.Ok(genders);
         }
 
-        // PUT api/users/5
+        // PUT api/user/5
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(int id, UserForUpdateDto userForUpdateDto)
         {
@@ -96,15 +108,13 @@ namespace FEWebsite.API.Controllers
                     .EmailExistsForAnotherUser(currentUser).ConfigureAwait(false);
                 if (usernameExistsForAnotherUser)
                 {
-                    var returnObj
-                        = new StatusCodeResultReturnObject(this.BadRequest(), "This username is taken by another user.");
-                    return this.BadRequest(returnObj);
+                    return this.BadRequest(new StatusCodeResultReturnObject(
+                        this.BadRequest(), "This username is taken by another user."));
                 }
                 else if (emailExistsForAnotherUser)
                 {
-                    var returnObj
-                        = new StatusCodeResultReturnObject(this.BadRequest(), "This email is taken by another user.");
-                    return this.BadRequest(returnObj);
+                    return this.BadRequest(new StatusCodeResultReturnObject(
+                        this.BadRequest(), "This email is taken by another user."));
                 }
                 else
                 {
@@ -132,21 +142,64 @@ namespace FEWebsite.API.Controllers
                     }
                     catch (Exception)
                     {
-                        var returnObj
-                            = new StatusCodeResultReturnObject(this.BadRequest(), "Your information failed to save.");
-                        return this.BadRequest(returnObj);
+                        return this.BadRequest(new StatusCodeResultReturnObject(
+                            this.BadRequest(), "Your information failed to save."));
                     }
                 }
             }
             else
             {
-                var returnObj
-                    = new StatusCodeResultReturnObject(this.Unauthorized(), "The provided password does not match.");
-                return this.BadRequest(returnObj);
+                return this.Unauthorized(new StatusCodeResultReturnObject(
+                    this.Unauthorized(), "The provided password does not match."));
             }
         }
 
-        // DELETE api/users/5
+        [HttpPost("{id}/like/{recipientId}")]
+        public async Task<IActionResult> ToggleUserLikeStatus(int id, int recipientId)
+        {
+            bool userIdInTokenMatches = id == this.GetUserIdFromClaim();
+            if (!userIdInTokenMatches)
+            {
+                return this.Unauthorized(new StatusCodeResultReturnObject(
+                    this.Unauthorized(), "User Id parameter doesn't match the logged in user."));
+            }
+
+            var like = await this.UserService.GetLike(id, recipientId).ConfigureAwait(false);
+            var recipient = await this.UserService.GetUser(recipientId).ConfigureAwait(false);
+            string likeStatusMessage;
+            if (like != null)
+            {
+                // var returnObj
+                //     = new StatusCodeResultReturnObject(this.BadRequest(), "You already like this user.");
+                // return this.BadRequest(returnObj);
+                this.UserService.Delete(like); // should untoggle the like by removing it from the Likes table.
+                likeStatusMessage = $"Like removed from {recipient.Name}.";
+            }
+            else
+            {
+                like = new UserLike()
+                {
+                    LikerId = id,
+                    LikeeId = recipientId,
+                };
+                this.UserService.Add(like);
+                likeStatusMessage = $"Like added to {recipient.Name}.";
+            }
+
+            var userRecordsSaved = await this.UserService.SaveAll().ConfigureAwait(false);
+            if (userRecordsSaved)
+            {
+                return this.Ok(new StatusCodeResultReturnObject(this.Ok(),
+                    likeStatusMessage));
+            }
+            else
+            {
+                return this.BadRequest(new StatusCodeResultReturnObject(
+                    this.BadRequest(), "Failed to update the Like status."));
+            }
+        }
+
+        // DELETE api/user/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {

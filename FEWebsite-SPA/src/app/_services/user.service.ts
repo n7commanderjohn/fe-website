@@ -7,7 +7,7 @@ import { environment } from './../../environments/environment';
 
 import { Gender } from '../_models/gender';
 import { User } from '../_models/user';
-import { UserParams } from './../_models/userParams';
+import { UserParams, UserParamsOptions as UPO } from './../_models/userParams';
 import { UpdateResponse } from '../_models/updateResponse';
 import { PaginatedResult } from './../_models/pagination';
 
@@ -16,6 +16,10 @@ import { PaginatedResult } from './../_models/pagination';
 })
 export class UserService {
   baseUrl = environment.apiUrl;
+  user = 'user';
+  photo = 'photo';
+  genders = 'genders';
+  like = 'like';
 
   constructor(private http: HttpClient) { }
 
@@ -34,9 +38,15 @@ export class UserService {
       params = params.append('maxAge', userParams.maxAge.toString());
       params = params.append('genderId', userParams.genderId);
       params = params.append('orderBy', userParams.orderBy);
+      if (userParams.likeFilter === UPO.LikeFilter.likees) {
+        params = params.append('likees', 'true');
+      }
+      if (userParams.likeFilter === UPO.LikeFilter.likers) {
+        params = params.append('likers', 'true');
+      }
     }
 
-    return this.http.get<User[]>(this.baseUrl + 'users', { observe: 'response', params })
+    return this.http.get<User[]>(this.baseUrl + this.user, { observe: 'response', params })
       .pipe(
         map(response => {
           paginatedResult.result = response.body;
@@ -51,23 +61,31 @@ export class UserService {
   }
 
   getUser(id: number): Observable<User> {
-    return this.http.get<User>(this.baseUrl + 'users/' + id);
+    return this.http.get<User>(this.baseUrl + this.user + '/' + id);
   }
 
   getGenders(): Observable<Gender[]> {
-    return this.http.get<Gender[]>(this.baseUrl + 'users/genders');
+    return this.http.get<Gender[]>(this.baseUrl + this.user + '/' +  this.genders);
   }
 
   updateUser(id: number, user: User): Observable<UpdateResponse> {
-    return this.http.put<UpdateResponse>(this.baseUrl + 'users/' + id, user);
+    return this.http.put<UpdateResponse>(this.baseUrl + this.user + '/' + id, user);
   }
 
   setMainPhoto(userId: number, photoId: number) {
-    return this.http.put(this.baseUrl + 'users/' + userId + '/photos/' + photoId + '/setMain', null);
+    return this.http.put(this.baseUrl + this.user + '/' + userId + '/' + this.photo + '/' + photoId + '/setMain', null);
   }
 
   deletePhoto(userId: number, photoId: number) {
-    return this.http.delete(this.baseUrl + 'users/' + userId + '/photos/' + photoId);
+    return this.http.delete(this.baseUrl + this.user + '/' + userId + '/' + this.photo + '/' + photoId);
+  }
+
+  toggleLike(userId: number, recepientId: number) {
+    return this.http.post(this.baseUrl + this.user + '/' + userId + '/' + this.like + '/' + recepientId, {});
+  }
+
+  getLikes(userId: number): Observable<number[]> {
+    return this.http.get<number[]>(this.baseUrl + this.user + '/' + userId + '/' + this.like);
   }
 
 }

@@ -15,6 +15,7 @@ hr
     h3 Add Photos
     .card.bg-faded.p-3.text-center.mb-3.my-drop-zone(ng2FileDrop [ngClass]="{'nv-file-over': hasBaseDropZoneOver}",
      (fileOver)="fileOverBase($event)", [uploader]="uploader")
+       //- data-fa-transform needed for SVG version of Font Awesome; does nothing with Web Font version.
        i.fa.fa-upload.fa-3x(data-fa-transform="right-17.5")
        | Drag Photos Here
     .p Multiple

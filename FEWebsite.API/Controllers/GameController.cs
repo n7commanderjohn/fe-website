@@ -11,15 +11,15 @@ namespace FEWebsite.API.Controllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class GamesController : ControllerBase
+    public class GameController : ControllerBase
     {
-        private IGamesService GamesService { get; }
+        private IGameService GameService { get; }
 
         private IMapper Mapper { get; }
 
-        public GamesController(IGamesService gamesService, IMapper mapper)
+        public GameController(IGameService gameService, IMapper mapper)
         {
-            this.GamesService = gamesService;
+            this.GameService = gameService;
             this.Mapper = mapper;
         }
 
@@ -28,7 +28,7 @@ namespace FEWebsite.API.Controllers
         [HttpGet]
         public async Task<OkObjectResult> GetGames()
         {
-            var games = await this.GamesService
+            var games = await this.GameService
                 .GetGames()
                 .ConfigureAwait(false);
 
@@ -42,7 +42,7 @@ namespace FEWebsite.API.Controllers
         [HttpGet("{id}")]
         public async Task<OkObjectResult> GetGame(int id)
         {
-            var game = await this.GamesService
+            var game = await this.GameService
                 .GetGame(id)
                 .ConfigureAwait(false);
 

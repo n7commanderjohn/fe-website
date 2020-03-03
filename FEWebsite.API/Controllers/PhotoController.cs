@@ -15,17 +15,17 @@ using FEWebsite.API.Models;
 namespace FEWebsite.API.Controllers
 {
     [Authorize]
-    [Route("api/users/{userId}/photos")]
+    [Route("api/user/{userId}/[controller]")]
     [ApiController]
-    public class PhotosController : ControllerBase
+    public class PhotoController : ControllerBase
     {
-        public IUsersService UserService { get; }
+        public IUserService UserService { get; }
         public IMapper Mapper { get; }
         public IOptions<CloudinarySettings> CloudinaryConfig { get; }
 
         public Cloudinary Cloudinary { get; }
 
-        public PhotosController(IUsersService userService,
+        public PhotoController(IUserService userService,
             IMapper mapper,
             IOptions<CloudinarySettings> cloudinaryConfig)
         {

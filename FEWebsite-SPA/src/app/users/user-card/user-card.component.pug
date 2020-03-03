@@ -6,8 +6,9 @@
         button.btn.btn-primary([routerLink]="['/users/', user.id]")
           i.fa.fa-user
       li.list-inline-item
-        button.btn.btn-primary
-          i.fa.fa-heart
+        button.btn.btn-primary((click)="toggleLike(user.id)")
+          //- this will not work if using SVG version of Font Awesome. Need to use the FA Angular Library eventually.
+          i.fa-heart([ngClass]="{'fas': isUserLiked(), 'far': !isUserLiked()}")
       li.list-inline-item
         button.btn.btn-primary
           i.fa.fa-envelope

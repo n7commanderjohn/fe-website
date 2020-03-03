@@ -9,17 +9,18 @@ using FEWebsite.API.Data.BaseServices;
 using FEWebsite.API.Models;
 using FEWebsite.API.DTOs.UserDTOs;
 using FEWebsite.API.Helpers;
+using FEWebsite.API.Models.ManyToManyModels.ComboModels;
 
 namespace FEWebsite.API.Data.DerivedServices
 {
-    public class UsersService : BaseService, IUsersService
+    public class UserService : BaseService, IUserService
     {
-        public UsersService(DataContext context)
-        {
-            Context = context;
-        }
-
         private DataContext Context { get; }
+
+        public UserService(DataContext context)
+        {
+            this.Context = context;
+        }
 
         public void Add<T>(T entity) where T : class
         {
@@ -34,7 +35,7 @@ namespace FEWebsite.API.Data.DerivedServices
         public async Task<User> GetUser(int userId)
         {
             var user = await this.DefaultUserIncludes(expandedInclude: true)
-                .FirstOrDefaultAsync(UserIdMatches(userId))
+                .SingleOrDefaultAsync(UserIdMatches(userId))
                 .ConfigureAwait(false);
 
             return user;
@@ -61,7 +62,7 @@ namespace FEWebsite.API.Data.DerivedServices
 
         public async Task<PagedList<User>> GetUsers(UserParams userParams)
         {
-            IQueryable<User> users = GetUsersFromContext(userParams);
+            IQueryable<User> users = await GetUsersFromContext(userParams).ConfigureAwait(false);
 
             var userList = await PagedList<User>
                 .CreateAsync(users, userParams.PageNumber, userParams.PageSize)
@@ -69,7 +70,7 @@ namespace FEWebsite.API.Data.DerivedServices
 
             return userList;
 
-            IQueryable<User> GetUsersFromContext(UserParams userParams)
+            async Task<IQueryable<User>> GetUsersFromContext(UserParams userParams)
             {
                 var users = this.DefaultUserIncludes()
                     .Where(NotUserIdMatches(userParams));
@@ -79,7 +80,19 @@ namespace FEWebsite.API.Data.DerivedServices
                     users = users.Where(GenderIdMatches(userParams));
                 }
 
-                var orderBy = userParams.OrderBy.ToLower();
+                if (userParams.Likers) // these two can possibly just be merged.
+                {
+                    var userLikerIds = await this.GetUserLikes(userParams).ConfigureAwait(false);
+                    users = users.Where(u => userLikerIds.Contains(u.Id));
+                }
+
+                if (userParams.Likees)
+                {
+                    var userLikeeIds = await this.GetUserLikes(userParams).ConfigureAwait(false);
+                    users = users.Where(u => userLikeeIds.Contains(u.Id));
+                }
+
+                var orderBy = userParams.OrderBy?.ToLower() ?? nameof(User.LastLogin).ToLower();
                 if (orderBy == nameof(User.AccountCreated).ToLower())
                 {
                     users = users.OrderByDescending(u => u.AccountCreated);
@@ -122,6 +135,27 @@ namespace FEWebsite.API.Data.DerivedServices
             }
         }
 
+        private async Task<IEnumerable<int>> GetUserLikes(UserParams userParams)
+        {
+            var userId = userParams.UserId;
+            var user = await this.UserIncludesLikes()
+                .FirstOrDefaultAsync(u => u.Id == userId)
+                .ConfigureAwait(false);
+
+            if (userParams.Likers)
+            {
+                return user.Likers
+                    .Where(u => u.LikeeId == userId)
+                    .Select(u => u.LikerId);
+            }
+            else
+            {
+                return user.Likees
+                    .Where(u => u.LikerId == userId)
+                    .Select(u => u.LikeeId);
+            }
+        }
+
         public async Task<IEnumerable<Gender>> GetGenders()
         {
             var genders = await this.Context.Genders
@@ -154,7 +188,8 @@ namespace FEWebsite.API.Data.DerivedServices
                     .Include(u => u.FavoriteGames)
                         .ThenInclude(ug => ug.Game)
                     .Include(u => u.FavoriteGenres)
-                        .ThenInclude(ugg => ugg.GameGenre);
+                        .ThenInclude(ugg => ugg.GameGenre)
+                    .Include(u => u.Likees);
             }
             else //for some reason when calling all users, it will never finish the api call
             {
@@ -164,6 +199,12 @@ namespace FEWebsite.API.Data.DerivedServices
                     .Include(u => u.FavoriteGames)
                     .Include(u => u.FavoriteGenres);
             }
+        }
+
+        private IQueryable<User> UserIncludesLikes() {
+            return this.Context.Users
+                .Include(u => u.Likers)
+                .Include(u => u.Likees);
         }
 
         public async Task<bool> SaveAll()
@@ -190,6 +231,33 @@ namespace FEWebsite.API.Data.DerivedServices
             var currentMainPhoto = await this.GetCurrentMainPhotoForUser(userId).ConfigureAwait(false);
             currentMainPhoto.IsMain = false;
             photoToBeSet.IsMain = true;
+        }
+
+        public async Task<UserLike> GetLike(int userId, int recipientId)
+        {
+            return await this.Context.UserLikes.FirstOrDefaultAsync(
+                    GetSelectedLikeOfCurrentUser(userId, recipientId))
+                .ConfigureAwait(false);
+
+            static Expression<Func<UserLike, bool>> GetSelectedLikeOfCurrentUser(int userId, int recipientId)
+            {
+                return u => u.LikerId == userId && u.LikeeId == recipientId;
+            }
+        }
+
+        public async Task<IEnumerable<int>> GetLikes(int userId)
+        {
+            var likes = await GetLikesForSelectedUser(userId)
+                .ToListAsync().ConfigureAwait(false);
+
+            return likes;
+
+            IQueryable<int> GetLikesForSelectedUser(int userId)
+            {
+                return this.Context.UserLikes
+                    .Where(ul => ul.LikerId == userId)
+                    .Select(ul => ul.LikeeId);
+            }
         }
     }
 }
