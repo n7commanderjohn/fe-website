@@ -89,9 +89,9 @@ namespace FEWebsite.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(int id, UserForUpdateDto userForUpdateDto)
         {
-            bool userIdInTokenMatches = id == this.GetUserIdFromClaim();
-            if (!userIdInTokenMatches) {
-                return this.Unauthorized();
+            var unauthorization = this.CheckIfUserIsAuthorized(id, "You aren't authorized to change this password.");
+            if (unauthorization != null) {
+                return unauthorization;
             }
 
             var currentUser = await this.UserService.GetUser(id).ConfigureAwait(false);
@@ -157,11 +157,9 @@ namespace FEWebsite.API.Controllers
         [HttpPost("{id}/like/{recipientId}")]
         public async Task<IActionResult> ToggleUserLikeStatus(int id, int recipientId)
         {
-            bool userIdInTokenMatches = id == this.GetUserIdFromClaim();
-            if (!userIdInTokenMatches)
-            {
-                return this.Unauthorized(new StatusCodeResultReturnObject(
-                    this.Unauthorized(), "User Id parameter doesn't match the logged in user."));
+            var unauthorization = this.CheckIfUserIsAuthorized(id, "User Id parameter doesn't match the logged in user.");
+            if (unauthorization != null) {
+                return unauthorization;
             }
 
             var like = await this.UserService.GetLike(id, recipientId).ConfigureAwait(false);

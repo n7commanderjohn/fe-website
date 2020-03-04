@@ -63,6 +63,20 @@ namespace FEWebsite.API.Helpers
             return int.Parse(controllerBase.User.FindFirst(ClaimTypes.NameIdentifier).Value);
         }
 
+        public static UnauthorizedObjectResult CheckIfUserIsAuthorized(this ControllerBase controllerBase, int userId,
+            string unauthorizedMsg = "You are not authorized for this action.")
+        {
+            if (userId != controllerBase.GetUserIdFromClaim())
+            {
+                return controllerBase.Unauthorized(new StatusCodeResultReturnObject(
+                    controllerBase.Unauthorized(), unauthorizedMsg));
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         public static string ToDescriptionString(this Enum enumVal)
         {
             DescriptionAttribute[] attributes = (DescriptionAttribute[])enumVal

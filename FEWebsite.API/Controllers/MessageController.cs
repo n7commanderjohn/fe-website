@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
@@ -29,10 +29,9 @@ namespace FEWebsite.API.Controllers
         [HttpGet("{messageId}", Name = "GetUserMessage")]
         public async Task<IActionResult> GetUserMessage(int userId, int messageId)
         {
-            if (userId != this.GetUserIdFromClaim())
-            {
-                return this.Unauthorized(new StatusCodeResultReturnObject(this.Unauthorized(),
-                    "You aren't authorized to view this message."));
+            var unauthorization = this.CheckIfUserIsAuthorized(userId, "You aren't authorized to view this message.");
+            if (unauthorization != null) {
+                return unauthorization;
             }
 
             var userMessage = await this.UserService.GetMessage(messageId).ConfigureAwait(false);
@@ -49,11 +48,11 @@ namespace FEWebsite.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUserMessage(int userId, UserMessageCreationDto userMessageCreationDto)
         {
-            if (userId != this.GetUserIdFromClaim())
-            {
-                return this.Unauthorized(new StatusCodeResultReturnObject(this.Unauthorized(),
-                    "You aren't authorized to send this message."));
+            var unauthorization = this.CheckIfUserIsAuthorized(userId, "You aren't authorized to send this message.");
+            if (unauthorization != null) {
+                return unauthorization;
             }
+
             userMessageCreationDto.SenderId = userId;
 
             var recipient = await this.UserService.GetUser(userMessageCreationDto.RecipientId).ConfigureAwait(false);
