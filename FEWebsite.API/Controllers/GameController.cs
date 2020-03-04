@@ -50,26 +50,5 @@ namespace FEWebsite.API.Controllers
 
             return this.Ok(gameDto);
         }
-
-        // POST api/games
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-
-        }
-
-        // PUT api/games/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-
-        }
-
-        // DELETE api/games/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-
-        }
     }
 }

@@ -28,17 +28,17 @@ namespace FEWebsite.API.Helpers
         {
             this.CreateMap<User, UserForLoginResponseDto>()
                 .ForMember(dest => dest.PhotoUrl,
-                    source => source.MapFrom(source => source.Photos.FirstOrDefault(p => p.IsMain).Url));
+                    source => source.MapFrom(source => source.Photos.First(p => p.IsMain).Url));
             this.CreateMap<User, UserForListDto>()
                 .ForMember(dest => dest.PhotoUrl,
-                    source => source.MapFrom(source => source.Photos.FirstOrDefault(p => p.IsMain).Url))
+                    source => source.MapFrom(source => source.Photos.First(p => p.IsMain).Url))
                 .ForMember(dest => dest.Age,
                     source => source.MapFrom(source => source.Birthday.CalculateAge()))
                 .ForMember(dest => dest.Gender,
                     source => source.MapFrom(source => source.Gender.Description));
             this.CreateMap<User, UserForDetailedDto>()
                 .ForMember(dest => dest.PhotoUrl,
-                    source => source.MapFrom(source => source.Photos.FirstOrDefault(p => p.IsMain).Url))
+                    source => source.MapFrom(source => source.Photos.First(p => p.IsMain).Url))
                 .ForMember(dest => dest.Age,
                     source => source.MapFrom(source => source.Birthday.CalculateAge()))
                 .ForMember(dest => dest.Gender,

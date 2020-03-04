@@ -196,12 +196,5 @@ namespace FEWebsite.API.Controllers
                     this.BadRequest(), "Failed to update the Like status."));
             }
         }
-
-        // DELETE api/user/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-
-        }
     }
 }
