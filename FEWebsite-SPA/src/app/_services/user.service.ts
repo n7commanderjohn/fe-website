@@ -2,14 +2,14 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-
-import { environment } from './../../environments/environment';
-
-import { Gender } from '../_models/gender';
-import { User } from '../_models/user';
-import { UserParams, UserParamsOptions as UPO } from './../_models/userParams';
-import { UpdateResponse } from '../_models/updateResponse';
+import { Gender } from './../_models/gender';
+import { Message } from './../_models/message';
+import { MessageContainerArgs } from './../_models/messageParams';
 import { PaginatedResult } from './../_models/pagination';
+import { UpdateResponse } from './../_models/updateResponse';
+import { User } from './../_models/user';
+import { UserParams, UserParamsOptions as UPO } from './../_models/userParams';
+import { environment } from './../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +20,7 @@ export class UserService {
   photo = 'photo';
   genders = 'genders';
   like = 'like';
+  message = 'message';
 
   constructor(private http: HttpClient) { }
 
@@ -28,10 +29,7 @@ export class UserService {
 
     let params = new HttpParams();
 
-    if (page && itemsPerPage) {
-      params = params.append('pageNumber', page.toString());
-      params = params.append('pageSize', itemsPerPage.toString());
-    }
+    params = this.AddPageAndItemsPerPageParams(page, itemsPerPage, params);
 
     if (userParams) {
       params = params.append('minAge', userParams.minAge.toString());
@@ -88,4 +86,33 @@ export class UserService {
     return this.http.get<number[]>(this.baseUrl + this.user + '/' + userId + '/' + this.like);
   }
 
+  getUserMessages(userId: number, page?: number, itemsPerPage?: number, messageArgs?: number ): Observable<PaginatedResult<Message[]>> {
+    const paginatedResult = new PaginatedResult<Message[]>();
+
+    let params = new HttpParams();
+
+    params = params.append('MessageContainer', messageArgs.toString());
+    params = this.AddPageAndItemsPerPageParams(page, itemsPerPage, params);
+
+    return this.http.get<Message[]>(this.baseUrl + this.user + '/' + userId + '/' + this.message, { observe: 'response', params })
+      .pipe(
+        map(response => {
+          paginatedResult.result = response.body;
+          const pagination = 'Pagination';
+          if (response.headers.get(pagination)) {
+            paginatedResult.pagination = JSON.parse(response.headers.get(pagination));
+          }
+
+          return paginatedResult;
+        })
+    );
+  }
+
+  private AddPageAndItemsPerPageParams(page: number, itemsPerPage: number, params: HttpParams): HttpParams {
+    if (page && itemsPerPage) {
+      params = params.append('pageNumber', page.toString());
+      params = params.append('pageSize', itemsPerPage.toString());
+    }
+    return params;
+  }
 }
