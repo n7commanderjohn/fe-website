@@ -10,6 +10,7 @@ using FEWebsite.API.Models;
 using FEWebsite.API.DTOs.UserDTOs;
 using FEWebsite.API.Helpers;
 using FEWebsite.API.Models.ManyToManyModels.ComboModels;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace FEWebsite.API.Data.DerivedServices
 {
@@ -269,11 +270,7 @@ namespace FEWebsite.API.Data.DerivedServices
 
         public async Task<PagedList<UserMessage>> GetMessagesForUser(MessageParams messageParams)
         {
-            var messages = this.Context.UserMessages
-                .Include(um => um.Sender)
-                    .ThenInclude(u => u.Photos)
-                .Include(um => um.Recipient)
-                    .ThenInclude(u => u.Photos)
+            var messages = this.DefaultUserMessagesIncludes()
                 .AsQueryable();
 
             messages = messageParams.MessageContainer switch
@@ -293,9 +290,29 @@ namespace FEWebsite.API.Data.DerivedServices
             return messageList;
         }
 
-        public Task<IEnumerable<UserMessage>> GetMessageThread(int userId, int recipientId)
+        private IIncludableQueryable<UserMessage, ICollection<Photo>> DefaultUserMessagesIncludes()
         {
-            throw new NotImplementedException();
+            return this.Context.UserMessages
+                .Include(um => um.Sender)
+                    .ThenInclude(u => u.Photos)
+                .Include(um => um.Recipient)
+                    .ThenInclude(u => u.Photos);
+        }
+
+        public async Task<IEnumerable<UserMessage>> GetMessageThread(int userId, int recipientId)
+        {
+            var messageThread = await GetUserMessageThread(userId, recipientId)
+                .OrderByDescending(um => um.MessageSent)
+                .ToListAsync().ConfigureAwait(false);
+
+            return messageThread;
+
+            IQueryable<UserMessage> GetUserMessageThread(int userId, int recipientId)
+            {
+                return this.DefaultUserMessagesIncludes()
+                    .Where(um => (um.RecipientId == userId && um.SenderId == recipientId)
+                        || (um.RecipientId == recipientId && um.SenderId == userId));
+            }
         }
     }
 }

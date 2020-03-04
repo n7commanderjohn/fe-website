@@ -65,6 +65,21 @@ namespace FEWebsite.API.Controllers
             return this.Ok(userMessages);
         }
 
+        [HttpGet("thread/{recipientId}")]
+        public async Task<IActionResult> GetUserMessageThread(int userId, int recipientId)
+        {
+            var unauthorization = this.CheckIfUserIsAuthorized(userId, "You aren't authorized to view these messages.");
+            if (unauthorization != null) {
+                return unauthorization;
+            }
+
+            var messageThread = await this.UserService.GetMessageThread(userId, recipientId).ConfigureAwait(false);
+
+            var returnMessageThread = this.Mapper.Map<IEnumerable<UserMessageToReturnDto>>(messageThread);
+
+            return this.Ok(returnMessageThread);
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateUserMessage(int userId, UserMessageCreationDto userMessageCreationDto)
         {
