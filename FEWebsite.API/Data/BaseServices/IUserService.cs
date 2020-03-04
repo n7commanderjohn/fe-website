@@ -36,7 +36,7 @@ namespace FEWebsite.API.Data.BaseServices
 
         Task<UserMessage> GetMessage(int id);
 
-        Task<PagedList<UserMessage>> GetMessagesForUser();
+        Task<PagedList<UserMessage>> GetMessagesForUser(MessageParams messageParams);
 
         Task<IEnumerable<UserMessage>> GetMessageThread(int userId, int recipientId);
     }

@@ -267,9 +267,30 @@ namespace FEWebsite.API.Data.DerivedServices
                 .ConfigureAwait(false);
         }
 
-        public Task<PagedList<UserMessage>> GetMessagesForUser()
+        public async Task<PagedList<UserMessage>> GetMessagesForUser(MessageParams messageParams)
         {
-            throw new NotImplementedException();
+            var messages = this.Context.UserMessages
+                .Include(um => um.Sender)
+                    .ThenInclude(u => u.Photos)
+                .Include(um => um.Recipient)
+                    .ThenInclude(u => u.Photos)
+                .AsQueryable();
+
+            messages = messageParams.MessageContainer switch
+            {
+                MessageContainerArgs.Unread => messages.Where(um => um.RecipientId == messageParams.UserId && !um.IsRead),
+                MessageContainerArgs.Inbox => messages.Where(um => um.RecipientId == messageParams.UserId),
+                MessageContainerArgs.Outbox => messages.Where(um => um.SenderId == messageParams.UserId),
+                _ => messages.Where(um => um.RecipientId == messageParams.UserId && !um.IsRead),
+            };
+
+            messages = messages.OrderByDescending(um => um.MessageSent);
+
+            var messageList = await PagedList<UserMessage>
+                .CreateAsync(messages, messageParams.PageNumber, messageParams.PageSize)
+                .ConfigureAwait(false);
+
+            return messageList;
         }
 
         public Task<IEnumerable<UserMessage>> GetMessageThread(int userId, int recipientId)
