@@ -63,6 +63,11 @@ namespace FEWebsite.API.Helpers
                 .ForMember(dest => dest.GenderId,
                     source => source.MapFrom(source => source.Gender));
             this.CreateMap<UserMessageCreationDto, UserMessage>().ReverseMap();
+            this.CreateMap<UserMessage, UserMessageToReturnDto>()
+                .ForMember(dest => dest.SenderPhotoUrl,
+                    source => source.MapFrom(source => source.Sender.Photos.First(p => p.IsMain).Url))
+                .ForMember(dest => dest.RecipientPhotoUrl,
+                    source => source.MapFrom(source => source.Recipient.Photos.First(p => p.IsMain).Url));
         }
 
         private void MapNewFaveGamesAndGenres(UserForUpdateDto userForUpdateDto, User currentUser)

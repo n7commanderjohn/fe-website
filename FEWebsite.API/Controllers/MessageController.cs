@@ -1,13 +1,14 @@
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 
 using FEWebsite.API.Data.BaseServices;
 using FEWebsite.API.DTOs.UserDTOs;
 using FEWebsite.API.Helpers;
 using FEWebsite.API.Models.ManyToManyModels.ComboModels;
-using Microsoft.EntityFrameworkCore;
 
 namespace FEWebsite.API.Controllers
 {
@@ -43,6 +44,25 @@ namespace FEWebsite.API.Controllers
             }
 
             return this.Ok(userMessage);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetUserMessages(int userId, [FromQuery]MessageParams messageParams)
+        {
+            var unauthorization = this.CheckIfUserIsAuthorized(userId, "You aren't authorized to view these messages.");
+            if (unauthorization != null) {
+                return unauthorization;
+            }
+
+            messageParams.UserId = userId;
+            var pagedUserMessages = await this.UserService.GetMessagesForUser(messageParams)
+                .ConfigureAwait(false);
+
+            var userMessages = this.Mapper.Map<IEnumerable<UserMessageToReturnDto>>(pagedUserMessages);
+
+            Response.AddPagination(pagedUserMessages);
+
+            return this.Ok(userMessages);
         }
 
         [HttpPost]
