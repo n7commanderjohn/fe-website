@@ -1,0 +1,20 @@
+table {
+    margin-top: 1rem;
+}
+
+td {
+    vertical-align: middle;
+}
+
+.row {
+    align-items: center;
+}
+
+table.table.table-hover {
+    cursor: pointer;
+}
+
+img.img-circle.rounded-circle {
+    width: 100px;
+    height: auto;
+}

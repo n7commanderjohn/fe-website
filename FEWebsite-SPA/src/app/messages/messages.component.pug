@@ -1,2 +1,47 @@
-p.
-  messages works!
+.container.mt-5
+  .row
+    .btn-group
+      button.btn.btn-primary([(ngModel)]="messageContainer", btnRadio='{{mca.Unread}}', (click)="loadMessages()")
+        i.fa.fa-envelope
+        | &nbsp;Unread
+      button.btn.btn-primary([(ngModel)]="messageContainer", btnRadio='{{mca.Inbox}}', (click)="loadMessages()")
+        i.fa.fa-envelope-open
+        | &nbsp;Inbox
+      button.btn.btn-primary([(ngModel)]="messageContainer", btnRadio='{{mca.Outbox}}', (click)="loadMessages()")
+        i.fa.fa-paper-plane
+        | &nbsp;Outbox
+  .row(*ngIf="messages.length == 0")
+    h3 No messages
+  .row(*ngIf="messages.length > 0")
+    table.table.table-hover
+      tbody
+        tr(*ngIf="messageContainer != mca.Outbox")
+          th Message
+          th From
+          th Received
+          th
+        tr(*ngIf="messageContainer == mca.Outbox")
+          th Message
+          th To
+          th Sent
+          th
+        tr(*ngFor="let message of messages", [routerLink]="['/users', messageContainer == mca.Outbox ? message.recipientId : message.senderId]")
+          td {{message.content}}
+          td
+            .row(*ngIf="messageContainer != mca.Outbox")
+              .col-sm-3
+                img.img-circle.rounded-circle(src="{{message?.senderPhotoUrl}}")
+              .col-sm-9
+                strong {{message.senderName}}
+            .row(*ngIf="messageContainer == mca.Outbox")
+              .col-sm-3
+                img.img-circle.rounded-circle(src="{{message?.recipientPhotoUrl}}")
+              .col-sm-9
+                strong {{message.recipientName}}
+          td {{message.messageSent | timeAgo}}
+          td
+            button.btn.btn-danger Delete
+.d-flex.justify-content-center
+  pagination([boundaryLinks]="true", [totalItems]="pagination.totalItems", [itemsPerPage]="pagination.itemsPerPage",
+    [(ngModel)]="pagination.currentPage", (pageChanged)="loadMessages($event)",
+    previousText="‹", nextText="›", firstText="«", lastText="»")

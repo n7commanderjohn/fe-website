@@ -86,7 +86,8 @@ export class UserService {
     return this.http.get<number[]>(this.baseUrl + this.user + '/' + userId + '/' + this.like);
   }
 
-  getUserMessages(userId: number, page?: number, itemsPerPage?: number, messageArgs?: number ): Observable<PaginatedResult<Message[]>> {
+  getUserMessages(userId: number, page?: number, itemsPerPage?: number, messageArgs?: number | string )
+    : Observable<PaginatedResult<Message[]>> {
     const paginatedResult = new PaginatedResult<Message[]>();
 
     let params = new HttpParams();

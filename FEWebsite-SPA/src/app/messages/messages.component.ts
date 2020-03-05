@@ -17,7 +17,8 @@ import { UserService } from './../_services/user.service';
 export class MessagesComponent implements OnInit {
   messages: Message[];
   pagination: Pagination;
-  messageContainer = MessageContainerArgs.Unread;
+  mca = MessageContainerArgs;
+  messageContainer: string;
 
   constructor(private userService: UserService,
               private authService: AuthService,
@@ -29,6 +30,7 @@ export class MessagesComponent implements OnInit {
       const messages: PaginatedResult<Message[]> = data.messages;
       this.messages = messages.result;
       this.pagination = messages.pagination;
+      this.messageContainer = this.mca.Unread;
     });
   }
 
