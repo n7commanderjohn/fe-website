@@ -25,7 +25,9 @@
           th To
           th Sent
           th
-        tr(*ngFor="let message of messages", [routerLink]="['/users', messageContainer == mca.Outbox ? message.recipientId : message.senderId]")
+        tr(*ngFor="let message of messages",
+          [routerLink]="['/users', messageContainer == mca.Outbox ? message.recipientId : message.senderId]",
+          [queryParams]="{tab: 4}")
           td {{message.content}}
           td
             .row(*ngIf="messageContainer != mca.Outbox")

@@ -18,10 +18,10 @@
         .card-footer
           .btn-group.d-flex
             .btn.btn-primary.w-100 Follow
-            .btn.btn-success.w-100 Message
+            .btn.btn-success.w-100((click)="selectTab(4)") Message
     .col-sm-9
       .tab-panel
-        tabset.user-tabset
+        tabset.user-tabset("#userTabset")
           tab(heading="About {{user.name}}")
             h4 Description
             div(*ngFor="let paragraph of userDesc")

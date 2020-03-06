@@ -10,7 +10,7 @@
           //- this will not work if using SVG version of Font Awesome. Need to use the FA Angular Library eventually.
           i.fa-heart([ngClass]="{'fas': isUserLiked(), 'far': !isUserLiked()}")
       li.list-inline-item
-        button.btn.btn-primary
+        button.btn.btn-primary([routerLink]="['/users/', user.id]", [queryParams]="{tab: 4}")
           i.fa.fa-envelope
   .card-body.p-1
     h6.card-title.text-center.mb-1
