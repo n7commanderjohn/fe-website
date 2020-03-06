@@ -20,17 +20,22 @@ export class MessagesComponent implements OnInit {
   mca = MessageContainerArgs;
   messageContainer: string;
 
+  private readonly successMsg = 'Messages loaded successfully.';
+
   constructor(private userService: UserService,
               private authService: AuthService,
               private route: ActivatedRoute,
               private alertify: AlertifyService) { }
 
   ngOnInit() {
-    this.route.data.subscribe(data => {
-      const messages: PaginatedResult<Message[]> = data.messages;
-      this.messages = messages.result;
-      this.pagination = messages.pagination;
-      this.messageContainer = this.mca.Unread;
+    this.route.data.subscribe({
+      next: data => {
+        const messages: PaginatedResult<Message[]> = data.messages;
+        this.messages = messages.result;
+        this.pagination = messages.pagination;
+        this.messageContainer = this.mca.Unread;
+        this.alertify.success(this.successMsg);
+      },
     });
   }
 
@@ -46,11 +51,17 @@ export class MessagesComponent implements OnInit {
     const userId = Number(this.authService.decodedToken.nameid);
     return this.userService.getUserMessages(
       userId, this.pagination.currentPage, this.pagination.itemsPerPage, this.messageContainer)
-      .subscribe((response) => {
-        this.messages = response.result;
-        this.pagination = response.pagination;
-      }, (error: StatusCodeResultReturnObject) => {
-        this.alertify.error(error.response);
+      .subscribe({
+        next: (response) => {
+          this.messages = response.result;
+          this.pagination = response.pagination;
+        },
+        error: (error: StatusCodeResultReturnObject) => {
+          this.alertify.error(error.response);
+        },
+        complete: () => {
+          this.alertify.success(this.successMsg);
+        }
       });
 }
 

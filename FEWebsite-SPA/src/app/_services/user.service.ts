@@ -1,10 +1,9 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Gender } from './../_models/gender';
 import { Message } from './../_models/message';
-import { MessageContainerArgs } from './../_models/messageParams';
+import { MessageToSend } from './../_models/messageToSend';
 import { PaginatedResult } from './../_models/pagination';
 import { UpdateResponse } from './../_models/updateResponse';
 import { User } from './../_models/user';
@@ -25,7 +24,7 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  getUsers(page?: number, itemsPerPage?: number, userParams?: UserParams): Observable<PaginatedResult<User[]>> {
+  getUsers(page?: number, itemsPerPage?: number, userParams?: UserParams) {
     const paginatedResult = new PaginatedResult<User[]>();
 
     let params = new HttpParams();
@@ -59,15 +58,15 @@ export class UserService {
       );
   }
 
-  getUser(id: number): Observable<User> {
+  getUser(id: number) {
     return this.http.get<User>(this.baseUrl + this.user + '/' + id);
   }
 
-  getGenders(): Observable<Gender[]> {
+  getGenders() {
     return this.http.get<Gender[]>(this.baseUrl + this.user + '/' +  this.genders);
   }
 
-  updateUser(id: number, user: User): Observable<UpdateResponse> {
+  updateUser(id: number, user: User) {
     return this.http.put<UpdateResponse>(this.baseUrl + this.user + '/' + id, user);
   }
 
@@ -83,12 +82,11 @@ export class UserService {
     return this.http.post(this.baseUrl + this.user + '/' + userId + '/' + this.like + '/' + recepientId, {});
   }
 
-  getLikes(userId: number): Observable<number[]> {
+  getLikes(userId: number) {
     return this.http.get<number[]>(this.baseUrl + this.user + '/' + userId + '/' + this.like);
   }
 
-  getUserMessages(userId: number, page?: number, itemsPerPage?: number, messageArgs?: number | string )
-    : Observable<PaginatedResult<Message[]>> {
+  getUserMessages(userId: number, page?: number, itemsPerPage?: number, messageArgs?: number | string ) {
     const paginatedResult = new PaginatedResult<Message[]>();
 
     let params = new HttpParams();
@@ -112,6 +110,10 @@ export class UserService {
 
   getMessageThread(userId: number, recipientId: number) {
     return this.http.get<Message[]>(this.baseUrl + this.user + '/' + userId + '/' + this.messsageThread + '/' + recipientId);
+  }
+
+  sendMessage(userId: number, message: MessageToSend) {
+    return this.http.post<Message>(this.baseUrl + this.user + '/' + userId + '/' + this.message, message);
   }
 
   private AddPageAndItemsPerPageParams(page: number, itemsPerPage: number, params: HttpParams): HttpParams {

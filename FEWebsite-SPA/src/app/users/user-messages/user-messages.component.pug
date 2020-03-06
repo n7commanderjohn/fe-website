@@ -1,8 +1,8 @@
 .card
-  .card-body
+  .card-body#chatbox
     div(*ngIf="messages?.length === 0")
       p No conversation exists. Why don't you send a friendly greeting? :D
-    ul.chat
+    ul.chat#chat-messages
       li(*ngFor="let message of messages")
         div(*ngIf="message.senderId == recipientId")
           span.chat-img.float-left.mr-1
@@ -25,7 +25,8 @@
               strong.primary-font.float-right {{message.senderName}}
             p {{message.content}}
   .card-footer
-    form
+    form("#messageForm=ngForm", (ngSubmit)="messageForm.valid && sendMessage()")
       .input-group
-        input.form-control.input-sm(type="text", placeholder="Send a friendly message to {{recipientName}}")
-        button.btn.btn-primary Send
+        input.form-control.input-sm([(ngModel)]="newMessage.content", name="content", required,
+          type="text", placeholder="Send a friendly message to {{recipientName}}")
+        button.btn.btn-primary([disabled]="!messageForm.valid") Send

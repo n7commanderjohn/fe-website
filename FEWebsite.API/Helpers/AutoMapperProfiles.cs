@@ -63,7 +63,12 @@ namespace FEWebsite.API.Helpers
                     source => source.Ignore())
                 .ForMember(dest => dest.GenderId,
                     source => source.MapFrom(source => source.Gender));
-            this.CreateMap<UserMessageCreationDto, UserMessage>().ReverseMap();
+            this.CreateMap<UserMessageCreationDto, UserMessage>()
+                .ReverseMap()
+                .ForMember(dest => dest.SenderPhotoUrl,
+                    source => source.MapFrom(source => source.Sender.Photos.First(p => p.IsMain).Url))
+                .ForMember(dest => dest.SenderName,
+                    source => source.MapFrom(source => source.Sender.Name));
             this.CreateMap<UserMessage, UserMessageToReturnDto>()
                 .ForMember(dest => dest.SenderPhotoUrl,
                     source => source.MapFrom(source => source.Sender.Photos.First(p => p.IsMain).Url))

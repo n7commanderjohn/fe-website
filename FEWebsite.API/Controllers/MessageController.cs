@@ -91,7 +91,8 @@ namespace FEWebsite.API.Controllers
             userMessageCreationDto.SenderId = userId;
 
             var recipient = await this.UserService.GetUser(userMessageCreationDto.RecipientId).ConfigureAwait(false);
-            if (recipient == null) {
+            if (recipient == null)
+            {
                 return this.BadRequest(new StatusCodeResultReturnObject(this.BadRequest(),
                     "The recipent could not be found."));
             }
@@ -101,6 +102,12 @@ namespace FEWebsite.API.Controllers
 
             if (await this.UserService.SaveAll().ConfigureAwait(false))
             {
+                var sender = await this.UserService.GetUser(userMessageCreationDto.SenderId).ConfigureAwait(false);
+                if (sender != null)
+                {
+                    outgoingMessage.Sender = sender;
+                }
+
                 var returnMessageObj = this.Mapper.Map<UserMessageCreationDto>(outgoingMessage);
                 return this.CreatedAtRoute("GetUserMessage", new {userId, messageId = outgoingMessage.Id},
                     returnMessageObj);
