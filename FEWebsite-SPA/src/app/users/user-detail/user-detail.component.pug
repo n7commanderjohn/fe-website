@@ -39,4 +39,4 @@
             ngx-gallery([options]="galleryOptions", [images]="galleryImages")
           tab(heading="Messages")
             h4 Messages
-            p add messages
+            app-user-messages([recipientId]="user.id", [recipientName]="user.name")

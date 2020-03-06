@@ -43,6 +43,7 @@ import { UserDetailComponent } from './users/user-detail/user-detail.component';
 import { UserEditReactiveComponent } from './users/user-edit-reactive/user-edit-reactive.component';
 import { UserEditComponent } from './users/user-edit/user-edit.component';
 import { UserListComponent } from './users/user-list/user-list.component';
+import { UserMessagesComponent } from './users/user-messages/user-messages.component';
 
 export function tokenGetter() {
    return localStorage.getItem('token');
@@ -67,6 +68,7 @@ export class CustomHammerConfig extends HammerGestureConfig  {
       MessagesComponent,
       UserCardComponent,
       UserDetailComponent,
+      UserMessagesComponent,
       UserEditComponent,
       UserEditReactiveComponent,
       PhotoEditorComponent,

@@ -21,6 +21,7 @@ export class UserService {
   genders = 'genders';
   like = 'like';
   message = 'message';
+  messsageThread = this.message + '/thread';
 
   constructor(private http: HttpClient) { }
 
@@ -107,6 +108,10 @@ export class UserService {
           return paginatedResult;
         })
     );
+  }
+
+  getMessageThread(userId: number, recipientId: number) {
+    return this.http.get<Message[]>(this.baseUrl + this.user + '/' + userId + '/' + this.messsageThread + '/' + recipientId);
   }
 
   private AddPageAndItemsPerPageParams(page: number, itemsPerPage: number, params: HttpParams): HttpParams {
