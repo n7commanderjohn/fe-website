@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NgxGalleryOptions, NgxGalleryImage, NgxGalleryAnimation } from 'ngx-gallery';
-
+import { NgxGalleryAnimation, NgxGalleryImage, NgxGalleryOptions } from 'ngx-gallery';
 import { User } from 'src/app/_models/user';
+
 
 @Component({
   selector: 'app-user-detail',
@@ -11,6 +11,7 @@ import { User } from 'src/app/_models/user';
 })
 export class UserDetailComponent implements OnInit {
   user: User;
+  userDesc: string[];
   galleryOptions: NgxGalleryOptions[];
   galleryImages: NgxGalleryImage[];
 
@@ -18,7 +19,8 @@ export class UserDetailComponent implements OnInit {
 
   ngOnInit() {
     this.route.data.subscribe(data => {
-      this.user = data.user;
+      this.user = data.user as User;
+      this.userDesc = this.user.description.split('\n');
     });
 
     this.galleryOptions = [

@@ -24,7 +24,8 @@
         tabset.user-tabset
           tab(heading="About {{user.name}}")
             h4 Description
-            p {{user.description}}
+            div(*ngFor="let paragraph of userDesc")
+              p {{paragraph}}
           tab(heading="Favorite Games")
             h4 Favorite Games
             ul
