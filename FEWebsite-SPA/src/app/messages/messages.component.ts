@@ -19,8 +19,8 @@ export class MessagesComponent implements OnInit {
   pagination: Pagination;
   mca = MessageContainerArgs;
   messageContainer: string;
-
   private readonly successMsg = 'Messages loaded successfully.';
+  private readonly userId = Number(this.authService.decodedToken.nameid);
 
   constructor(private userService: UserService,
               private authService: AuthService,
@@ -48,9 +48,8 @@ export class MessagesComponent implements OnInit {
         this.pagination.itemsPerPage = event.itemsPerPage;
       }
     }
-    const userId = Number(this.authService.decodedToken.nameid);
     return this.userService.getUserMessages(
-      userId, this.pagination.currentPage, this.pagination.itemsPerPage, this.messageContainer)
+      this.userId, this.pagination.currentPage, this.pagination.itemsPerPage, this.messageContainer)
       .subscribe({
         next: (response) => {
           this.messages = response.result;
@@ -63,6 +62,19 @@ export class MessagesComponent implements OnInit {
           this.alertify.success(this.successMsg);
         }
       });
-}
+  }
+
+  deleteMessage(messageId: number) {
+    this.alertify.confirm('Are you sure you wish to delete this message?', () => {
+      this.userService.deleteMessage(messageId, this.userId).subscribe({
+        next: () => {
+          this.messages.splice(this.messages.findIndex(m => m.id === messageId), 1);
+        },
+        error: (error: StatusCodeResultReturnObject) => {
+          this.alertify.error(error.response);
+        }
+      });
+    });
+  }
 
 }

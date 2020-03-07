@@ -116,6 +116,10 @@ export class UserService {
     return this.http.post<Message>(this.baseUrl + this.user + '/' + userId + '/' + this.message, message);
   }
 
+  deleteMessage(messageId: number, userId: number) {
+    return this.http.post(this.baseUrl + this.user + '/' + userId + '/' + this.message + '/' + messageId, {});
+  }
+
   private AddPageAndItemsPerPageParams(page: number, itemsPerPage: number, params: HttpParams): HttpParams {
     if (page && itemsPerPage) {
       params = params.append('pageNumber', page.toString());

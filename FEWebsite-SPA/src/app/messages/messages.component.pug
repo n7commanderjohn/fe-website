@@ -42,7 +42,7 @@
                 strong {{message.recipientName}}
           td {{message.messageSent | timeAgo}}
           td
-            button.btn.btn-danger Delete
+            button.btn.btn-danger((click)="deleteMessage(message.id); $event.stopPropagation();") Delete
 .d-flex.justify-content-center
   pagination([boundaryLinks]="true", [totalItems]="pagination.totalItems", [itemsPerPage]="pagination.itemsPerPage",
     [(ngModel)]="pagination.currentPage", (pageChanged)="loadMessages($event)",
