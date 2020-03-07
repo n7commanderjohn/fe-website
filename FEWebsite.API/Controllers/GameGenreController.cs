@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using FEWebsite.API.Data.BaseServices;
-using AutoMapper;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+using AutoMapper;
+
+using FEWebsite.API.Data.BaseServices;
 using FEWebsite.API.DTOs.GameGenreDTOs;
 
 namespace FEWebsite.API.Controllers
@@ -49,27 +52,6 @@ namespace FEWebsite.API.Controllers
             var gameGenreDto = this.Mapper.Map<GameGenreForDetailedDto>(gameGenre);
 
             return this.Ok(gameGenreDto);
-        }
-
-        // POST api/GameGenres
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-
-        }
-
-        // PUT api/GameGenres/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-
-        }
-
-        // DELETE api/GameGenres/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-
         }
     }
 }

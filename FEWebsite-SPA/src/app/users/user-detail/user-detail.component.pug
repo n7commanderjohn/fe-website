@@ -18,13 +18,14 @@
         .card-footer
           .btn-group.d-flex
             .btn.btn-primary.w-100 Follow
-            .btn.btn-success.w-100 Message
+            .btn.btn-success.w-100((click)="selectTab(4)") Message
     .col-sm-9
       .tab-panel
-        tabset.user-tabset
+        tabset.user-tabset("#userTabset")
           tab(heading="About {{user.name}}")
             h4 Description
-            p {{user.description}}
+            div(*ngFor="let paragraph of userDesc")
+              p {{paragraph}}
           tab(heading="Favorite Games")
             h4 Favorite Games
             ul
@@ -38,4 +39,4 @@
             ngx-gallery([options]="galleryOptions", [images]="galleryImages")
           tab(heading="Messages")
             h4 Messages
-            p add messages
+            app-user-messages([recipientId]="user.id", [recipientName]="user.name")

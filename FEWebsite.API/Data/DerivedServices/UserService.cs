@@ -10,6 +10,7 @@ using FEWebsite.API.Models;
 using FEWebsite.API.DTOs.UserDTOs;
 using FEWebsite.API.Helpers;
 using FEWebsite.API.Models.ManyToManyModels.ComboModels;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace FEWebsite.API.Data.DerivedServices
 {
@@ -257,6 +258,64 @@ namespace FEWebsite.API.Data.DerivedServices
                 return this.Context.UserLikes
                     .Where(ul => ul.LikerId == userId)
                     .Select(ul => ul.LikeeId);
+            }
+        }
+
+        public async Task<UserMessage> GetMessage(int id)
+        {
+            return await this.Context.UserMessages
+                .FirstOrDefaultAsync(m => m.Id == id)
+                .ConfigureAwait(false);
+        }
+
+        public async Task<PagedList<UserMessage>> GetMessagesForUser(MessageParams messageParams)
+        {
+            var messages = this.DefaultUserMessagesIncludes()
+                .AsQueryable();
+
+            Expression<Func<UserMessage, bool>> IsUnreadRecipientMessageAndNotDeleted =
+                um => um.RecipientId == messageParams.UserId && !um.IsRead && !um.RecipientDeleted;
+            Expression<Func<UserMessage, bool>> IsRecipientMessageAndNotDeleted = um => um.RecipientId == messageParams.UserId && !um.RecipientDeleted;
+            Expression<Func<UserMessage, bool>> IsSenderMessageAndNotDeleted = um => um.SenderId == messageParams.UserId && !um.SenderDeleted;
+            messages = messageParams.MessageContainer switch
+            {
+                MessageContainerArgs.Unread => messages.Where(IsUnreadRecipientMessageAndNotDeleted),
+                MessageContainerArgs.Inbox => messages.Where(IsRecipientMessageAndNotDeleted),
+                MessageContainerArgs.Outbox => messages.Where(IsSenderMessageAndNotDeleted),
+                _ => messages.Where(IsUnreadRecipientMessageAndNotDeleted),
+            };
+
+            messages = messages.OrderByDescending(um => um.MessageSent);
+
+            var messageList = await PagedList<UserMessage>
+                .CreateAsync(messages, messageParams.PageNumber, messageParams.PageSize)
+                .ConfigureAwait(false);
+
+            return messageList;
+        }
+
+        private IIncludableQueryable<UserMessage, ICollection<Photo>> DefaultUserMessagesIncludes()
+        {
+            return this.Context.UserMessages
+                .Include(um => um.Sender)
+                    .ThenInclude(u => u.Photos)
+                .Include(um => um.Recipient)
+                    .ThenInclude(u => u.Photos);
+        }
+
+        public async Task<IEnumerable<UserMessage>> GetMessageThread(int userId, int recipientId)
+        {
+            var messageThread = await GetUserMessageThread(userId, recipientId)
+                .OrderByDescending(um => um.MessageSent)
+                .ToListAsync().ConfigureAwait(false);
+
+            return messageThread;
+
+            IQueryable<UserMessage> GetUserMessageThread(int userId, int recipientId)
+            {
+                return this.DefaultUserMessagesIncludes()
+                    .Where(um => (um.RecipientId == userId && !um.RecipientDeleted && um.SenderId == recipientId)
+                        || (um.RecipientId == recipientId && !um.SenderDeleted && um.SenderId == userId));
             }
         }
     }

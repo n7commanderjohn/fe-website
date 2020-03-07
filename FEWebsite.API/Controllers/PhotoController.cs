@@ -1,9 +1,12 @@
 using System.Linq;
 using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+
 using AutoMapper;
+
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 
@@ -53,12 +56,13 @@ namespace FEWebsite.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddPhotoForUser(int userId, [FromForm]PhotoForUploadDto photoForUploadDto)
+        public async Task<IActionResult> AddPhotoForUser(int userId, [FromForm] PhotoForUploadDto photoForUploadDto)
         {
-            if (!this.IsUserMatched(userId))
+            var unauthorization = this.CheckIfLoggedInUserIsAuthorized(userId,
+                "You are not logged in as the user you are trying to upload the photo for.");
+            if (unauthorization != null)
             {
-                return this.BadRequest(new StatusCodeResultReturnObject(this.Unauthorized(),
-                    "You are not logged in as the user you are trying to upload the photo for."));
+                return unauthorization;
             }
 
             var currentUser = await this.UserService.GetUser(userId).ConfigureAwait(false);
@@ -76,7 +80,7 @@ namespace FEWebsite.API.Controllers
                 bool doesPhotoHaveData = file.Length > 0;
                 if (doesPhotoHaveData)
                 {
-                    using (var stream = file.OpenReadStream())
+                    using(var stream = file.OpenReadStream())
                     {
                         var uploadParams = new ImageUploadParams()
                         {
@@ -197,7 +201,8 @@ namespace FEWebsite.API.Controllers
                 {
                     return this.Ok();
                 }
-                else {
+                else
+                {
                     return this.BadRequest(new StatusCodeResultReturnObject(this.BadRequest(),
                         failureBase + "database."));
                 }
@@ -208,26 +213,21 @@ namespace FEWebsite.API.Controllers
             }
         }
 
-        private BadRequestObjectResult IsUserAndPhotoAuthorized(User user, int photoId)
+        private UnauthorizedObjectResult IsUserAndPhotoAuthorized(User user, int photoId)
         {
-            if (!this.IsUserMatched(user.Id))
+            var unauthorization = this.CheckIfLoggedInUserIsAuthorized(user.Id,
+                "This isn't the currently logged in user.");
+            if (unauthorization != null)
             {
-                return this.BadRequest(new StatusCodeResultReturnObject(this.Unauthorized(),
-                    "This isn't the currently logged in user."));
+                return unauthorization;
             }
-
             if (!user.DoesPhotoExist(photoId))
             {
-                return this.BadRequest(new StatusCodeResultReturnObject(this.Unauthorized(),
+                return this.Unauthorized(new StatusCodeResultReturnObject(this.Unauthorized(),
                     "This photo id doesn't match any of the user's photos."));
             }
 
             return null;
-        }
-
-        private bool IsUserMatched(int userId)
-        {
-            return userId == this.GetUserIdFromClaim();
         }
     }
 }

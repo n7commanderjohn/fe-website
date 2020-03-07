@@ -1,11 +1,14 @@
 using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Mvc;
-using FEWebsite.API.Data.BaseServices;
-using FEWebsite.API.Models;
-using FEWebsite.API.Helpers;
-using FEWebsite.API.DTOs.UserDTOs;
 using Microsoft.Extensions.Configuration;
+
 using AutoMapper;
+
+using FEWebsite.API.Data.BaseServices;
+using FEWebsite.API.DTOs.UserDTOs;
+using FEWebsite.API.Helpers;
+using FEWebsite.API.Models;
 
 namespace FEWebsite.API.Controllers
 {
@@ -50,7 +53,8 @@ namespace FEWebsite.API.Controllers
                 // return this.Created($"api/users/{createdUser.Id}", createdUser);
                 return this.CreatedAtRoute("GetUser", new { controller = "User", id = returnUser.Id }, returnUser);
             }
-            else {
+            else
+            {
                 return this.BadRequest(new StatusCodeResultReturnObject(this.BadRequest(),
                     "Registration failed when creating the user."));
             }
@@ -88,7 +92,7 @@ namespace FEWebsite.API.Controllers
             if (matchedUser == null)
             {
                 return this.BadRequest(new StatusCodeResultReturnObject(this.BadRequest(),
-                "No user was found with the given information."));
+                    "No user was found with the given information."));
             }
 
             const string generatedTempPassword = "password"; //change this to a random temp password later on.
@@ -100,7 +104,8 @@ namespace FEWebsite.API.Controllers
                 return this.Ok(new StatusCodeResultReturnObject(this.Ok(),
                     generatedTempPassword));
             }
-            else {
+            else
+            {
                 return this.BadRequest(new StatusCodeResultReturnObject(this.BadRequest(),
                     "Password reset failed."));
             }

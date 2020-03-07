@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -60,6 +61,30 @@ namespace FEWebsite.API.Helpers
 
         public static int GetUserIdFromClaim(this ControllerBase controllerBase) {
             return int.Parse(controllerBase.User.FindFirst(ClaimTypes.NameIdentifier).Value);
+        }
+
+        public static UnauthorizedObjectResult CheckIfLoggedInUserIsAuthorized(this ControllerBase controllerBase, int userId,
+            string unauthorizedMsg = "You are not authorized for this action.")
+        {
+            if (userId != controllerBase.GetUserIdFromClaim())
+            {
+                return controllerBase.Unauthorized(new StatusCodeResultReturnObject(
+                    controllerBase.Unauthorized(), unauthorizedMsg));
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public static string ToDescriptionString(this Enum enumVal)
+        {
+            DescriptionAttribute[] attributes = (DescriptionAttribute[])enumVal
+                .GetType()
+                .GetField(enumVal.ToString())
+                .GetCustomAttributes(typeof(DescriptionAttribute), false);
+
+            return attributes.Length > 0 ? attributes[0].Description : string.Empty;
         }
     }
 }

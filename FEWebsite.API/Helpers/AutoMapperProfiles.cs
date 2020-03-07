@@ -26,6 +26,7 @@ namespace FEWebsite.API.Helpers
 
         private void CreateMapForUser()
         {
+            // no way to avoid null references for these, since null propagator operator cannot be used in expression tree
             this.CreateMap<User, UserForLoginResponseDto>()
                 .ForMember(dest => dest.PhotoUrl,
                     source => source.MapFrom(source => source.Photos.FirstOrDefault(p => p.IsMain).Url));
@@ -62,6 +63,13 @@ namespace FEWebsite.API.Helpers
                     source => source.Ignore())
                 .ForMember(dest => dest.GenderId,
                     source => source.MapFrom(source => source.Gender));
+            this.CreateMap<UserMessageCreationDto, UserMessage>()
+                .ReverseMap();
+            this.CreateMap<UserMessage, UserMessageToReturnDto>()
+                .ForMember(dest => dest.SenderPhotoUrl,
+                    source => source.MapFrom(source => source.Sender.Photos.First(p => p.IsMain).Url))
+                .ForMember(dest => dest.RecipientPhotoUrl,
+                    source => source.MapFrom(source => source.Recipient.Photos.First(p => p.IsMain).Url));
         }
 
         private void MapNewFaveGamesAndGenres(UserForUpdateDto userForUpdateDto, User currentUser)
