@@ -31,7 +31,8 @@ namespace FEWebsite.API.Controllers
         public async Task<IActionResult> GetUserMessage(int userId, int messageId)
         {
             var unauthorization = this.CheckIfUserIsAuthorized(userId, "You aren't authorized to view this message.");
-            if (unauthorization != null) {
+            if (unauthorization != null)
+            {
                 return unauthorization;
             }
 
@@ -50,7 +51,8 @@ namespace FEWebsite.API.Controllers
         public async Task<IActionResult> GetUserMessages(int userId, [FromQuery]MessageParams messageParams)
         {
             var unauthorization = this.CheckIfUserIsAuthorized(userId, "You aren't authorized to view these messages.");
-            if (unauthorization != null) {
+            if (unauthorization != null)
+            {
                 return unauthorization;
             }
 
@@ -69,7 +71,8 @@ namespace FEWebsite.API.Controllers
         public async Task<IActionResult> GetUserMessageThread(int userId, int recipientId)
         {
             var unauthorization = this.CheckIfUserIsAuthorized(userId, "You aren't authorized to view these messages.");
-            if (unauthorization != null) {
+            if (unauthorization != null)
+            {
                 return unauthorization;
             }
 
@@ -84,7 +87,8 @@ namespace FEWebsite.API.Controllers
         public async Task<IActionResult> CreateUserMessage(int userId, UserMessageCreationDto userMessageCreationDto)
         {
             var unauthorization = this.CheckIfUserIsAuthorized(userId, "You aren't authorized to send this message.");
-            if (unauthorization != null) {
+            if (unauthorization != null)
+            {
                 return unauthorization;
             }
 
@@ -114,6 +118,39 @@ namespace FEWebsite.API.Controllers
             }
 
             throw new DbUpdateException("The User Message failed to be created.");
+        }
+
+        [HttpPost("{messageId}")]
+        public async Task<IActionResult> DeleteUserMessage(int messageId, int userId)
+        {
+            var unauthorization = this.CheckIfUserIsAuthorized(userId, "You aren't authorized to delete this message.");
+            if (unauthorization != null)
+            {
+                return unauthorization;
+            }
+
+            var messageToDelete = await this.UserService.GetMessage(messageId).ConfigureAwait(false);
+
+            if (messageToDelete.SenderId == userId)
+            {
+                messageToDelete.SenderDeleted = true;
+            }
+            if (messageToDelete.RecipientId == userId)
+            {
+                messageToDelete.RecipientDeleted = true;
+            }
+
+            if (messageToDelete.SenderDeleted && messageToDelete.RecipientDeleted)
+            {
+                this.UserService.Delete(messageToDelete);
+            }
+
+            if (await this.UserService.SaveAll().ConfigureAwait(false))
+            {
+                return this.NoContent();
+            }
+
+            throw new DbUpdateException("The User Message failed to be deleted.");
         }
     }
 }

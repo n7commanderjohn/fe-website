@@ -273,12 +273,16 @@ namespace FEWebsite.API.Data.DerivedServices
             var messages = this.DefaultUserMessagesIncludes()
                 .AsQueryable();
 
+            Expression<Func<UserMessage, bool>> IsUnreadRecipientMessageAndNotDeleted =
+                um => um.RecipientId == messageParams.UserId && !um.IsRead && !um.RecipientDeleted;
+            Expression<Func<UserMessage, bool>> IsRecipientMessageAndNotDeleted = um => um.RecipientId == messageParams.UserId && !um.RecipientDeleted;
+            Expression<Func<UserMessage, bool>> IsSenderMessageAndNotDeleted = um => um.SenderId == messageParams.UserId && !um.SenderDeleted;
             messages = messageParams.MessageContainer switch
             {
-                MessageContainerArgs.Unread => messages.Where(um => um.RecipientId == messageParams.UserId && !um.IsRead),
-                MessageContainerArgs.Inbox => messages.Where(um => um.RecipientId == messageParams.UserId),
-                MessageContainerArgs.Outbox => messages.Where(um => um.SenderId == messageParams.UserId),
-                _ => messages.Where(um => um.RecipientId == messageParams.UserId && !um.IsRead),
+                MessageContainerArgs.Unread => messages.Where(IsUnreadRecipientMessageAndNotDeleted),
+                MessageContainerArgs.Inbox => messages.Where(IsRecipientMessageAndNotDeleted),
+                MessageContainerArgs.Outbox => messages.Where(IsSenderMessageAndNotDeleted),
+                _ => messages.Where(IsUnreadRecipientMessageAndNotDeleted),
             };
 
             messages = messages.OrderByDescending(um => um.MessageSent);
@@ -310,8 +314,8 @@ namespace FEWebsite.API.Data.DerivedServices
             IQueryable<UserMessage> GetUserMessageThread(int userId, int recipientId)
             {
                 return this.DefaultUserMessagesIncludes()
-                    .Where(um => (um.RecipientId == userId && um.SenderId == recipientId)
-                        || (um.RecipientId == recipientId && um.SenderId == userId));
+                    .Where(um => (um.RecipientId == userId && !um.RecipientDeleted && um.SenderId == recipientId)
+                        || (um.RecipientId == recipientId && !um.SenderDeleted && um.SenderId == userId));
             }
         }
     }
