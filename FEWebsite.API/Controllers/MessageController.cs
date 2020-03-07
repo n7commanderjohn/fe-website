@@ -108,7 +108,7 @@ namespace FEWebsite.API.Controllers
                     outgoingMessage.Sender = sender;
                 }
 
-                var returnMessageObj = this.Mapper.Map<UserMessageCreationDto>(outgoingMessage);
+                var returnMessageObj = this.Mapper.Map<UserMessageToReturnDto>(outgoingMessage);
                 return this.CreatedAtRoute("GetUserMessage", new {userId, messageId = outgoingMessage.Id},
                     returnMessageObj);
             }
