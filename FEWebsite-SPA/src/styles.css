@@ -6,6 +6,31 @@
 @import '../node_modules/alertifyjs/build/css/themes/bootstrap.min.css';
 @import '../node_modules/ngx-bootstrap/datepicker/bs-datepicker.css';
 
+.cloister-black {
+  font-family: 'Cloister Black', 'Arial Narrow', Arial, sans-serif;
+
+  -webkit-text-fill-color: white;
+  /* Will override color (regardless of order) */
+  -webkit-text-stroke-width: .5px black;
+
+  text-shadow:
+    3px 3px 0 #000,
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    1px 1px 0 #000;
+}
+
+body {
+  background-image: url(./assets/wallpapers/Legendary_Celica.png);
+  background-size: cover;
+  /* background-blend-mode: overlay; */
+}
+
+.transparent-bg {
+  background-color: rgba(0, 0, 0, 0.75);
+}
+
 .tab-panel {
   border: 1px solid #ddd;
   padding: 10px;
