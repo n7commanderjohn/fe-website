@@ -10,7 +10,7 @@ nav.navbar.navbar-expand-md.navbar-dark.bg-primary
       li.nav-item(routerLinkActive="active")
         a.nav-link([routerLink]="['/messages']") Messages
       li.nav-item.dropdown(dropdown, routerLinkActive="active")
-        a.nav-link.dropdown-toggle(dropdownToggle) Games
+        a.nav-link.dropdown-toggle(dropdownToggle) Games (WIP)
         .dropdown-menu('*dropdownMenu')
           div(*ngFor="let num of nums")
             a.nav-link.dropdown-item([routerLink]="['games/FE' + num]") FE{{num}}
