@@ -1,9 +1,12 @@
 using System.Linq;
 using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+
 using AutoMapper;
+
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 
@@ -53,11 +56,12 @@ namespace FEWebsite.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddPhotoForUser(int userId, [FromForm]PhotoForUploadDto photoForUploadDto)
+        public async Task<IActionResult> AddPhotoForUser(int userId, [FromForm] PhotoForUploadDto photoForUploadDto)
         {
-            var unauthorization = this.CheckIfUserIsAuthorized(userId,
+            var unauthorization = this.CheckIfLoggedInUserIsAuthorized(userId,
                 "You are not logged in as the user you are trying to upload the photo for.");
-            if (unauthorization != null) {
+            if (unauthorization != null)
+            {
                 return unauthorization;
             }
 
@@ -76,7 +80,7 @@ namespace FEWebsite.API.Controllers
                 bool doesPhotoHaveData = file.Length > 0;
                 if (doesPhotoHaveData)
                 {
-                    using (var stream = file.OpenReadStream())
+                    using(var stream = file.OpenReadStream())
                     {
                         var uploadParams = new ImageUploadParams()
                         {
@@ -197,7 +201,8 @@ namespace FEWebsite.API.Controllers
                 {
                     return this.Ok();
                 }
-                else {
+                else
+                {
                     return this.BadRequest(new StatusCodeResultReturnObject(this.BadRequest(),
                         failureBase + "database."));
                 }
@@ -210,9 +215,10 @@ namespace FEWebsite.API.Controllers
 
         private UnauthorizedObjectResult IsUserAndPhotoAuthorized(User user, int photoId)
         {
-            var unauthorization = this.CheckIfUserIsAuthorized(user.Id,
+            var unauthorization = this.CheckIfLoggedInUserIsAuthorized(user.Id,
                 "This isn't the currently logged in user.");
-            if (unauthorization != null) {
+            if (unauthorization != null)
+            {
                 return unauthorization;
             }
             if (!user.DoesPhotoExist(photoId))

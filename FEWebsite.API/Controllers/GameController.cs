@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using FEWebsite.API.Data.BaseServices;
-using AutoMapper;
-using FEWebsite.API.DTOs.GameDTOs;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+using AutoMapper;
+
+using FEWebsite.API.Data.BaseServices;
+using FEWebsite.API.DTOs.GameDTOs;
 
 namespace FEWebsite.API.Controllers
 {

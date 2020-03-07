@@ -63,7 +63,7 @@ namespace FEWebsite.API.Helpers
             return int.Parse(controllerBase.User.FindFirst(ClaimTypes.NameIdentifier).Value);
         }
 
-        public static UnauthorizedObjectResult CheckIfUserIsAuthorized(this ControllerBase controllerBase, int userId,
+        public static UnauthorizedObjectResult CheckIfLoggedInUserIsAuthorized(this ControllerBase controllerBase, int userId,
             string unauthorizedMsg = "You are not authorized for this action.")
         {
             if (userId != controllerBase.GetUserIdFromClaim())

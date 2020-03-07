@@ -5,6 +5,7 @@ import { StatusCodeResultReturnObject } from './../../_models/statusCodeResultRe
 import { AlertifyService } from './../../_services/alertify.service';
 import { AuthService } from './../../_services/auth.service';
 import { UserService } from './../../_services/user.service';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-user-messages',
@@ -14,7 +15,7 @@ import { UserService } from './../../_services/user.service';
 export class UserMessagesComponent implements OnInit, DoCheck {
   @Input() recipientId: number;
   @Input() recipientName: string;
-  userId: number;
+  currentUserId: number;
   messages: Message[];
   newMessage: MessageToSend;
   private chatbox: HTMLElement;
@@ -28,7 +29,7 @@ export class UserMessagesComponent implements OnInit, DoCheck {
   ) {}
 
   ngOnInit() {
-    this.userId = Number(this.authService.decodedToken.nameid);
+    this.currentUserId = Number(this.authService.decodedToken.nameid);
     this.loadMessages();
     this.newMessage = {
       recipientId: this.recipientId,
@@ -50,7 +51,16 @@ export class UserMessagesComponent implements OnInit, DoCheck {
 
   loadMessages() {
     return this.userService
-      .getMessageThread(this.userId, this.recipientId)
+      .getMessageThread(this.currentUserId, this.recipientId)
+      .pipe(
+        tap(messages => {
+          messages.forEach(message => {
+            if (!message.isRead && message.recipientId === this.currentUserId) {
+              this.userService.markAsRead(this.currentUserId, message.id);
+            }
+          });
+        })
+      )
       .subscribe({
         next: response => {
           this.messages = response.reverse();
@@ -62,7 +72,7 @@ export class UserMessagesComponent implements OnInit, DoCheck {
   }
 
   sendMessage() {
-    this.userService.sendMessage(this.userId, this.newMessage)
+    this.userService.sendMessage(this.currentUserId, this.newMessage)
       .subscribe({
         next: (message) => {
           this.messages.push(message);

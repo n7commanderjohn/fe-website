@@ -1,9 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+
 using AutoMapper;
 
 using FEWebsite.API.Data.BaseServices;
@@ -34,7 +36,7 @@ namespace FEWebsite.API.Controllers
 
         // GET api/user
         [HttpGet]
-        public async Task<OkObjectResult> GetUsers([FromQuery]UserParams userParams)
+        public async Task<OkObjectResult> GetUsers([FromQuery] UserParams userParams)
         {
             userParams.UserId = this.GetUserIdFromClaim();
 
@@ -89,15 +91,16 @@ namespace FEWebsite.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(int id, UserForUpdateDto userForUpdateDto)
         {
-            var unauthorization = this.CheckIfUserIsAuthorized(id, "You aren't authorized to change this password.");
-            if (unauthorization != null) {
+            var unauthorization = this.CheckIfLoggedInUserIsAuthorized(id, "You aren't authorized to change this password.");
+            if (unauthorization != null)
+            {
                 return unauthorization;
             }
 
             var currentUser = await this.UserService.GetUser(id).ConfigureAwait(false);
             var passwordVerficationPassed = userForUpdateDto.IsPasswordNeeded ?
-                this.AuthService.ComparePassword(currentUser, userForUpdateDto.PasswordCurrent)
-                : true;
+                this.AuthService.ComparePassword(currentUser, userForUpdateDto.PasswordCurrent) :
+                true;
             if (passwordVerficationPassed)
             {
                 this.Mapper.Map(userForUpdateDto, currentUser);
@@ -118,7 +121,8 @@ namespace FEWebsite.API.Controllers
                 }
                 else
                 {
-                    try {
+                    try
+                    {
                         bool hasUpdatedPassword = userForUpdateDto.Password != null;
                         if (hasUpdatedPassword)
                         {
@@ -157,8 +161,9 @@ namespace FEWebsite.API.Controllers
         [HttpPost("{id}/like/{recipientId}")]
         public async Task<IActionResult> ToggleUserLikeStatus(int id, int recipientId)
         {
-            var unauthorization = this.CheckIfUserIsAuthorized(id, "User Id parameter doesn't match the logged in user.");
-            if (unauthorization != null) {
+            var unauthorization = this.CheckIfLoggedInUserIsAuthorized(id, "User Id parameter doesn't match the logged in user.");
+            if (unauthorization != null)
+            {
                 return unauthorization;
             }
 

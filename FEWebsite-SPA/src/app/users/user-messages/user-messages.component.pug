@@ -14,7 +14,7 @@
                 span.fa.fa-clock-o &nbsp;{{message.messageSent | timeAgo}}
             p {{message.content}}
         div(*ngIf="message.senderId != recipientId")
-          span.chat-img.float-right
+          span.chat-img.float-right.ml-1
             img.img-circle.rounded-circle(src="{{message.senderPhotoUrl}}", alt="{{message.senderName}}")
           .chat-body
             .header
@@ -28,5 +28,5 @@
     form("#messageForm=ngForm", (ngSubmit)="messageForm.valid && sendMessage()")
       .input-group
         input.form-control.input-sm([(ngModel)]="newMessage.content", name="content", required,
-          type="text", placeholder="Send a friendly message to {{recipientName}}")
+          type="text", placeholder="Send a jolly message to {{recipientName}}!")
         button.btn.btn-primary([disabled]="!messageForm.valid") Send

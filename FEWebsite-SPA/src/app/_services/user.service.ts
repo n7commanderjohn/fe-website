@@ -120,6 +120,11 @@ export class UserService {
     return this.http.post(this.baseUrl + this.user + '/' + userId + '/' + this.message + '/' + messageId, {});
   }
 
+  markAsRead(userId: number, messageId: number) {
+    this.http.post(this.baseUrl + this.user + '/' + userId + '/' + this.message + '/' + messageId + '/read', {})
+      .subscribe();
+  }
+
   private AddPageAndItemsPerPageParams(page: number, itemsPerPage: number, params: HttpParams): HttpParams {
     if (page && itemsPerPage) {
       params = params.append('pageNumber', page.toString());
