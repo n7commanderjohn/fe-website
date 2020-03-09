@@ -7,7 +7,9 @@
 @import '../node_modules/ngx-bootstrap/datepicker/bs-datepicker.css';
 
 .cloister-black {
-  font-family: 'Cloister Black', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Cloister Black', 'Lato', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 
+    'Helvetica Neue', 'Arial', 'sans-serif', 'Apple Color Emoji', 'Segoe UI Emoji', 
+    'Segoe UI Symbol', 'Arial Narrow', 'Arial', 'sans-serif';
 
   -webkit-text-fill-color: white;
   /* Will override color (regardless of order) */
@@ -22,9 +24,9 @@
 }
 
 body {
-  background-image: url(./assets/wallpapers/Legendary_Celica.png);
+  background-image: url(./assets/wallpapers/eirika_by_marimbamonkey14_x2.png);
   background-size: cover;
-  /* background-blend-mode: overlay; */
+  background-blend-mode: difference;
 }
 
 .transparent-bg {
