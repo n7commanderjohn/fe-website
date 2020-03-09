@@ -1,5 +1,4 @@
 /* You can add global styles to this file, and also import other style files */
-@import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 @import '../node_modules/bootswatch/dist/darkly/bootstrap.min.css';
 @import '../node_modules/@fortawesome/fontawesome-free/css/all.css';
 @import '../node_modules/alertifyjs/build/css/alertify.min.css';
@@ -26,10 +25,10 @@
 body {
   background-image: url(./assets/wallpapers/eirika_by_marimbamonkey14_x2.png);
   background-size: cover;
-  background-blend-mode: difference;
+  /* background-blend-mode: difference; */
 }
 
-.transparent-bg {
+.jumbotron.transparent-bg, .transparent-bg {
   background-color: rgba(0, 0, 0, 0.75);
 }
 
