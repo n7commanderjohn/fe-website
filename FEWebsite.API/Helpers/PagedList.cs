@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace FEWebsite.API.Helpers
@@ -18,7 +19,7 @@ namespace FEWebsite.API.Helpers
             this.TotalCount = totalCount;
             this.CurrentPage = currentPage;
             this.PageSize = pageSize;
-            this.TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+            this.TotalPages = (int) Math.Ceiling(totalCount / (double) pageSize);
             this.AddRange(items);
         }
 

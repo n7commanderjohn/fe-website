@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+
 using FEWebsite.API.Models;
 using FEWebsite.API.Models.ManyToManyModels;
 using FEWebsite.API.Models.ManyToManyModels.ComboModels;
@@ -8,35 +9,34 @@ namespace FEWebsite.API.Data
     public class DataContext : DbContext
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options)
-        {
-        }
+        { }
 
-        #region Models
-        #region StandardModels
+#region Models
+#region StandardModels
         public DbSet<User> Users { get; set; }
         public DbSet<Gender> Genders { get; set; } // should make this many to many eventually for *diversi-REEEEE*
-        #endregion StandardModels
+#endregion StandardModels
 
-        #region OneToManyModels
+#region OneToManyModels
         public DbSet<Photo> Photos { get; set; }
-        #endregion OneToManyModels
+#endregion OneToManyModels
 
-        #region ManyToManyModels
+#region ManyToManyModels
         public DbSet<Game> Games { get; set; }
         public DbSet<GameGenre> GameGenres { get; set; }
-        #endregion ManyToManyModels
+#endregion ManyToManyModels
 
-        #region ManyToManyComboModels
+#region ManyToManyComboModels
         public DbSet<UserGame> UserGames { get; set; }
         public DbSet<UserGameGenre> UserGameGenres { get; set; }
         public DbSet<UserLike> UserLikes { get; set; }
         public DbSet<UserMessage> UserMessages { get; set; }
-        #endregion ManyToManyComboModels
-        #endregion Models
+#endregion ManyToManyComboModels
+#endregion Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            #region SetUpManytoManyRelationships
+#region SetUpManytoManyRelationships
             modelBuilder.Entity<UserGame>().HasKey(ug => new { ug.UserId, ug.GameId });
             modelBuilder.Entity<UserGameGenre>().HasKey(ug => new { ug.UserId, ug.GameGenreId });
 
@@ -59,7 +59,7 @@ namespace FEWebsite.API.Data
                 .HasOne(um => um.Recipient)
                 .WithMany(u => u.MessagesRecieved)
                 .OnDelete(DeleteBehavior.Restrict);
-            #endregion SetUpManytoManyRelationships
+#endregion SetUpManytoManyRelationships
         }
     }
 }

@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+
 using FEWebsite.API.Models.AbstractModels;
 
 namespace FEWebsite.API.Models

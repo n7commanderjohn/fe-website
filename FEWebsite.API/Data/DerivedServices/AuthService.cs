@@ -3,10 +3,12 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using FEWebsite.API.Data.BaseServices;
-using FEWebsite.API.Models;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+
+using FEWebsite.API.Data.BaseServices;
+using FEWebsite.API.Models;
 
 namespace FEWebsite.API.Data.DerivedServices
 {
@@ -45,7 +47,7 @@ namespace FEWebsite.API.Data.DerivedServices
         private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
         {
             var hMACSHA512 = new System.Security.Cryptography.HMACSHA512(passwordSalt);
-            using (var hmac = hMACSHA512)
+            using(var hmac = hMACSHA512)
             {
                 var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
 
@@ -81,7 +83,7 @@ namespace FEWebsite.API.Data.DerivedServices
         public void CreatePasswordHash(User user, string password)
         {
             var hMACSHA512 = new System.Security.Cryptography.HMACSHA512();
-            using (var hmac = hMACSHA512)
+            using(var hmac = hMACSHA512)
             {
                 user.PasswordSalt = hmac.Key;
                 user.PasswordHash = hmac.ComputeHash(buffer: System.Text.Encoding.UTF8.GetBytes(password));
@@ -90,7 +92,7 @@ namespace FEWebsite.API.Data.DerivedServices
 
         public string CreateUserToken(User authenticatedUser, string appSettingsToken)
         {
-            var claims = new[]
+            var claims = new []
             {
                 new Claim(ClaimTypes.NameIdentifier, authenticatedUser.Id.ToString()),
                 new Claim(ClaimTypes.Name, authenticatedUser.Username),

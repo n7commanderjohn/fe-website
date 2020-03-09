@@ -1,10 +1,12 @@
-﻿using System;
+using System;
+
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using FEWebsite.API.Data;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+
+using FEWebsite.API.Data;
 
 namespace FEWebsite.API
 {

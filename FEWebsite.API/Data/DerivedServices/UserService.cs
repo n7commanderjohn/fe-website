@@ -1,16 +1,17 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Collections.Generic;
 using System.Threading.Tasks;
+
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 
 using FEWebsite.API.Data.BaseServices;
-using FEWebsite.API.Models;
 using FEWebsite.API.DTOs.UserDTOs;
 using FEWebsite.API.Helpers;
+using FEWebsite.API.Models;
 using FEWebsite.API.Models.ManyToManyModels.ComboModels;
-using Microsoft.EntityFrameworkCore.Query;
 
 namespace FEWebsite.API.Data.DerivedServices
 {
@@ -180,7 +181,8 @@ namespace FEWebsite.API.Data.DerivedServices
             }
         }
 
-        private IQueryable<User> DefaultUserIncludes(bool expandedInclude = false) {
+        private IQueryable<User> DefaultUserIncludes(bool expandedInclude = false)
+        {
             if (expandedInclude)
             {
                 return this.Context.Users
@@ -202,7 +204,8 @@ namespace FEWebsite.API.Data.DerivedServices
             }
         }
 
-        private IQueryable<User> UserIncludesLikes() {
+        private IQueryable<User> UserIncludesLikes()
+        {
             return this.Context.Users
                 .Include(u => u.Likers)
                 .Include(u => u.Likees);
@@ -277,7 +280,8 @@ namespace FEWebsite.API.Data.DerivedServices
                 um => um.RecipientId == messageParams.UserId && !um.IsRead && !um.RecipientDeleted;
             Expression<Func<UserMessage, bool>> IsRecipientMessageAndNotDeleted = um => um.RecipientId == messageParams.UserId && !um.RecipientDeleted;
             Expression<Func<UserMessage, bool>> IsSenderMessageAndNotDeleted = um => um.SenderId == messageParams.UserId && !um.SenderDeleted;
-            messages = messageParams.MessageContainer switch
+            messages = messageParams.MessageContainer
+            switch
             {
                 MessageContainerArgs.Unread => messages.Where(IsUnreadRecipientMessageAndNotDeleted),
                 MessageContainerArgs.Inbox => messages.Where(IsRecipientMessageAndNotDeleted),
