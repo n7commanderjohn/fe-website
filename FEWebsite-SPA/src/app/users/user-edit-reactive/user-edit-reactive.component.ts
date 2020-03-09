@@ -80,7 +80,7 @@ export class UserEditReactiveComponent implements OnInit {
     this.fgvm.passwordCurrent.toggleOtherPasswordFields(this.userEditForm, this.passwordChangeMode);
   }
 
-  resetForm(formGroupValue: any, isUpdate: boolean) {
+  resetForm(formGroupValue: any, isUpdate?: boolean) {
     this.userEditForm.patchValue({passwordCurrent: undefined});
     this.userEditForm.reset(formGroupValue);
     if (isUpdate) {
