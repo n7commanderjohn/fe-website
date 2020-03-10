@@ -33,8 +33,8 @@ export class NavComponent implements OnInit {
   login() {
     this.authService.login(this.loginCredentials).subscribe(next => {
       this.alertify.success('Login successful.');
-    }, (error: StatusCodeResultReturnObject) => {
-      this.alertify.error(error.response);
+    }, (error: string) => {
+      this.alertify.error(error);
     }, () => {
       this.router.navigate(['/home']);
     });

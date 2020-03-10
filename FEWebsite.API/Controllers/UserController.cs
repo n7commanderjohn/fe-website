@@ -153,8 +153,7 @@ namespace FEWebsite.API.Controllers
             }
             else
             {
-                return this.Unauthorized(new StatusCodeResultReturnObject(
-                    this.Unauthorized(), "The provided password does not match."));
+                return this.Unauthorized("The provided password does not match.");
             }
         }
 

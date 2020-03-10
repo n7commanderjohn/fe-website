@@ -223,8 +223,7 @@ namespace FEWebsite.API.Controllers
             }
             if (!user.DoesPhotoExist(photoId))
             {
-                return this.Unauthorized(new StatusCodeResultReturnObject(this.Unauthorized(),
-                    "This photo id doesn't match any of the user's photos."));
+                return this.Unauthorized("This photo id doesn't match any of the user's photos.");
             }
 
             return null;

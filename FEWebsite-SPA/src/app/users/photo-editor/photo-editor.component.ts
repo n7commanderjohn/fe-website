@@ -65,37 +65,41 @@ export class PhotoEditorComponent implements OnInit {
 
   setMainPhoto(newMainPhoto: Photo) {
     const userId = Number(this.authService.decodedToken.nameid);
-    this.userService.setMainPhoto(userId, newMainPhoto.id as number).subscribe(() => {
-      this.currentMain = this.photos.filter(p => p.isMain)[0];
-      this.currentMain.isMain = false;
+    this.userService.setMainPhoto(userId, newMainPhoto.id as number).subscribe({
+      next: () => {
+        this.currentMain = this.photos.filter(p => p.isMain)[0];
+        this.currentMain.isMain = false;
 
-      this.setNewMainPhoto(newMainPhoto, 'Selected Photo has been set as main.');
-    }, error => {
-      this.alertify.error('Failed to set the selected photo as the main photo.');
-    });
+        this.setNewMainPhoto(newMainPhoto, 'Selected Photo has been set as main.');
+      },
+      error: (error: string) => {
+        this.alertify.error(error);
+    }});
   }
 
 
   deletePhoto(photoId: number) {
     this.alertify.confirm('Are you sure you wish to delete this photo?', () => {
       const userId = Number(this.authService.decodedToken.nameid);
-      this.userService.deletePhoto(userId, photoId).subscribe(() => {
-        this.photos.splice(this.photos.findIndex(p => p.id === photoId), 1);
-        this.alertify.success('The selected photo has been deleted.');
+      this.userService.deletePhoto(userId, photoId).subscribe({
+        next: () => {
+          this.photos.splice(this.photos.findIndex(p => p.id === photoId), 1);
+          this.alertify.success('The selected photo has been deleted.');
 
-        const areThereAnyPhotosLeft = this.photos.length > 0;
-        if (areThereAnyPhotosLeft) {
-          const areThereMainPhotos = this.photos.filter(p => p.isMain).length > 0;
-          if (!areThereMainPhotos) {
-            const newMainPhoto = this.photos.find(p => !p.isMain);
-            this.setNewMainPhoto(newMainPhoto, 'Another photo has been selected to be the main photo.');
+          const areThereAnyPhotosLeft = this.photos.length > 0;
+          if (areThereAnyPhotosLeft) {
+            const areThereMainPhotos = this.photos.filter(p => p.isMain).length > 0;
+            if (!areThereMainPhotos) {
+              const newMainPhoto = this.photos.find(p => !p.isMain);
+              this.setNewMainPhoto(newMainPhoto, 'Another photo has been selected to be the main photo.');
+            }
+
+          } else {
+            this.setDefaultUserPhoto();
           }
-
-        } else {
-          this.setDefaultUserPhoto();
+        }, error: error => {
+          this.alertify.error(error);
         }
-      }, error => {
-        this.alertify.error('Failed to delete the selected photo.');
       });
     });
   }

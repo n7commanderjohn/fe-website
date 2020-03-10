@@ -69,8 +69,7 @@ namespace FEWebsite.API.Controllers
 
             if (authenticatedUser == null)
             {
-                return this.BadRequest(new StatusCodeResultReturnObject(this.Unauthorized(),
-                    "Login failed."));
+                return this.Unauthorized("Login failed.");
             }
 
             var token = this.AuthService.CreateUserToken(authenticatedUser, this.Config.GetAppSettingsToken());

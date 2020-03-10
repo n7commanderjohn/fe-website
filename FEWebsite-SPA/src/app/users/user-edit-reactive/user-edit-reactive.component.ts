@@ -103,8 +103,8 @@ export class UserEditReactiveComponent implements OnInit {
           this.resetForm(this.userEditForm.value, true);
           this.authService.updateTokenAndUserDetails(response);
           this.user.age = response.userAge;
-        }, (error: StatusCodeResultReturnObject) => {
-          this.alertify.error(error.response);
+        }, (error: string) => {
+          this.alertify.error(error);
         });
       }
     }

@@ -72,8 +72,7 @@ namespace FEWebsite.API.Helpers
         {
             if (userId != controllerBase.GetUserIdFromClaim())
             {
-                return controllerBase.Unauthorized(new StatusCodeResultReturnObject(
-                    controllerBase.Unauthorized(), unauthorizedMsg));
+                return controllerBase.Unauthorized(unauthorizedMsg);
             }
             else
             {
