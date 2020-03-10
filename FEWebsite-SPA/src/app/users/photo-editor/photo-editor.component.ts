@@ -1,11 +1,12 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { FileUploader } from 'ng2-file-upload';
 import { AuthService } from './../../_services/auth.service';
 import { AlertifyService } from './../../_services/alertify.service';
 import { UserService } from 'src/app/_services/user.service';
 import { environment } from 'src/environments/environment';
 import { Photo } from 'src/app/_models/photo';
-import { User } from 'src/app/_models/user';
-import { FileUploader } from 'ng2-file-upload';
+import { ProblemReturnObject } from './../../_models/problemReturnObject';
+import { StatusCodeResultReturnObject } from './../../_models/statusCodeResultReturnObject';
 
 @Component({
   selector: 'app-photo-editor',
@@ -72,8 +73,14 @@ export class PhotoEditorComponent implements OnInit {
 
         this.setNewMainPhoto(newMainPhoto, 'Selected Photo has been set as main.');
       },
-      error: (error: string) => {
-        this.alertify.error(error);
+      error: (error: StatusCodeResultReturnObject | ProblemReturnObject) => {
+        if (error as ProblemReturnObject) {
+          const problem = error as ProblemReturnObject;
+          this.alertify.error(problem.detail);
+        } else {
+          const statusCodeResult = error as StatusCodeResultReturnObject;
+          this.alertify.error(statusCodeResult.response);
+        }
     }});
   }
 

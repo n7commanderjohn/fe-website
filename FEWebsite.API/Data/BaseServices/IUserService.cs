@@ -28,7 +28,7 @@ namespace FEWebsite.API.Data.BaseServices
 
         Task<Photo> GetCurrentMainPhotoForUser(int userId);
 
-        void SetUserPhotoAsMain(int userId, Photo photoToBeSet);
+        Task<Photo> SetUserPhotoAsMain(int userId, Photo photoToBeSet);
 
         Task<UserLike> GetLike(int userId, int recipientId);
 

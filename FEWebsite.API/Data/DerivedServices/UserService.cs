@@ -169,7 +169,7 @@ namespace FEWebsite.API.Data.DerivedServices
 
         public async Task<Photo> GetPhoto(int photoId)
         {
-            var photo = await Context.Photos
+            var photo = await this.Context.Photos
                 .FirstOrDefaultAsync(PhotoIdMatches(photoId))
                 .ConfigureAwait(false);
 
@@ -220,7 +220,7 @@ namespace FEWebsite.API.Data.DerivedServices
 
         public async Task<Photo> GetCurrentMainPhotoForUser(int userId)
         {
-            return await Context.Photos
+            return await this.Context.Photos
                 .FirstOrDefaultAsync(UserIdMatchesAndPhotoIsMain(userId))
                 .ConfigureAwait(false);
 
@@ -230,11 +230,16 @@ namespace FEWebsite.API.Data.DerivedServices
             }
         }
 
-        public async void SetUserPhotoAsMain(int userId, Photo photoToBeSet)
+        public async Task<Photo> SetUserPhotoAsMain(int userId, Photo photoToBeSet)
         {
             var currentMainPhoto = await this.GetCurrentMainPhotoForUser(userId).ConfigureAwait(false);
+            if (currentMainPhoto != null)
+            {
             currentMainPhoto.IsMain = false;
+            }
             photoToBeSet.IsMain = true;
+
+            return photoToBeSet;
         }
 
         public async Task<UserLike> GetLike(int userId, int recipientId)

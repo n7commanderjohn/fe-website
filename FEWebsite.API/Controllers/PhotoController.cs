@@ -127,13 +127,23 @@ namespace FEWebsite.API.Controllers
             if (isRequestAuthorized)
             {
                 var photoToSetAsMain = await this.UserService.GetPhoto(photoId).ConfigureAwait(false);
-                if (photoToSetAsMain.IsMain)
+                if (photoToSetAsMain == null)
+                {
+                    return this.BadRequest(new StatusCodeResultReturnObject(this.BadRequest(),
+                        "This photo has failed to be retrieved from the database."));
+                }
+                else if (photoToSetAsMain.IsMain)
                 {
                     return this.BadRequest(new StatusCodeResultReturnObject(this.BadRequest(),
                         "This photo is already the user's main photo."));
                 }
 
-                this.UserService.SetUserPhotoAsMain(userId, photoToSetAsMain);
+                var setPhoto = await this.UserService
+                    .SetUserPhotoAsMain(userId, photoToSetAsMain).ConfigureAwait(false);
+                if (!setPhoto.IsMain)
+                {
+                    return this.Problem(detail: "Setting the selected photo as the main photo failed.", statusCode: 500);
+                }
 
                 bool isDatabaseSaveSuccessful = await this.UserService.SaveAll().ConfigureAwait(false);
                 if (isDatabaseSaveSuccessful)
