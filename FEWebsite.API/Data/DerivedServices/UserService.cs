@@ -36,7 +36,7 @@ namespace FEWebsite.API.Data.DerivedServices
 
         public async Task<User> GetUser(int userId)
         {
-            var user = await this.DefaultUserIncludes(expandedInclude: true)
+            var user = await this.Context.Users
                 .SingleOrDefaultAsync(UserIdMatches(userId))
                 .ConfigureAwait(false);
 
@@ -74,7 +74,7 @@ namespace FEWebsite.API.Data.DerivedServices
 
             async Task<IQueryable<User>> GetUsersFromContext(UserParams userParams)
             {
-                var users = this.DefaultUserIncludes()
+                var users = this.Context.Users
                     .Where(NotUserIdMatches(userParams));
 
                 if (!string.IsNullOrEmpty(userParams.GenderId))
@@ -140,7 +140,7 @@ namespace FEWebsite.API.Data.DerivedServices
         private async Task<IEnumerable<int>> GetUserLikes(UserParams userParams)
         {
             var userId = userParams.UserId;
-            var user = await this.UserIncludesLikes()
+            var user = await this.Context.Users
                 .FirstOrDefaultAsync(u => u.Id == userId)
                 .ConfigureAwait(false);
 
@@ -235,7 +235,7 @@ namespace FEWebsite.API.Data.DerivedServices
             var currentMainPhoto = await this.GetCurrentMainPhotoForUser(userId).ConfigureAwait(false);
             if (currentMainPhoto != null)
             {
-            currentMainPhoto.IsMain = false;
+                currentMainPhoto.IsMain = false;
             }
             photoToBeSet.IsMain = true;
 
@@ -278,7 +278,7 @@ namespace FEWebsite.API.Data.DerivedServices
 
         public async Task<PagedList<UserMessage>> GetMessagesForUser(MessageParams messageParams)
         {
-            var messages = this.DefaultUserMessagesIncludes()
+            var messages = this.Context.UserMessages
                 .AsQueryable();
 
             Expression<Func<UserMessage, bool>> IsUnreadRecipientMessageAndNotDeleted =
@@ -322,7 +322,7 @@ namespace FEWebsite.API.Data.DerivedServices
 
             IQueryable<UserMessage> GetUserMessageThread(int userId, int recipientId)
             {
-                return this.DefaultUserMessagesIncludes()
+                return this.Context.UserMessages
                     .Where(um => (um.RecipientId == userId && !um.RecipientDeleted && um.SenderId == recipientId)
                         || (um.RecipientId == recipientId && !um.SenderDeleted && um.SenderId == userId));
             }

@@ -24,24 +24,24 @@ namespace FEWebsite.API.Models
 
         public DateTime LastLogin { get; set; }
 
-        public Gender Gender { get; set; }
+        public virtual Gender Gender { get; set; }
 
         [Column("Gender")]
         public string GenderId { get; set; }
 
-        public ICollection<UserGame> FavoriteGames { get; set; }
+        public virtual ICollection<UserGame> FavoriteGames { get; set; }
 
-        public ICollection<UserGameGenre> FavoriteGenres { get; set; }
+        public virtual ICollection<UserGameGenre> FavoriteGenres { get; set; }
 
-        public ICollection<UserLike> Likers { get; set; }
+        public virtual ICollection<UserLike> Likers { get; set; }
 
-        public ICollection<UserLike> Likees { get; set; }
+        public virtual ICollection<UserLike> Likees { get; set; }
 
-        public ICollection<Photo> Photos { get; set; }
+        public virtual ICollection<Photo> Photos { get; set; }
 
-        public ICollection<UserMessage> MessagesSent { get; set; }
+        public virtual ICollection<UserMessage> MessagesSent { get; set; }
 
-        public ICollection<UserMessage> MessagesRecieved { get; set; }
+        public virtual ICollection<UserMessage> MessagesRecieved { get; set; }
 
         [Column("AboutMe")]
         public override string Description { get; set; }

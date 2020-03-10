@@ -34,14 +34,22 @@ namespace FEWebsite.API
         public void ConfigureDevelopmentServices(IServiceCollection services)
         {
             // services.AddDbContext<DataContext>(x => x.UseSqlite(Configuration.GetConnectionString("SQLite")));
-            services.AddDbContext<DataContext>(x => x.UseMySql(Configuration.GetConnectionString("MySQL")));
+            services.AddDbContext<DataContext>(x =>
+            {
+                x.UseLazyLoadingProxies();
+                x.UseMySql(Configuration.GetConnectionString("MySQL"));
+            });
 
             this.ConfigureServices(services);
         }
 
         public void ConfigureProductionServices(IServiceCollection services)
         {
-            services.AddDbContext<DataContext>(x => x.UseMySql(Configuration.GetConnectionString("MySQL")));
+            services.AddDbContext<DataContext>(x =>
+            {
+                x.UseLazyLoadingProxies();
+                x.UseMySql(Configuration.GetConnectionString("MySQL"));
+            });
             this.ConfigureServices(services);
         }
 

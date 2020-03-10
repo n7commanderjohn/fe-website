@@ -7,6 +7,6 @@ namespace FEWebsite.API.Models.ManyToManyModels
 {
     public class Game : BaseModel
     {
-        public ICollection<UserGame> UserGames { get; set; }
+        public virtual ICollection<UserGame> UserGames { get; set; }
     }
 }
