@@ -11,42 +11,20 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
-
--- Dumping database structure for fewebsite
-DROP DATABASE IF EXISTS `dev_fewebsite`;
-CREATE DATABASE IF NOT EXISTS `dev_fewebsite` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `dev_fewebsite`;
-
--- Dumping structure for table fewebsite.gamegenres
-DROP TABLE IF EXISTS `gamegenres`;
-CREATE TABLE IF NOT EXISTS `gamegenres` (
-  `Id` int NOT NULL AUTO_INCREMENT,
-  `Description` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
-  `Name` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
-  PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- Dumping data for table fewebsite.gamegenres: ~4 rows (approximately)
+-- Dumping data for table dev_fewebsite.gamegenres: ~4 rows (approximately)
+DELETE FROM `gamegenres`;
 /*!40000 ALTER TABLE `gamegenres` DISABLE KEYS */;
-REPLACE INTO `gamegenres` (`Id`, `Description`, `Name`) VALUES
+INSERT INTO `gamegenres` (`Id`, `Description`, `Name`) VALUES
 	(1, 'Action', 'AC'),
 	(2, 'Adventure', 'AD'),
 	(3, 'Role Playing Game', 'RPG'),
 	(4, 'Strategy', 'S');
 /*!40000 ALTER TABLE `gamegenres` ENABLE KEYS */;
 
--- Dumping structure for table fewebsite.games
-DROP TABLE IF EXISTS `games`;
-CREATE TABLE IF NOT EXISTS `games` (
-  `Id` int NOT NULL AUTO_INCREMENT,
-  `Description` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
-  `Name` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
-  PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- Dumping data for table fewebsite.games: ~16 rows (approximately)
+-- Dumping data for table dev_fewebsite.games: ~16 rows (approximately)
+DELETE FROM `games`;
 /*!40000 ALTER TABLE `games` DISABLE KEYS */;
-REPLACE INTO `games` (`Id`, `Description`, `Name`) VALUES
+INSERT INTO `games` (`Id`, `Description`, `Name`) VALUES
 	(1, 'Fire Emblem 1', 'FE1'),
 	(2, 'Fire Emblem 2', 'FE2'),
 	(3, 'Fire Emblem 3', 'FE3'),
@@ -65,61 +43,66 @@ REPLACE INTO `games` (`Id`, `Description`, `Name`) VALUES
 	(16, 'Fire Emblem 16', 'FE16');
 /*!40000 ALTER TABLE `games` ENABLE KEYS */;
 
--- Dumping structure for table fewebsite.genders
-DROP TABLE IF EXISTS `genders`;
-CREATE TABLE IF NOT EXISTS `genders` (
-  `Id` varchar(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `Description` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
-  PRIMARY KEY (`Id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- Dumping data for table fewebsite.genders: ~3 rows (approximately)
+-- Dumping data for table dev_fewebsite.genders: ~3 rows (approximately)
+DELETE FROM `genders`;
 /*!40000 ALTER TABLE `genders` DISABLE KEYS */;
-REPLACE INTO `genders` (`Id`, `Description`) VALUES
+INSERT INTO `genders` (`Id`, `Description`) VALUES
 	('F', 'Female'),
 	('M', 'Male'),
 	('NA', 'Prefer not to say');
 /*!40000 ALTER TABLE `genders` ENABLE KEYS */;
 
--- Dumping structure for table fewebsite.photos
-DROP TABLE IF EXISTS `photos`;
-CREATE TABLE IF NOT EXISTS `photos` (
-  `Id` int NOT NULL AUTO_INCREMENT,
-  `Description` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
-  `Name` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
-  `UserId` int NOT NULL,
-  `Url` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
-  `DateAdded` datetime(6) NOT NULL,
-  `IsMain` tinyint(1) NOT NULL,
-  `PublicId` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
-  PRIMARY KEY (`Id`),
-  KEY `IX_Photos_UserId` (`UserId`),
-  CONSTRAINT `FK_Photos_Users_UserId` FOREIGN KEY (`UserId`) REFERENCES `users` (`Id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=146 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- Dumping data for table fewebsite.photos: ~9 rows (approximately)
+-- Dumping data for table dev_fewebsite.photos: ~104 rows (approximately)
+DELETE FROM `photos`;
 /*!40000 ALTER TABLE `photos` DISABLE KEYS */;
-REPLACE INTO `photos` (`Id`, `Description`, `Name`, `UserId`, `Url`, `DateAdded`, `IsMain`, `PublicId`) VALUES
-	(1, 'Yummy 4399046e-a2bd-465c-9e35-3335eb381bff', NULL, 9, 'https://randomuser.me/api/portraits/women/28.jpg', '0001-01-01 00:00:00.000000', 1, NULL),
-	(2, 'Yummy 94bb4abb-1a8d-486d-b98c-db4cd909f1b4', NULL, 5, 'https://randomuser.me/api/portraits/men/97.jpg', '0001-01-01 00:00:00.000000', 0, NULL),
-	(4, 'Yummy ce972880-0dc9-4f9a-b862-5240f6b3567d', NULL, 7, 'https://randomuser.me/api/portraits/women/48.jpg', '0001-01-01 00:00:00.000000', 1, NULL),
-	(6, 'Yummy 2289c924-adc5-4c13-9f5a-1a729fe63a21', NULL, 8, 'https://randomuser.me/api/portraits/women/74.jpg', '0001-01-01 00:00:00.000000', 1, NULL),
-	(8, 'Yummy e7b1f875-fbbe-4793-819d-a823583974c6', NULL, 6, 'https://randomuser.me/api/portraits/women/34.jpg', '0001-01-01 00:00:00.000000', 0, NULL),
+INSERT INTO `photos` (`Id`, `Description`, `Name`, `UserId`, `Url`, `DateAdded`, `IsMain`, `PublicId`) VALUES
+	(1, NULL, NULL, 3, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1579984470/ou6vccumvisalxhskcq4.jpg', '2020-01-25 15:34:29.719594', 0, 'ou6vccumvisalxhskcq4'),
+	(2, NULL, NULL, 3, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1579984484/zsioyswikx5wusbukeot.jpg', '2020-01-25 15:34:43.577329', 0, 'zsioyswikx5wusbukeot'),
+	(3, NULL, NULL, 3, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580157128/shtmbjgki8sktvtleqys.png', '2020-01-27 15:32:07.617793', 1, 'shtmbjgki8sktvtleqys'),
+	(4, NULL, NULL, 3, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580019680/bfyzqmnxscuuv1wezd29.jpg', '2020-01-26 01:21:20.060837', 0, 'bfyzqmnxscuuv1wezd29'),
+	(5, NULL, NULL, 3, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580019681/iitjrz6newhbiou1kfne.jpg', '2020-01-26 01:21:20.473020', 0, 'iitjrz6newhbiou1kfne'),
+	(6, NULL, NULL, 3, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580019682/whxeq1ezrmyte4q4xa1o.jpg', '2020-01-26 01:21:21.155102', 0, 'whxeq1ezrmyte4q4xa1o'),
+	(7, NULL, NULL, 3, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580019683/wnw7kupwgnnbhuaq8sqx.jpg', '2020-01-26 01:21:22.338795', 0, 'wnw7kupwgnnbhuaq8sqx'),
+	(8, NULL, NULL, 3, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580019683/x9z1f37u9g2lxmgzilvc.jpg', '2020-01-26 01:21:23.319526', 0, 'x9z1f37u9g2lxmgzilvc'),
+	(9, NULL, NULL, 3, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1579985288/q3sty6k55p4wn1c1mexv.jpg', '2020-01-25 15:48:07.216931', 0, 'q3sty6k55p4wn1c1mexv'),
+	(10, NULL, NULL, 2, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580121957/dnjojcbv6mhrdxplrjc7.jpg', '2020-01-27 05:45:56.489951', 1, 'dnjojcbv6mhrdxplrjc7'),
+	(11, NULL, NULL, 3, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580020112/jkwoxjjmompyxcwbrmrt.jpg', '2020-01-26 01:28:28.238534', 0, 'jkwoxjjmompyxcwbrmrt'),
+	(12, NULL, NULL, 3, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580156503/begvuppry7ov7zi0rjem.jpg', '2020-01-27 15:21:42.602076', 0, 'begvuppry7ov7zi0rjem'),
+	(13, NULL, NULL, 3, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580020115/tr9g2j9ymu4lkarfzbsb.jpg', '2020-01-26 01:28:34.213957', 0, 'tr9g2j9ymu4lkarfzbsb'),
 	(14, NULL, NULL, 1, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1579984470/ou6vccumvisalxhskcq4.jpg', '2020-01-25 15:34:29.719594', 0, 'ou6vccumvisalxhskcq4'),
 	(15, NULL, NULL, 1, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1579984484/zsioyswikx5wusbukeot.jpg', '2020-01-25 15:34:43.577329', 0, 'zsioyswikx5wusbukeot'),
 	(16, NULL, NULL, 1, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1579985288/q3sty6k55p4wn1c1mexv.jpg', '2020-01-25 15:48:07.216931', 0, 'q3sty6k55p4wn1c1mexv'),
+	(17, NULL, NULL, 1, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580156503/begvuppry7ov7zi0rjem.jpg', '2020-01-27 15:21:42.602076', 0, 'begvuppry7ov7zi0rjem'),
+	(18, NULL, NULL, 2, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580121955/gcoss7gsolq3gh5utanq.jpg', '2020-01-27 05:45:54.723986', 0, 'gcoss7gsolq3gh5utanq'),
+	(19, NULL, NULL, 1, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580156502/vbmyyyesf9pq3sycs9qp.jpg', '2020-01-27 15:21:41.722794', 0, 'vbmyyyesf9pq3sycs9qp'),
 	(20, NULL, NULL, 1, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580009742/ipp83tpqonadxlfwbocx.png', '2020-01-25 22:35:28.626804', 0, 'ipp83tpqonadxlfwbocx'),
 	(21, NULL, NULL, 1, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580010128/jlvpp3dob1lf6sshw7mg.jpg', '2020-01-25 22:42:08.077722', 0, 'jlvpp3dob1lf6sshw7mg'),
 	(22, NULL, NULL, 1, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580010129/t9xojhgayqmuiok9agfa.jpg', '2020-01-25 22:42:08.932007', 0, 't9xojhgayqmuiok9agfa'),
+	(23, NULL, NULL, 3, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580019676/qwcc3zlatjlp9mjlswmb.jpg', '2020-01-26 01:21:14.276889', 0, 'qwcc3zlatjlp9mjlswmb'),
+	(24, NULL, NULL, 3, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580019674/gahzmwvfweb3dv00c1ee.jpg', '2020-01-26 01:21:13.743507', 0, 'gahzmwvfweb3dv00c1ee'),
+	(25, NULL, NULL, 3, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580019673/fyyohb8pbvdqfgrx6j40.jpg', '2020-01-26 01:21:12.748798', 0, 'fyyohb8pbvdqfgrx6j40'),
+	(26, NULL, NULL, 3, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580016035/u4y8octagi7irgg3z4qx.png', '2020-01-26 00:20:35.180125', 0, 'u4y8octagi7irgg3z4qx'),
+	(27, NULL, NULL, 3, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580016034/bsi94yfaoeedyhhnj2ps.png', '2020-01-26 00:20:30.112630', 0, 'bsi94yfaoeedyhhnj2ps'),
+	(28, NULL, NULL, 3, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580016029/tf65ewmyudrqi4bofphr.jpg', '2020-01-26 00:20:29.188085', 0, 'tf65ewmyudrqi4bofphr'),
+	(29, NULL, NULL, 3, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580010128/jlvpp3dob1lf6sshw7mg.jpg', '2020-01-25 22:42:08.077722', 0, 'jlvpp3dob1lf6sshw7mg'),
 	(30, NULL, NULL, 1, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580014840/dqf9uvxnamoniijijgbs.jpg', '2020-01-26 00:00:40.158734', 0, 'dqf9uvxnamoniijijgbs'),
+	(31, NULL, NULL, 3, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580015867/j8pa8qzmzhu5aoyl1ode.jpg', '2020-01-26 00:17:47.152760', 0, 'j8pa8qzmzhu5aoyl1ode'),
 	(32, NULL, NULL, 1, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580014861/ibvnxaxhhzfre9i7l3gg.jpg', '2020-01-26 00:01:01.500380', 0, 'ibvnxaxhhzfre9i7l3gg'),
+	(33, NULL, NULL, 3, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580015804/pykoducqttwbswdtqfod.jpg', '2020-01-26 00:16:43.665966', 0, 'pykoducqttwbswdtqfod'),
+	(34, NULL, NULL, 3, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580015803/w8shh4eemt1ah3g4ulqm.jpg', '2020-01-26 00:16:43.204281', 0, 'w8shh4eemt1ah3g4ulqm'),
+	(35, NULL, NULL, 3, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580015800/nfeyeouzx9nwmyb4bq2q.jpg', '2020-01-26 00:16:40.054605', 0, 'nfeyeouzx9nwmyb4bq2q'),
 	(36, NULL, NULL, 1, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580015800/nfeyeouzx9nwmyb4bq2q.jpg', '2020-01-26 00:16:40.054605', 0, 'nfeyeouzx9nwmyb4bq2q'),
+	(37, NULL, NULL, 3, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580014840/dqf9uvxnamoniijijgbs.jpg', '2020-01-26 00:00:40.158734', 0, 'dqf9uvxnamoniijijgbs'),
 	(38, NULL, NULL, 1, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580015803/w8shh4eemt1ah3g4ulqm.jpg', '2020-01-26 00:16:43.204281', 0, 'w8shh4eemt1ah3g4ulqm'),
 	(39, NULL, NULL, 1, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580015804/pykoducqttwbswdtqfod.jpg', '2020-01-26 00:16:43.665966', 0, 'pykoducqttwbswdtqfod'),
 	(40, NULL, NULL, 1, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580015805/vcjrb9z86gzzeuekybgj.jpg', '2020-01-26 00:16:44.269715', 0, 'vcjrb9z86gzzeuekybgj'),
+	(41, NULL, NULL, 1, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580020121/dzle99ogjti2l3r2u5gp.png', '2020-01-26 01:28:40.257628', 0, 'dzle99ogjti2l3r2u5gp'),
+	(42, NULL, NULL, 1, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580015805/vcjrb9z86gzzeuekybgj.jpg', '2020-01-26 00:16:44.269715', 0, 'vcjrb9z86gzzeuekybgj'),
 	(43, NULL, NULL, 1, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580015867/j8pa8qzmzhu5aoyl1ode.jpg', '2020-01-26 00:17:47.152760', 0, 'j8pa8qzmzhu5aoyl1ode'),
+	(44, NULL, NULL, 1, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580015803/w8shh4eemt1ah3g4ulqm.jpg', '2020-01-26 00:16:43.204281', 0, 'w8shh4eemt1ah3g4ulqm'),
 	(45, NULL, NULL, 1, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580015869/ljpgvpyi2yasmcvedhex.png', '2020-01-26 00:17:49.053836', 0, 'ljpgvpyi2yasmcvedhex'),
 	(46, NULL, NULL, 1, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580015871/pc8hp6lyxvhqzlcgtpky.jpg', '2020-01-26 00:17:50.585649', 0, 'pc8hp6lyxvhqzlcgtpky'),
+	(47, NULL, NULL, 1, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580014840/dqf9uvxnamoniijijgbs.jpg', '2020-01-26 00:00:40.158734', 0, 'dqf9uvxnamoniijijgbs'),
 	(48, NULL, NULL, 1, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580016029/tf65ewmyudrqi4bofphr.jpg', '2020-01-26 00:20:29.188085', 0, 'tf65ewmyudrqi4bofphr'),
 	(49, NULL, NULL, 1, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580016034/bsi94yfaoeedyhhnj2ps.png', '2020-01-26 00:20:30.112630', 0, 'bsi94yfaoeedyhhnj2ps'),
 	(50, NULL, NULL, 1, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580016035/u4y8octagi7irgg3z4qx.png', '2020-01-26 00:20:35.180125', 0, 'u4y8octagi7irgg3z4qx'),
@@ -136,9 +119,23 @@ REPLACE INTO `photos` (`Id`, `Description`, `Name`, `UserId`, `Url`, `DateAdded`
 	(61, NULL, NULL, 1, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580019683/x9z1f37u9g2lxmgzilvc.jpg', '2020-01-26 01:21:23.319526', 0, 'x9z1f37u9g2lxmgzilvc'),
 	(62, NULL, NULL, 1, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580020112/jkwoxjjmompyxcwbrmrt.jpg', '2020-01-26 01:28:28.238534', 0, 'jkwoxjjmompyxcwbrmrt'),
 	(63, NULL, NULL, 1, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580020115/tr9g2j9ymu4lkarfzbsb.jpg', '2020-01-26 01:28:34.213957', 0, 'tr9g2j9ymu4lkarfzbsb'),
+	(64, NULL, NULL, 1, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580020115/tr9g2j9ymu4lkarfzbsb.jpg', '2020-01-26 01:28:34.213957', 0, 'tr9g2j9ymu4lkarfzbsb'),
 	(65, NULL, NULL, 1, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580020117/clydpauxudbzq9pwirsa.png', '2020-01-26 01:28:35.688590', 0, 'clydpauxudbzq9pwirsa'),
 	(66, NULL, NULL, 1, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580020119/di1kzwytgtrg8a2nsjjy.png', '2020-01-26 01:28:38.129755', 0, 'di1kzwytgtrg8a2nsjjy'),
 	(67, NULL, NULL, 1, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580020121/dzle99ogjti2l3r2u5gp.png', '2020-01-26 01:28:40.257628', 0, 'dzle99ogjti2l3r2u5gp'),
+	(68, NULL, NULL, 1, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580019682/whxeq1ezrmyte4q4xa1o.jpg', '2020-01-26 01:21:21.155102', 0, 'whxeq1ezrmyte4q4xa1o'),
+	(69, NULL, NULL, 1, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580019681/iitjrz6newhbiou1kfne.jpg', '2020-01-26 01:21:20.473020', 0, 'iitjrz6newhbiou1kfne'),
+	(70, NULL, NULL, 1, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580019680/bfyzqmnxscuuv1wezd29.jpg', '2020-01-26 01:21:20.060837', 0, 'bfyzqmnxscuuv1wezd29'),
+	(71, NULL, NULL, 1, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580019679/gjw0vf2zim8tciokafkq.gif', '2020-01-26 01:21:19.124884', 0, 'gjw0vf2zim8tciokafkq'),
+	(72, NULL, NULL, 1, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580019679/orlhiiljcqjofflsn12t.jpg', '2020-01-26 01:21:18.631602', 0, 'orlhiiljcqjofflsn12t'),
+	(73, NULL, NULL, 1, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580019676/wor8wfeilem1gjzddhgg.png', '2020-01-26 01:21:16.227932', 0, 'wor8wfeilem1gjzddhgg'),
+	(74, NULL, NULL, 1, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580019676/qwcc3zlatjlp9mjlswmb.jpg', '2020-01-26 01:21:14.276889', 0, 'qwcc3zlatjlp9mjlswmb'),
+	(75, NULL, NULL, 1, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580019674/gahzmwvfweb3dv00c1ee.jpg', '2020-01-26 01:21:13.743507', 0, 'gahzmwvfweb3dv00c1ee'),
+	(76, NULL, NULL, 1, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580019673/fyyohb8pbvdqfgrx6j40.jpg', '2020-01-26 01:21:12.748798', 0, 'fyyohb8pbvdqfgrx6j40'),
+	(77, NULL, NULL, 1, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580016035/u4y8octagi7irgg3z4qx.png', '2020-01-26 00:20:35.180125', 0, 'u4y8octagi7irgg3z4qx'),
+	(78, NULL, NULL, 1, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580016034/bsi94yfaoeedyhhnj2ps.png', '2020-01-26 00:20:30.112630', 0, 'bsi94yfaoeedyhhnj2ps'),
+	(79, NULL, NULL, 3, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580019679/orlhiiljcqjofflsn12t.jpg', '2020-01-26 01:21:18.631602', 0, 'orlhiiljcqjofflsn12t'),
+	(80, NULL, NULL, 3, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580019679/gjw0vf2zim8tciokafkq.gif', '2020-01-26 01:21:19.124884', 0, 'gjw0vf2zim8tciokafkq'),
 	(102, NULL, NULL, 11, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580121194/tokcfgkhxcqxb3shbmuu.jpg', '2020-01-27 05:33:13.824961', 1, 'tokcfgkhxcqxb3shbmuu'),
 	(103, NULL, NULL, 11, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580121194/ir5ra1wlg9chbvilhnsc.jpg', '2020-01-27 05:33:14.374160', 0, 'ir5ra1wlg9chbvilhnsc'),
 	(104, NULL, NULL, 11, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580121196/bapv90rlhzz4stsmu9zx.jpg', '2020-01-27 05:33:15.180982', 0, 'bapv90rlhzz4stsmu9zx'),
@@ -160,200 +157,89 @@ REPLACE INTO `photos` (`Id`, `Description`, `Name`, `UserId`, `Url`, `DateAdded`
 	(130, NULL, NULL, 12, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580156828/wgowgijmsoz5eezrfoa4.jpg', '2020-01-27 15:27:07.505957', 0, 'wgowgijmsoz5eezrfoa4'),
 	(131, NULL, NULL, 12, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580156828/vlumfdobsseijmtzvv5v.jpg', '2020-01-27 15:27:08.271847', 0, 'vlumfdobsseijmtzvv5v'),
 	(132, NULL, NULL, 12, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580156867/uqvfkpxelaqhph0ml1ko.png', '2020-01-27 15:27:47.167818', 0, 'uqvfkpxelaqhph0ml1ko'),
-	(133, NULL, NULL, 3, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580156951/mhp0wk9ifax1efh0gfj6.png', '2020-01-27 15:29:10.780835', 1, 'mhp0wk9ifax1efh0gfj6'),
 	(134, NULL, NULL, 4, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580157007/hdvgjckz9cqauy30blgr.jpg', '2020-01-27 15:30:06.694974', 1, 'hdvgjckz9cqauy30blgr'),
 	(135, NULL, NULL, 1, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580157128/shtmbjgki8sktvtleqys.png', '2020-01-27 15:32:07.617793', 1, 'shtmbjgki8sktvtleqys'),
-	(136, NULL, NULL, 5, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580157387/bbbwy9fcikmua3zdfwpi.jpg', '2020-01-27 15:36:26.636157', 0, 'bbbwy9fcikmua3zdfwpi'),
-	(137, NULL, NULL, 5, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580157387/kfppiyuwrzn8jqa9drx3.jpg', '2020-01-27 15:36:27.332070', 0, 'kfppiyuwrzn8jqa9drx3'),
-	(138, NULL, NULL, 5, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580157390/sjnyna9xirhoczg69ub1.png', '2020-01-27 15:36:27.722234', 1, 'sjnyna9xirhoczg69ub1'),
-	(139, NULL, NULL, 12, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580157503/iriju9pnc9vtup5ywx6v.jpg', '2020-01-27 15:38:23.175140', 1, 'iriju9pnc9vtup5ywx6v'),
-	(141, NULL, NULL, 6, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580157698/k6ul0qmfc7rtdvqomm9d.jpg', '2020-01-27 15:41:37.660417', 0, 'k6ul0qmfc7rtdvqomm9d'),
-	(142, NULL, NULL, 6, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580157699/zqcmp2g3r8ojylytm1sx.jpg', '2020-01-27 15:41:38.679960', 1, 'zqcmp2g3r8ojylytm1sx'),
-	(143, NULL, NULL, 6, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580157699/hqmsy5olwikskdfolc9a.jpg', '2020-01-27 15:41:39.098759', 0, 'hqmsy5olwikskdfolc9a'),
-	(144, NULL, NULL, 6, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580157700/hinugfebvltifvbbvvyt.png', '2020-01-27 15:41:39.674017', 0, 'hinugfebvltifvbbvvyt'),
-	(145, NULL, NULL, 13, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580289812/xii16j8nn1q7f0xdg8la.jpg', '2020-01-29 04:23:30.020073', 1, 'xii16j8nn1q7f0xdg8la');
+	(139, NULL, NULL, 12, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580157503/iriju9pnc9vtup5ywx6v.jpg', '2020-01-27 15:38:23.175140', 1, 'iriju9pnc9vtup5ywx6v');
 /*!40000 ALTER TABLE `photos` ENABLE KEYS */;
 
--- Dumping structure for table fewebsite.usergamegenres
-DROP TABLE IF EXISTS `usergamegenres`;
-CREATE TABLE IF NOT EXISTS `usergamegenres` (
-  `UserId` int NOT NULL,
-  `GameGenreId` int NOT NULL,
-  PRIMARY KEY (`UserId`,`GameGenreId`),
-  KEY `IX_UserGameGenres_GameGenreId` (`GameGenreId`),
-  CONSTRAINT `FK_UserGameGenres_GameGenres_GameGenreId` FOREIGN KEY (`GameGenreId`) REFERENCES `gamegenres` (`Id`) ON DELETE CASCADE,
-  CONSTRAINT `FK_UserGameGenres_Users_UserId` FOREIGN KEY (`UserId`) REFERENCES `users` (`Id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- Dumping data for table fewebsite.usergamegenres: ~19 rows (approximately)
+-- Dumping data for table dev_fewebsite.usergamegenres: ~11 rows (approximately)
+DELETE FROM `usergamegenres`;
 /*!40000 ALTER TABLE `usergamegenres` DISABLE KEYS */;
-REPLACE INTO `usergamegenres` (`UserId`, `GameGenreId`) VALUES
+INSERT INTO `usergamegenres` (`UserId`, `GameGenreId`) VALUES
 	(2, 1),
-	(3, 1),
-	(5, 1),
-	(6, 1),
-	(7, 1),
-	(8, 1),
-	(9, 1),
+	(1, 2),
+	(2, 2),
+	(3, 2),
 	(4, 2),
 	(1, 3),
+	(2, 3),
+	(3, 3),
 	(4, 3),
-	(6, 3),
-	(7, 3),
-	(8, 3),
-	(9, 3),
 	(2, 4),
-	(3, 4),
-	(4, 4),
-	(5, 4);
+	(4, 4);
 /*!40000 ALTER TABLE `usergamegenres` ENABLE KEYS */;
 
--- Dumping structure for table fewebsite.usergames
-DROP TABLE IF EXISTS `usergames`;
-CREATE TABLE IF NOT EXISTS `usergames` (
-  `UserId` int NOT NULL,
-  `GameId` int NOT NULL,
-  PRIMARY KEY (`UserId`,`GameId`),
-  KEY `IX_UserGames_GameId` (`GameId`),
-  CONSTRAINT `FK_UserGames_Games_GameId` FOREIGN KEY (`GameId`) REFERENCES `games` (`Id`) ON DELETE CASCADE,
-  CONSTRAINT `FK_UserGames_Users_UserId` FOREIGN KEY (`UserId`) REFERENCES `users` (`Id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- Dumping data for table fewebsite.usergames: ~27 rows (approximately)
+-- Dumping data for table dev_fewebsite.usergames: ~14 rows (approximately)
+DELETE FROM `usergames`;
 /*!40000 ALTER TABLE `usergames` DISABLE KEYS */;
-REPLACE INTO `usergames` (`UserId`, `GameId`) VALUES
-	(3, 3),
-	(5, 3),
-	(6, 3),
-	(7, 3),
-	(8, 3),
-	(9, 3),
+INSERT INTO `usergames` (`UserId`, `GameId`) VALUES
 	(1, 7),
+	(2, 7),
+	(3, 7),
 	(1, 8),
 	(2, 8),
+	(3, 8),
 	(4, 8),
-	(6, 9),
-	(7, 9),
-	(8, 9),
-	(9, 9),
-	(3, 10),
 	(4, 10),
-	(5, 10),
-	(6, 11),
-	(7, 11),
-	(8, 11),
-	(9, 11),
-	(3, 13),
 	(4, 13),
-	(5, 13),
 	(4, 14),
 	(1, 16),
+	(2, 16),
+	(3, 16),
 	(4, 16);
 /*!40000 ALTER TABLE `usergames` ENABLE KEYS */;
 
--- Dumping structure for table fewebsite.userlikes
-DROP TABLE IF EXISTS `userlikes`;
-CREATE TABLE IF NOT EXISTS `userlikes` (
-  `LikerId` int NOT NULL,
-  `LikeeId` int NOT NULL,
-  PRIMARY KEY (`LikerId`,`LikeeId`),
-  KEY `IX_UserLikes_LikeeId` (`LikeeId`),
-  CONSTRAINT `FK_UserLikes_Users_LikeeId` FOREIGN KEY (`LikeeId`) REFERENCES `users` (`Id`) ON DELETE RESTRICT,
-  CONSTRAINT `FK_UserLikes_Users_LikerId` FOREIGN KEY (`LikerId`) REFERENCES `users` (`Id`) ON DELETE RESTRICT
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- Dumping data for table fewebsite.userlikes: ~0 rows (approximately)
+-- Dumping data for table dev_fewebsite.userlikes: ~5 rows (approximately)
+DELETE FROM `userlikes`;
 /*!40000 ALTER TABLE `userlikes` DISABLE KEYS */;
-REPLACE INTO `userlikes` (`LikerId`, `LikeeId`) VALUES
+INSERT INTO `userlikes` (`LikerId`, `LikeeId`) VALUES
 	(2, 1),
 	(1, 2),
-	(1, 3),
 	(1, 4),
-	(1, 5),
 	(1, 11),
 	(1, 12);
 /*!40000 ALTER TABLE `userlikes` ENABLE KEYS */;
 
--- Dumping structure for table fewebsite.usermessages
-DROP TABLE IF EXISTS `usermessages`;
-CREATE TABLE IF NOT EXISTS `usermessages` (
-  `Id` int NOT NULL AUTO_INCREMENT,
-  `SenderId` int NOT NULL,
-  `RecipientId` int NOT NULL,
-  `Content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
-  `IsRead` tinyint(1) NOT NULL,
-  `DateRead` datetime(6) DEFAULT NULL,
-  `MessageSent` datetime(6) NOT NULL,
-  `SenderDeleted` tinyint(1) NOT NULL,
-  `RecipientDeleted` tinyint(1) NOT NULL,
-  PRIMARY KEY (`Id`),
-  KEY `IX_UserMessages_RecipientId` (`RecipientId`),
-  KEY `IX_UserMessages_SenderId` (`SenderId`),
-  CONSTRAINT `FK_UserMessages_Users_RecipientId` FOREIGN KEY (`RecipientId`) REFERENCES `users` (`Id`) ON DELETE RESTRICT,
-  CONSTRAINT `FK_UserMessages_Users_SenderId` FOREIGN KEY (`SenderId`) REFERENCES `users` (`Id`) ON DELETE RESTRICT
-) ENGINE=InnoDB AUTO_INCREMENT=90 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- Dumping data for table fewebsite.usermessages: ~0 rows (approximately)
+-- Dumping data for table dev_fewebsite.usermessages: ~8 rows (approximately)
+DELETE FROM `usermessages`;
 /*!40000 ALTER TABLE `usermessages` DISABLE KEYS */;
-REPLACE INTO `usermessages` (`Id`, `SenderId`, `RecipientId`, `Content`, `IsRead`, `DateRead`, `MessageSent`, `SenderDeleted`, `RecipientDeleted`) VALUES
+INSERT INTO `usermessages` (`Id`, `SenderId`, `RecipientId`, `Content`, `IsRead`, `DateRead`, `MessageSent`, `SenderDeleted`, `RecipientDeleted`) VALUES
+	(1, 1, 3, 'hi clonee!!!', 1, '2020-03-10 02:15:22.758228', '2020-03-10 02:14:42.688440', 0, 0),
 	(2, 1, 2, 'Hi broooo', 1, '2020-03-06 22:31:40.417217', '2020-03-03 19:29:40.930727', 0, 0),
 	(3, 1, 2, 'are you smashin Eirika', 1, '2020-03-06 22:31:40.419321', '2020-03-03 19:34:58.849984', 0, 0),
 	(4, 2, 1, 'sure am!!!', 1, '2020-03-06 22:33:08.591148', '2020-03-04 02:10:43.686646', 0, 0),
 	(5, 1, 2, 'that\'s so hawtttt!!!', 1, '2020-03-06 22:31:40.395779', '2020-03-04 02:13:46.658583', 0, 0),
 	(86, 1, 2, 'zzzzz', 1, '2020-03-06 22:52:42.887626', '2020-03-06 22:35:00.750906', 0, 0),
 	(87, 1, 2, 'i\'m soooo tiredddddd', 1, '2020-03-06 22:52:43.044426', '2020-03-06 22:35:14.034363', 0, 0),
-	(88, 1, 13, 'ugh', 0, NULL, '2020-03-07 01:08:01.550034', 0, 0),
 	(89, 2, 1, 'jjj', 1, '2020-03-09 23:44:33.963823', '2020-03-09 02:28:03.172119', 0, 0);
 /*!40000 ALTER TABLE `usermessages` ENABLE KEYS */;
 
--- Dumping structure for table fewebsite.users
-DROP TABLE IF EXISTS `users`;
-CREATE TABLE IF NOT EXISTS `users` (
-  `Id` int NOT NULL AUTO_INCREMENT,
-  `Email` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
-  `Username` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
-  `PasswordHash` longblob,
-  `PasswordSalt` longblob,
-  `Birthday` datetime(6) NOT NULL,
-  `AccountCreated` datetime(6) NOT NULL,
-  `LastLogin` datetime(6) NOT NULL,
-  `Gender` varchar(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `AboutMe` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
-  `Alias` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
-  PRIMARY KEY (`Id`),
-  KEY `IX_Users_Gender` (`Gender`),
-  CONSTRAINT `FK_Users_Genders_Gender` FOREIGN KEY (`Gender`) REFERENCES `genders` (`Id`) ON DELETE RESTRICT
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- Dumping data for table fewebsite.users: ~9 rows (approximately)
+-- Dumping data for table dev_fewebsite.users: ~6 rows (approximately)
+DELETE FROM `users`;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-REPLACE INTO `users` (`Id`, `Email`, `Username`, `PasswordHash`, `PasswordSalt`, `Birthday`, `AccountCreated`, `LastLogin`, `Gender`, `AboutMe`, `Alias`) VALUES
-	(1, 'kimgears2@gmail.com', 'n7cmdrjohn', _binary 0x6231643763663361623638316565633536366233653031613131663533313661643638373836366333373733613464613832623865303733613437666437343832306134623734643838636161363163383933336130316665343766373834653362313765313862383433323733313439626133366232613030613632376437, _binary 0x3EEFBFBDEFBFBD6802EFBFBDEFBFBD15EFBFBDEFBFBD69EFBFBD55EFBFBD22EFBFBDEFBFBDEFBFBD45190EEFBFBD04EFBFBD580FEFBFBD0E09EFBFBD2F6133EFBFBDEFBFBDEFBFBD4DD6BCC7A2EFBFBDEFBFBD58EFBFBDEFBFBD2843EFBFBD60EFBFBD524B3BEFBFBDEFBFBDEFBFBDEFBFBDEFBFBD4776EFBFBDD496EFBFBD1503EFBFBD215FEFBFBDD698EFBFBDEFBFBDEFBFBD042409277EEFBFBDEFBFBD2FEFBFBD29EFBFBD2140EFBFBD5AEFBFBDEFBFBD4125EFBFBD7954EFBFBD04EFBFBD73EFBFBDD6B3EFBFBDEFBFBDEFBFBDEFBFBD1B0644EFBFBDEFBFBDCA87EFBFBDD9A2EFBFBDEFBFBDCCA1EFBFBDEFBFBD6954EFBFBD, '1992-09-05 12:00:00.000000', '2015-01-30 00:00:00.000000', '2020-03-09 23:45:15.402009', 'NA', 'i will git gud', 'N7 John'),
-	(2, 'iloveeirika6969@gmail.com', 'iloveeirika6969', _binary 0xEFBFBDEFBFBD55D1B022EFBFBD227BEFBFBDEFBFBD09EFBFBDEFBFBD2F2A3DEFBFBD7D38EFBFBD6B7C30C98BEFBFBD385718EFBFBD6AEFBFBD2659EFBFBDEFBFBDEFBFBD0F31EFBFBD56EFBFBDEFBFBDEFBFBD52EFBFBDEFBFBD50EFBFBDEFBFBDEFBFBDEFBFBD5FEFBFBD5B4A2EEFBFBD62EFBFBDEFBFBD0619, _binary 0x65643161626633303466383363333131663333626133663039333063346664393031353162356633323337396635363566343662323632633234313864376262623134383833336239653538316664346464626361613561373461656361613064363837363634363265666439303439393433306339316534646438666665636330353366373162643131396634383338386437633564373162323335653730393938663830376632613763356231336431316166623339353863343536656266663966346166396163363165356336366663356433626130303263636466303330633238653932386564306534363666353834626132336139616633393231, '1991-05-15 08:00:00.000000', '2015-05-15 00:00:00.000000', '2020-03-09 03:38:49.773197', 'M', 'eirika is my waifu\r\nhell yeah\r\npronouns\r\ngot 2000 orbs saved for Eirika', 'Ephriam'),
-	(3, NULL, 'pope', _binary 0xEFBFBD1816C789EFBFBDEFBFBD1AEFBFBDEFBFBD3C02EFBFBD6CEFBFBD6976EFBFBD304B04EFBFBDEFBFBD0913477755EFBFBDEFBFBD19EFBFBDEFBFBDEFBFBDEFBFBD4EEFBFBD65585EEFBFBD2AEFBFBDEFBFBD486062EFBFBDEFBFBDEFBFBD4213EFBFBDEFBFBD14EFBFBDEFBFBDEFBFBDEFBFBDEFBFBDEFBFBD7A, _binary 0x38363537383533626439366131386536393863653430393937356637353565323136326139313339386163373436326261393132366164616437303030313933373236373137663963616664323239663165356334633863636562646335313534326636663730346266663362316561636430346536613161323964306339393738303438363734346235313331626166326533313438303335306566633332623435386239386632306639366366336538303338666537626239323136376135633736376232636231636638643236646264396233363133373634366665393937396664386161646637323963643330663439633662633166613465663061, '1988-08-11 00:00:00.000000', '2016-10-29 00:00:00.000000', '2020-01-27 15:28:57.788798', 'M', 'My story is boy2bb404ed-089a-4614-802b-379afc98f1fd', 'Pope'),
-	(4, 'stonelover4141@gmail.com', 'stonelover4141', _binary 0xEFBFBD4BEFBFBDEFBFBD1AEFBFBDEFBFBDCC9A605541EFBFBDEFBFBD03EFBFBD4F245EEFBFBD717AEFBFBDEFBFBD65EFBFBD625C4D417CEFBFBDEFBFBD361350EFBFBD0175EFBFBDEFBFBDEFBFBD1FEFBFBDEFBFBD15EFBFBD74EFBFBDEFBFBD65EFBFBDEFBFBDEFBFBD3F6BEFBFBDEFBFBD02EFBFBDEFBFBD7603, _binary 0x39643935643036393466383634326137343538383537396138303232346537653432613135663534313438636230613136333564333933353437383932643435653562323164333261353239393837643166663232396631666434356139363336373937373736623839666135366165373736373262373633306634666334656135313364343231363361363361393235656133343966303438333164303633616430343564303035376138363135303463373762323261386366666534633537386439646432616365616630323766613937656364393266613938346631646438623538366464323037313764353964613834333361623933373832316162, '1997-10-02 09:00:00.000000', '2018-05-06 00:00:00.000000', '2020-02-24 19:02:35.225384', 'F', 'HAHA I LOVE STONES', 'Furzz'),
-	(5, NULL, 'mcmahon', _binary 0xEFBFBD1A791FEFBFBD573422060EEFBFBD06EFBFBDEFBFBD6DEFBFBDEFBFBDEFBFBDEFBFBDEFBFBD2D31EFBFBD653A16EFBFBDEFBFBDEFBFBDEF8D91EFBFBD32EFBFBDEFBFBDEFBFBD37EFBFBDEFBFBD604DDFBA02EFBFBD4F55EFBFBDEFBFBD28157F50EFBFBDEFBFBD17496404CC81EFBFBD35, _binary 0xEFBFBD6DEFBFBD66EFBFBD74EFBFBDEFBFBD29735946EFBFBD76EFBFBDEFBFBD641D375F592BEFBFBD5AC6947EEFBFBDEFBFBD5A56EFBFBDEFBFBDEFBFBDEFBFBD2966EFBFBD4EC49AEFBFBD652FEFBFBD6650EFBFBD3F5904EFBFBDEFBFBD512DEFBFBDEFBFBDEFBFBDEFBFBDEFBFBDEFBFBD5EEFBFBDEFBFBD5FEFBFBD12EFBFBDEFBFBDEFBFBDEFBFBDEFBFBD1903EFBFBDEFBFBDD990EFBFBDEFBFBDEFBFBD70EFBFBDEFBFBD4615EFBFBD0B7C24CBB5EFBFBD0EEFBFBD7B1379EFBFBDEFBFBD53EFBFBDD7BBEFBFBDEFBFBDEFBFBD4EEFBFBD24EFBFBDEFBFBD6B0568EFBFBD08EFBFBDEFBFBD4530EFBFBD37EFBFBD6D28EFBFBD74, '1988-11-05 00:00:00.000000', '2019-09-27 00:00:00.000000', '2020-01-27 15:37:02.196475', 'M', 'YESSSSSSSSSSS!!!!!!!\r\nSHOW YOUR MOVES', 'Mcmahon'),
-	(6, NULL, 'lisa', _binary 0x0B32EFBFBDEFBFBDEFBFBD08EFBFBD17EFBFBD7AEFBFBDEFBFBD3AEFBFBDEFBFBD2FEFBFBDEFBFBD76EFBFBDEFBFBDEFBFBDEFBFBDEFBFBD45EFBFBDEFBFBD50EFBFBD7D0EEFBFBD42EFBFBDEFBFBD3337EFBFBD07EFBFBD0D0A395FC4A8EFBFBD3FEFBFBD1912EFBFBDCAB541EFBFBDEFBFBD2C7D6BEFBFBDEFBFBDEFBFBD42, _binary 0x64633734346239386432316536373363373638303963353432376538643932653033303637623631323938376439663835656432316231343163323835626236363365623239306364353063393836336361336265613039626265333236323632316266623133626131356135353638336232336263353433633931346134663061623130336365663065373034303033646430353564386437383733366337396230383936653937323632303436623238376136393436666466653261336639373432356561373031643363386539383236313038383238633134653361343264646561343130643463616336303063616531333039373739346161313061, '1990-06-19 00:00:00.000000', '2014-02-20 00:00:00.000000', '2020-01-27 15:39:19.188585', 'F', 'I love gerbils', 'Lisa'),
-	(7, NULL, 'lana', _binary 0x06697DEFBFBD25EFBFBD7718EFBFBD2F0401DA8D3AEFBFBD34EFBFBD2F1CEFBFBD7F3EEFBFBD44EFBFBD5BEFBFBD1CEFBFBD52EFBFBD39EFBFBDEFBFBDEFBFBD5BEFBFBD75DD8CEFBFBD2C47EFBFBD0B082AEFBFBDEFBFBDEFBFBDEFBFBDEFBFBDEFBFBDEFBFBDEFBFBD7854EFBFBDEFBFBD3FEFBFBD300E, _binary 0x31646533613035623733363736626538316332653764613335666161323562336139336162646366316439626662353463396339663966353236656662356233633832666238333261313561353432303265663334363463363036616339666330323033666262303466646230613236626339353433316337356266363762303362353537313263633137373066326535636634613932313631303336393764333363333835333161373135386537356331363564316264363130303435303266323530366237366231613437363835313030666335623833636365353737633262333238363866313838643534326234373462366330393334323563663861, '1989-06-07 00:00:00.000000', '2015-07-07 00:00:00.000000', '2015-07-07 00:00:00.000000', 'F', 'My story is girlbc3bf092-d53b-4e05-bc48-4171dd6757f5', 'Lana'),
-	(8, NULL, 'danielle', _binary 0x3561383034633762666337393061383864303937383339643736303630373831663535363030353765653131313763323261626461663336343664346666316331323466396165303362363263383130346466336338326364623631373961623334313439383430323835383766626334353838666164396135636666333135, _binary 0x70EFBFBD0F04EFBFBD1F24EFBFBD455259D8BEEFBFBD28EFBFBDEFBFBD5F0EEFBFBDEFBFBDCD87EFBFBD54EFBFBD68EFBFBDEFBFBD4527194DEFBFBDCEAE1DEFBFBD354DEFBFBD1DEFBFBDEFBFBDEFBFBDEFBFBD15EFBFBD59EFBFBD33EFBFBD5419EFBFBDEFBFBD4A6DEFBFBDEFBFBDC29EEFBFBDEFBFBD6A75EFBFBD043751D3BA6A1DEFBFBD3339EFBFBD422CEFBFBD20EFBFBDEFBFBD61EFBFBDEFBFBD73EFBFBDEFBFBD13EFBFBDEFBFBD32EFBFBD6BEFBFBD2E63EFBFBD1FEFBFBDEFBFBDEFBFBDEFBFBDEFBFBDEFBFBD57EFBFBD087AEFBFBDEFBFBD25EFBFBD37EFBFBD1DC6843828EFBFBD76EFBFBDEFBFBD38EFBFBD, '1990-05-15 00:00:00.000000', '2014-01-18 00:00:00.000000', '2014-01-18 00:00:00.000000', 'F', 'My story is girle7fd7605-a151-49d8-abf4-4b71fafc50c3', 'Danielle'),
-	(9, NULL, 'elinor', _binary 0x3230373231376565373562393866623866626530626638386365343037303464613862303233353334646538363336333566346134353936656139383030303237386137333436353862343432633539653534353830343365313262643563386566613534376262333339336235316132656332653432363266386432383135, _binary 0x04D79A564418EFBFBD5606EFBFBDEFBFBDEFBFBDEFBFBD66EFBFBDEFBFBD7BEFBFBDEFBFBD6FEFBFBDEFBFBD7CEFBFBD1643D3B4EFBFBDEFBFBDEFBFBDEFBFBD39EFBFBDEFBFBDEFBFBD50EFBFBD6002EFBFBD77EFBFBD3CEFBFBD3142EFBFBD2838EFBFBD197EEFBFBDEFBFBDD99B3C3D39EFBFBD51EFBFBD5551EFBFBD2AEFBFBD3747EFBFBD24EFBFBD2EEFBFBDEFBFBDEFBFBDEFBFBD68EFBFBD276C3C0947EFBFBDEFBFBD7536062C055BEFBFBDEFBFBDEFBFBD3D3667EFBFBDEFBFBD3BEFBFBD0918EFBFBDEFBFBDEFBFBDEFBFBD5AEFBFBDEFBFBD26EFBFBD5B21EFBFBDEFBFBDEFBFBDD0BF5265EFBFBD1FEFBFBD, '1987-04-01 00:00:00.000000', '2016-03-31 00:00:00.000000', '2016-03-31 00:00:00.000000', 'F', 'My story is girl0e31d38f-7722-43af-8635-beca6194bd2a', 'Elinor'),
-	(11, NULL, 'blackjack', _binary 0xC485EFBFBDD4AAEFBFBD6E4BEFBFBD70EFBFBDEFBFBD094E042CEFBFBDEFBFBDEFBFBD0D0A16EFBFBDEFBFBDEFBFBDEFBFBD0CEFBFBD432EEFBFBDEFBFBDEFBFBD59EFBFBDEFBFBDEFBFBD3A160FEFBFBDEFBFBD55701CEFBFBD0D0A2864EFBFBD76EFBFBDEFBFBD587DEFBFBDEFBFBDEFBFBD504AEFBFBD31EFBFBD74, _binary 0xEFBFBDEFBFBDEFBFBD58EFBFBDEFBFBD7FEFBFBD1C60EFBFBDEFBFBD623F1D5DEFBFBD7F5A4EEFBFBDEFBFBD50325BEFBFBD7906520956EFBFBD523DD8ACEFBFBDEFBFBDEFBFBDEFBFBD2FEFBFBDC69D036950EFBFBD51EFBFBD1AEFBFBD6E2DEFBFBDEFBFBD3FEFBFBD6AEFBFBDEFBFBD72EFBFBDEFBFBDEFBFBD737D64EFBFBDEFBFBD43EFBFBD241D07EFBFBD74EFBFBD7D41340D0AEFBFBDEFBFBD3EEFBFBD6BEFBFBDEFBFBD65EFBFBD2DEFBFBD4FEFBFBD1DEFBFBDEFBFBD1F49EFBFBDEFBFBD76752A53EFBFBD73EFBFBD2E72EFBFBDEFBFBD7E61EFBFBD6CEFBFBD71EFBFBDEFBFBDEFBFBD4256EFBFBD2B421F, '0001-01-01 00:00:00.000000', '2020-01-27 01:48:48.023685', '2020-01-27 05:08:34.914834', 'F', 'epic story of blackjack', 'Black of Jack'),
-	(12, NULL, 'cmdrshepard', _binary 0x385055EFBFBDEFBFBD63EFBFBDEFBFBD37EFBFBDEFBFBDEFBFBD6A4A65EFBFBD79565FEFBFBD4B6D7FEFBFBD20C8A0EFBFBD1A76EFBFBDEFBFBDC4A5624415EFBFBD551FEFBFBD5619EFBFBDEFBFBDEFBFBDEFBFBDEFBFBD07C58CC2B6EFBFBD511CEFBFBD3904EFBFBD2E2926EFBFBD, _binary 0x31393030643466326439663366656565343032303665373133343532333864383561303235613630623963633030306261643036653330373362353766316438663466356332386439373836633137353636663231663762393833623364326634333031313164373233363762636463323630366236653662366239623630636336646365373531343831396366323634643365346364313437383231353634373765383834633138383035636162306135306134653439373837653864626438336635316336383566353337323133623361393434653531313164343338323362346333656531613331353130656339386638663362626465633239353162, '0001-01-01 00:00:00.000000', '2020-01-27 15:25:47.304905', '2020-01-27 15:38:05.799035', 'M', 'I\'m Commander Shepard, and this is my favorite website on the Citadel.', 'Commander Shepard'),
-	(13, 'japjap@gmail.com', 'amisueki', _binary 0x10EFBFBDC288EFBFBDEFBFBDEFBFBD4E18EFBFBD683BEFBFBD01EFBFBD3F39EFBFBD04EFBFBDC5A5E891A2EFBFBD1CEFBFBDEFBFBDEFBFBD45084CEFBFBD33230133EFBFBD08EFBFBDEFBFBDEFBFBD7C5AEFBFBDEFBFBDEFBFBD7A6E4CEFBFBD146A75EFBFBD1C73EFBFBD2441EFBFBDEFBFBDEFBFBD, _binary 0x61383663666136653866393939663634643535373431623962393735303838303662366634366563343831313362633437366634616364363138303061363261343939356631626537633861383034376135646638646263326431353635656563666263393562636134636532393333393535323836643666303630663937353731376637386131386239336265343233636531633338376466386164343632333734323864353364383463323663333534633763643066306133366635343137363530633362643063336635336363386462643363323137646463356331323231643365306633383862356230663264323636623964646538666464343737, '1995-01-08 05:00:00.000000', '2020-01-29 02:22:48.568834', '2020-02-18 10:03:29.332176', 'F', 'amisueki', 'Ami-chan'),
-	(14, 'kimgears3@gmail.com', 'foofoo', _binary 0xEFBFBDEFBFBDEFBFBDEFBFBDEFBFBD063CEFBFBDEFBFBD2B25EFBFBD2771EFBFBD28EFBFBDEFBFBDEFBFBDEFBFBD2573EFBFBDEFBFBD74EFBFBDEFBFBDEFBFBD59EFBFBD0E08C29C1CEFBFBDEFBFBDEFBFBD43EFBFBDEFBFBDEFBFBDEFBFBD12EFBFBD74EFBFBDEFBFBDEFBFBD3CEFBFBDEFBFBD7973256F544133EFBFBD6B2173EFBFBD, _binary 0x64343632316532323762643364356332336331383762643365383633623633373030393832636535646262333362343064396161393336343862653537363334383232336339663663306131333364353137333032353832343735663734363938316335643932323635623561323131633165646636646431636233643466313861393835653336383266393438393635396661633665626332653633646530393933623430643038386132383966306435663231626636643339346330366561396630343835376539656462303432333737616135653563643431306137663261303761623535376130623765386334666637306236623835306166653133, '2020-01-07 08:25:28.000000', '2020-01-29 03:36:39.965092', '2020-01-29 03:36:40.262467', 'F', 'foofoo', 'foofoo');
+INSERT INTO `users` (`Id`, `Email`, `Username`, `PasswordHash`, `PasswordSalt`, `Birthday`, `AccountCreated`, `LastLogin`, `Gender`, `AboutMe`, `Alias`) VALUES
+	(1, 'kimgears2@gmail.com', 'n7cmdrjohn', _binary 0x990989EA10429A4056FCD09474FEC68C82373781BE51EF899625CD4ACF09E3445655CDE5963C8447753B865B5DA5912682657D1A2818A8B7DB0420B35E6CB2A3, _binary 0xCA41AF561617B146B03D04FB987A681EEE08A262FD707CB2659F8D066E24B31BFCD128A01456A16A05EF58A2ACB45709C880F328CE8BC9CE6EBBDCB1166832B1515D2E931E7F8CA9F0F54F909498E990A1CAA9A4A70338E0BEDEB20A0B45130737CDACDB2EBD7C0A6B7DD2998561413CE0EA9E51365ED17AF9271D060161127A, '1992-09-05 16:00:00.000000', '2015-01-30 00:00:00.000000', '2020-03-10 01:27:07.458303', 'NA', 'i will git gud', 'N7 John'),
+	(2, 'iloveeirika6969@gmail.com', 'iloveeirika6969', _binary 0x88AA267B8F6C6100C5743AB488CD3791E0BBC313EE825AE5DC3A8422166866016D944898B679FAD2155E8F28B7CEE436B2FE90E2B2A8F7D5AE7C487397AE2D1D, _binary 0x485ED4FE753FEEF6B44B9E43A99BAD49ABA23416683E41076DF5AC71B5063DF20C79F1A28913B8BBAB077025174C9351AA84A54269C060E8CF855CA0A07944AA8307BC930271EA59EAFF99214F02FE695D80387577F431EE7E0E6EF1FC47D531051BC489BC9675C8164B9C2313EB92687F3AE01B560BE33B1E4B4D6FEA716025, '1991-05-15 08:00:00.000000', '2015-05-15 00:00:00.000000', '2020-03-10 01:23:34.263320', 'M', 'eirika is my waifu\r\nhell yeah\r\npronouns\r\ngot 2000 orbs saved for Eirika', 'Ephriam'),
+	(3, 'kimgears3@gmail.com', 'n7cmdrjohn3', _binary 0x8A947D8F30796FCBE4A553A224B6D2054DA9A9E730248C3E7F67BFB2732176A3C9CB6C08D84DDA47AADBFE1AA06FAF7E8563FC0FC7E9F3B3A1A0DBF8292C8EEC, _binary 0xEC214667A76789D1282EF96B9C7D9C3BB4CFA89DAC8544B2CEC398D708A816B2A82876797DF19EDCDDEF8A0B8B5D32878CD2A9BF83FB4D7AA9E29BEC0F2F7459DFC9BDD0DD41DE01B4E57DC9C58762CCEC40669F4C559490F0F6827250C6284B9FB770DD006C355BA9CE8A24DD70E5579B3FEACF12619849A446803BDB610985, '1992-09-05 00:00:00.000000', '2015-01-30 00:00:00.000000', '2020-03-10 02:15:25.547409', 'NA', 'I am best pro\nand i will git gud', 'N7 John'),
+	(4, 'stonelover4141@gmail.com', 'stonelover4141', _binary 0x550F2B2D5413B4744B817A73AF2748D2B6C38C5F82EEB7708622EC4FE26DE512AB98F529B9DADC0BC30B3D98502EAC2815CF9AC7FD951BB4B28C428119E1FE15, _binary 0x32388E5678AE0DFC42B07728B4B2B91DAA9A476F7D628B1BC1957AF37920BAF77DB1ABCFE15310B8B19728E7328F2961E7CA78B6EBA37E78BE610B5DA22AA6FADB01D4A9682715D6C7F0FC4E7814D217D6911DC996A8EB6958C3BB99F02B1A1617DEAB3BFA7F5EDBD3C9C302DEA60466E844324631AFBAE886E29501E7E96397, '1997-10-02 09:00:00.000000', '2018-05-06 00:00:00.000000', '2020-03-10 01:23:17.695540', 'F', 'HAHA I LOVE STONES', 'Furzz'),
+	(11, 'blackjack@gmail.com', 'blackjack', _binary 0xB2F9D5CAF7A7FCEF3D652E5EF9F5CEAD19BD0117010646D872F459C88DC018002DB034A6C7F86B3D0726BE55C41F1B87FAF086A50374006040FFF9BADAFA2200, _binary 0xA97EB849D4320E07D00400D1DB6B8565A61FC1FFA535EEF663165C67C8910BFB0B3EF93DF8CFF6303013A986D0A7A208CBEA4F9802C283F516CC887AA20EC110E748EDEB497098B3A0EE2552AD1C752C32F2796BACABCCF6591EAB9BBC694CA2F08499038AFE686CC6282A73BFC42DE9A14C58C7DC78383673BE1F99D5C87392, '0001-01-01 00:00:00.000000', '2020-01-27 01:48:48.023685', '2020-03-10 01:25:14.795114', 'F', 'epic story of blackjack', 'Black of Jack'),
+	(12, 'cmdrshepard@gmail.com', 'cmdrshepard', _binary 0x5801D7C49F9C298F7930EF82E5B3F48CF6636DDE338799348E1371F3764C7A15BFCD30E1A4D09EBAB450BDF47D0A8E568C9358F74FCE51B57A5B7A8E120A269F, _binary 0x99B5FB4C79ECE90C0A2EF4C9BEF46663160161D447E6D5DDC60D0E8D462AFB44C86B1F4B6FA45F2AE58D4CE7B77348ED075A0E4D507ACDE1AA9D1D81575141BB3A9C692685F7C9422409C9F87832BDBC755E73C6DD5D3A3309EC42EDCEB83F64638EB9601E3B7E421E8F26FB02A4DFCA4A36FF605F3B7641B58DCAEC6632DBA7, '0001-01-01 00:00:00.000000', '2020-01-27 15:25:47.304905', '2020-03-10 01:25:32.526111', 'M', 'I\'m Commander Shepard, and this is my favorite website on the Citadel.', 'Commander Shepard');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 
--- Dumping structure for table fewebsite.__efmigrationshistory
-DROP TABLE IF EXISTS `__efmigrationshistory`;
-CREATE TABLE IF NOT EXISTS `__efmigrationshistory` (
-  `MigrationId` varchar(95) NOT NULL,
-  `ProductVersion` varchar(32) NOT NULL,
-  PRIMARY KEY (`MigrationId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- Dumping data for table fewebsite.__efmigrationshistory: ~2 rows (approximately)
+-- Dumping data for table dev_fewebsite.__efmigrationshistory: ~2 rows (approximately)
+DELETE FROM `__efmigrationshistory`;
 /*!40000 ALTER TABLE `__efmigrationshistory` DISABLE KEYS */;
-REPLACE INTO `__efmigrationshistory` (`MigrationId`, `ProductVersion`) VALUES
+INSERT INTO `__efmigrationshistory` (`MigrationId`, `ProductVersion`) VALUES
 	('20200309194714_MySqlInit', '3.1.0'),
 	('20200309202525_PopulateLookupTables', '3.1.0');
 /*!40000 ALTER TABLE `__efmigrationshistory` ENABLE KEYS */;
