@@ -169,8 +169,7 @@ namespace FEWebsite.API.Controllers
 
             if (message.RecipientId != userId)
             {
-                return this.Unauthorized(new StatusCodeResultReturnObject(this.Unauthorized(),
-                    "Senders cannot mark recipient messages as read."));
+                return this.Unauthorized("Senders cannot mark recipient messages as read.");
             }
 
             message.IsRead = true;

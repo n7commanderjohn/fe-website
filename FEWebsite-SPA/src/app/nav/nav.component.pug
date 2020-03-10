@@ -1,6 +1,6 @@
 nav.navbar.navbar-expand-md.navbar-dark.bg-primary
   .container
-    a.navbar-brand([routerLink]="['/home']") Fire Emblem Network (WIP)
+    a.navbar-brand.cloister-black([routerLink]="['/home']") Fire Emblem Network (WIP)
     ul.navbar-nav.mr-auto(*ngIf="isLoggedIn();")
       li.nav-item(routerLinkActive="active")
         a.nav-link([routerLink]="['/users']") Users 
@@ -10,7 +10,7 @@ nav.navbar.navbar-expand-md.navbar-dark.bg-primary
       li.nav-item(routerLinkActive="active")
         a.nav-link([routerLink]="['/messages']") Messages
       li.nav-item.dropdown(dropdown, routerLinkActive="active")
-        a.nav-link.dropdown-toggle(dropdownToggle) Games
+        a.nav-link.dropdown-toggle(dropdownToggle) Games (WIP)
         .dropdown-menu('*dropdownMenu')
           div(*ngFor="let num of nums")
             a.nav-link.dropdown-item([routerLink]="['games/FE' + num]") FE{{num}}
@@ -31,5 +31,9 @@ nav.navbar.navbar-expand-md.navbar-dark.bg-primary
       input.form-control.mr-sm-2(required type='text' name='username' placeholder='Username', [(ngModel)]="loginCredentials.username")
       input.form-control.mr-sm-2(required type='password' name='password' placeholder='Password', [(ngModel)]="loginCredentials.password")
       .btn-group.d-flex
-        button.btn.btn-info.my-2.my-sm-0(type='submit', [disabled]="!loginForm.valid") Login
-        button.btn.btn-info.my-2.my-sm-0(type='button', (click)="enterResetPasswordMode();") Reset Password
+        button.btn.btn-info.my-2.my-sm-0(type='submit', [disabled]="!loginForm.valid")
+          i.fas.fa-sign-in-alt
+          | &nbsp;Login
+        button.btn.btn-info.my-2.my-sm-0(type='button', (click)="enterResetPasswordMode();")
+          i.fas.fa-unlock-alt
+          | &nbsp;Reset Password

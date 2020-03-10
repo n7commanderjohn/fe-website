@@ -1,9 +1,11 @@
 using System;
 using System.ComponentModel;
 using System.Security.Claims;
+
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -28,7 +30,8 @@ namespace FEWebsite.API.Helpers
             int currentPage, int pageSize, int totalCount, int totalPages)
         {
             var pHeader = new PaginationHeader(currentPage, pageSize, totalCount, totalPages);
-            var camelCaseFormatter = new JsonSerializerSettings(){
+            var camelCaseFormatter = new JsonSerializerSettings()
+            {
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             };
             response.Headers.Add("Pagination", JsonConvert.SerializeObject(pHeader, camelCaseFormatter));
@@ -59,7 +62,8 @@ namespace FEWebsite.API.Helpers
             return config.GetSection("AppSettings:Token").Value;
         }
 
-        public static int GetUserIdFromClaim(this ControllerBase controllerBase) {
+        public static int GetUserIdFromClaim(this ControllerBase controllerBase)
+        {
             return int.Parse(controllerBase.User.FindFirst(ClaimTypes.NameIdentifier).Value);
         }
 
@@ -68,8 +72,7 @@ namespace FEWebsite.API.Helpers
         {
             if (userId != controllerBase.GetUserIdFromClaim())
             {
-                return controllerBase.Unauthorized(new StatusCodeResultReturnObject(
-                    controllerBase.Unauthorized(), unauthorizedMsg));
+                return controllerBase.Unauthorized(unauthorizedMsg);
             }
             else
             {
@@ -79,7 +82,7 @@ namespace FEWebsite.API.Helpers
 
         public static string ToDescriptionString(this Enum enumVal)
         {
-            DescriptionAttribute[] attributes = (DescriptionAttribute[])enumVal
+            DescriptionAttribute[] attributes = (DescriptionAttribute[]) enumVal
                 .GetType()
                 .GetField(enumVal.ToString())
                 .GetCustomAttributes(typeof(DescriptionAttribute), false);

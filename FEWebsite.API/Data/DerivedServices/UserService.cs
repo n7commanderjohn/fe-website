@@ -1,16 +1,17 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Collections.Generic;
 using System.Threading.Tasks;
+
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 
 using FEWebsite.API.Data.BaseServices;
-using FEWebsite.API.Models;
 using FEWebsite.API.DTOs.UserDTOs;
 using FEWebsite.API.Helpers;
+using FEWebsite.API.Models;
 using FEWebsite.API.Models.ManyToManyModels.ComboModels;
-using Microsoft.EntityFrameworkCore.Query;
 
 namespace FEWebsite.API.Data.DerivedServices
 {
@@ -35,7 +36,7 @@ namespace FEWebsite.API.Data.DerivedServices
 
         public async Task<User> GetUser(int userId)
         {
-            var user = await this.DefaultUserIncludes(expandedInclude: true)
+            var user = await this.Context.Users
                 .SingleOrDefaultAsync(UserIdMatches(userId))
                 .ConfigureAwait(false);
 
@@ -73,7 +74,7 @@ namespace FEWebsite.API.Data.DerivedServices
 
             async Task<IQueryable<User>> GetUsersFromContext(UserParams userParams)
             {
-                var users = this.DefaultUserIncludes()
+                var users = this.Context.Users
                     .Where(NotUserIdMatches(userParams));
 
                 if (!string.IsNullOrEmpty(userParams.GenderId))
@@ -139,7 +140,7 @@ namespace FEWebsite.API.Data.DerivedServices
         private async Task<IEnumerable<int>> GetUserLikes(UserParams userParams)
         {
             var userId = userParams.UserId;
-            var user = await this.UserIncludesLikes()
+            var user = await this.Context.Users
                 .FirstOrDefaultAsync(u => u.Id == userId)
                 .ConfigureAwait(false);
 
@@ -168,7 +169,7 @@ namespace FEWebsite.API.Data.DerivedServices
 
         public async Task<Photo> GetPhoto(int photoId)
         {
-            var photo = await Context.Photos
+            var photo = await this.Context.Photos
                 .FirstOrDefaultAsync(PhotoIdMatches(photoId))
                 .ConfigureAwait(false);
 
@@ -180,7 +181,8 @@ namespace FEWebsite.API.Data.DerivedServices
             }
         }
 
-        private IQueryable<User> DefaultUserIncludes(bool expandedInclude = false) {
+        private IQueryable<User> DefaultUserIncludes(bool expandedInclude = false)
+        {
             if (expandedInclude)
             {
                 return this.Context.Users
@@ -202,7 +204,8 @@ namespace FEWebsite.API.Data.DerivedServices
             }
         }
 
-        private IQueryable<User> UserIncludesLikes() {
+        private IQueryable<User> UserIncludesLikes()
+        {
             return this.Context.Users
                 .Include(u => u.Likers)
                 .Include(u => u.Likees);
@@ -217,7 +220,7 @@ namespace FEWebsite.API.Data.DerivedServices
 
         public async Task<Photo> GetCurrentMainPhotoForUser(int userId)
         {
-            return await Context.Photos
+            return await this.Context.Photos
                 .FirstOrDefaultAsync(UserIdMatchesAndPhotoIsMain(userId))
                 .ConfigureAwait(false);
 
@@ -227,11 +230,16 @@ namespace FEWebsite.API.Data.DerivedServices
             }
         }
 
-        public async void SetUserPhotoAsMain(int userId, Photo photoToBeSet)
+        public async Task<Photo> SetUserPhotoAsMain(int userId, Photo photoToBeSet)
         {
             var currentMainPhoto = await this.GetCurrentMainPhotoForUser(userId).ConfigureAwait(false);
-            currentMainPhoto.IsMain = false;
+            if (currentMainPhoto != null)
+            {
+                currentMainPhoto.IsMain = false;
+            }
             photoToBeSet.IsMain = true;
+
+            return photoToBeSet;
         }
 
         public async Task<UserLike> GetLike(int userId, int recipientId)
@@ -270,14 +278,15 @@ namespace FEWebsite.API.Data.DerivedServices
 
         public async Task<PagedList<UserMessage>> GetMessagesForUser(MessageParams messageParams)
         {
-            var messages = this.DefaultUserMessagesIncludes()
+            var messages = this.Context.UserMessages
                 .AsQueryable();
 
             Expression<Func<UserMessage, bool>> IsUnreadRecipientMessageAndNotDeleted =
                 um => um.RecipientId == messageParams.UserId && !um.IsRead && !um.RecipientDeleted;
             Expression<Func<UserMessage, bool>> IsRecipientMessageAndNotDeleted = um => um.RecipientId == messageParams.UserId && !um.RecipientDeleted;
             Expression<Func<UserMessage, bool>> IsSenderMessageAndNotDeleted = um => um.SenderId == messageParams.UserId && !um.SenderDeleted;
-            messages = messageParams.MessageContainer switch
+            messages = messageParams.MessageContainer
+            switch
             {
                 MessageContainerArgs.Unread => messages.Where(IsUnreadRecipientMessageAndNotDeleted),
                 MessageContainerArgs.Inbox => messages.Where(IsRecipientMessageAndNotDeleted),
@@ -313,7 +322,7 @@ namespace FEWebsite.API.Data.DerivedServices
 
             IQueryable<UserMessage> GetUserMessageThread(int userId, int recipientId)
             {
-                return this.DefaultUserMessagesIncludes()
+                return this.Context.UserMessages
                     .Where(um => (um.RecipientId == userId && !um.RecipientDeleted && um.SenderId == recipientId)
                         || (um.RecipientId == recipientId && !um.SenderDeleted && um.SenderId == userId));
             }

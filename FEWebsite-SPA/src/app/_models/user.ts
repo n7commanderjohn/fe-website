@@ -11,7 +11,7 @@ export interface User extends BaseModel {
     gender: string;
     birthday: Date;
     accountCreated: Date;
-    lastLogin: Date;
+    lastLogin: Date | any;
     photoUrl: string;
     photos: Photo[];
     listOfGames?: string[];

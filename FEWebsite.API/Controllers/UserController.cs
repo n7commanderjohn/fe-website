@@ -153,7 +153,7 @@ namespace FEWebsite.API.Controllers
             }
             else
             {
-                return this.Unauthorized(new StatusCodeResultReturnObject(
+                return this.BadRequest(new StatusCodeResultReturnObject(
                     this.Unauthorized(), "The provided password does not match."));
             }
         }
@@ -176,7 +176,7 @@ namespace FEWebsite.API.Controllers
                 //     = new StatusCodeResultReturnObject(this.BadRequest(), "You already like this user.");
                 // return this.BadRequest(returnObj);
                 this.UserService.Delete(like); // should untoggle the like by removing it from the Likes table.
-                likeStatusMessage = $"Like removed from {recipient.Name}.";
+                likeStatusMessage = $"You have stopped following {recipient.Name}.";
             }
             else
             {
@@ -186,7 +186,7 @@ namespace FEWebsite.API.Controllers
                     LikeeId = recipientId,
                 };
                 this.UserService.Add(like);
-                likeStatusMessage = $"Like added to {recipient.Name}.";
+                likeStatusMessage = $"You have started following {recipient.Name}.";
             }
 
             var userRecordsSaved = await this.UserService.SaveAll().ConfigureAwait(false);
@@ -198,7 +198,7 @@ namespace FEWebsite.API.Controllers
             else
             {
                 return this.BadRequest(new StatusCodeResultReturnObject(
-                    this.BadRequest(), "Failed to update the Like status."));
+                    this.BadRequest(), "Failed to update their follow status."));
             }
         }
     }

@@ -1,119 +1,125 @@
 .container.mt-4
-  .row
-    .col-sm-3
-      h1 Your Profile 
-        span(*ngIf="debug") (Reactive)
-    .col-sm-9
-      div(*ngIf="debug")
-        p Form Value: {{userEditForm.value | json}}
-        p Form Status: {{userEditForm.status | json}}
-      .alert.alert-info(*ngIf="userEditForm.dirty")
-        strong Information:&nbsp;
-        | You have made changes. Any unsaved changes will lost!
-  .row
-    .col-sm-3
-      .card
-        img.card-img-top.img-thumbnail(src="{{photoUrl || '../../../assets/defaultUser.png'}}" alt="{{user.name}}")
-        .card-body
-          div
-            strong Age:
-            p {{user.age}}
-          div
-            strong Last Active:
-            p {{user.lastLogin | timeAgo}}
-          div
-            strong User Since:
-            p {{user.accountCreated | date:'MMMM d, y'}}
-        .card-footer
-          .btn-group.d-flex
-            button.btn.btn-success.w-100([disabled]="!userEditForm.dirty || !userEditForm.valid", form="userEditForm") Save
-            button.btn.btn-primary.w-100([disabled]="!userEditForm.dirty", (click)="resetForm(initialFormState);") Cancel
-    .col-sm-9
-      .tab-panel
-        tabset.user-tabset
-          tab(heading="Edit Profile")
-            .container
-              form([formGroup]="userEditForm", (ngSubmit)="updateUser();", id="userEditForm")
-                .row
-                  .form-group.col-sm
-                    h4 Your Display Name
-                    input.form-control(formControlName='{{fs.name}}', type='text', placeholder='Display Name',
-                      [ngClass]="{'is-invalid': fgvm.name.hasErrors(userEditForm)}")
-                    .invalid-feedback Please enter a Display Name.
-                  .form-group.col-sm
-                    h4 Your Username
-                    input.form-control(formControlName='{{fs.username}}', type='text', placeholder='Username',
-                      [ngClass]="{'is-invalid': fgvm.username.hasErrors(userEditForm)}")
-                    .invalid-feedback Please enter a username.
-                  .form-group.col-sm
-                    h4 Your Email
-                    input.form-control(formControlName='{{fs.email}}', type='text', placeholder='Email',
-                      [ngClass]="{'is-invalid': fgvm.email.hasErrors(userEditForm)}")
-                    .invalid-feedback Please enter a email.
-                .row
-                  .form-group.col-sm-7
-                    .row.form-inline
-                      h4.col-sm Current Password
-                      .col-sm(*ngIf="!passwordChangeMode")
-                        button.btn.btn-primary((click)="passwordChangeToggle()") Change Password
-                    input.form-control(formControlName='{{fs.passwordCurrent}}', type='password', placeholder='Current Password',
-                      [ngClass]="{'is-invalid': fgvm.passwordCurrent.hasErrors(userEditForm)}")
-                    .invalid-feedback(*ngIf="fgvm.passwordCurrent.requiredForUserName(userEditForm)") Current password is required for Username Change.
-                    .invalid-feedback(*ngIf="fgvm.passwordCurrent.requiredForEmail(userEditForm)") Current password is required for Email change.
-                    .invalid-feedback(*ngIf="fgvm.passwordCurrent.requiredForPasswordChange(userEditForm)") Current Password is required for Password change.
-                div(*ngIf="passwordChangeMode")
+  .jumbotron.transparent-bg.px-2
+    .row
+      .col
+        div(*ngIf="debug")
+          p Form Value: {{userEditForm.value | json}}
+          p Form Status: {{userEditForm.status | json}}
+        .alert.alert-info(*ngIf="userEditForm.dirty")
+          strong Information:&nbsp;
+          | You have made changes. Any unsaved changes will lost!
+    .row
+      .col
+        h1 Here are your awesome details!
+          span(*ngIf="debug") (Reactive)
+    .row
+      .col-sm-3
+        .card
+          img.card-img-top.img-thumbnail(src="{{photoUrl || '../../../assets/defaultUser.png'}}" alt="{{user.name}}")
+          .card-body
+            div
+              strong Age:
+              p {{user.age}}
+            div
+              strong Last Active:
+              p {{user.lastLogin | timeAgo}}
+            div
+              strong User Since:
+              p {{user.accountCreated | date:'MMMM d, y'}}
+          .card-footer
+            .btn-group.d-flex
+              button.btn.btn-success.w-100([disabled]="!userEditForm.dirty || !userEditForm.valid", form="userEditForm")
+                i.fas.fa-save
+                | &nbsp;Save
+              button.btn.btn-primary.w-100([disabled]="!userEditForm.dirty", (click)="resetForm(initialFormState);")
+                i.fas.fa-ban
+                | &nbsp;Cancel
+      .col-sm-9
+        .tab-panel
+          tabset.user-tabset
+            tab(heading="Edit Profile")
+              .container
+                form([formGroup]="userEditForm", (ngSubmit)="updateUser();", id="userEditForm")
                   .row
                     .form-group.col-sm
-                      h4 New Password
-                      input.form-control(formControlName='{{fs.password}}', type='password', placeholder='New Password',
-                        [ngClass]="{'is-invalid': fgvm.password.hasErrors(userEditForm)}")
-                      .invalid-feedback(*ngIf="fgvm.password.passwordNewRequired(userEditForm)") New Password is required.
-                      .invalid-feedback(*ngIf="fgvm.password.minLength(userEditForm)") Password must be at least 8 characters.
-                      .invalid-feedback(*ngIf="fgvm.password.maxLength(userEditForm)") Password can't excced 16 characters.
+                      h4 Your Display Name
+                      input.form-control(formControlName='{{fs.name}}', type='text', placeholder='Display Name',
+                        [ngClass]="{'is-invalid': fgvm.name.hasErrors(userEditForm)}")
+                      .invalid-feedback Please enter a Display Name.
                     .form-group.col-sm
-                      h4 Confirm New Password
-                      input.form-control(formControlName='{{fs.passwordConfirm}}', type='password', placeholder='Confirm New Password',
-                        [ngClass]="{'is-invalid': fgvm.passwordConfirm.hasErrors(userEditForm)}")
-                      .invalid-feedback(*ngIf="fgvm.passwordConfirm.confirmationPasswordMatches(userEditForm)") Confirmation password does not match.
-                  .form-group.text-center
-                    button.btn.btn-primary((click)="passwordChangeToggle()") Cancel Password Change
-                .form-group
-                  h4 Your Story
-                  textarea.form-control(formControlName='{{fs.description}}' rows="6", placeholder='Your story...')
-                .row
-                  .form-group.col-sm
-                    h4 Your Gender
-                    select.form-control(formControlName='{{fs.gender}}', id="gender")
-                      option(*ngFor="let gender of listOfGenders", [value]="gender.id") {{gender.description}}
-                  .form-group.col-sm
-                    h4 Your Birthday
-                    input.form-control(formControlName='{{fs.birthday}}', type='text', bsDatepicker,
-                      [bsConfig]="bsConfig", placeholder='Birthday', [maxDate]="maxDate",
-                      [ngClass]="{'is-invalid': fgvm.birthday.hasErrors(userEditForm)}")
-                    .invalid-feedback(*ngIf="fgvm.birthday.required(userEditForm)") Your Birthday is required
-                .row
-                  .form-group.col-sm(formArrayName='{{fs.games}}')
-                    h4 Favorite Games
+                      h4 Your Username
+                      input.form-control(formControlName='{{fs.username}}', type='text', placeholder='Username',
+                        [ngClass]="{'is-invalid': fgvm.username.hasErrors(userEditForm)}")
+                      .invalid-feedback Please enter a username.
+                    .form-group.col-sm
+                      h4 Your Email
+                      input.form-control(formControlName='{{fs.email}}', type='text', placeholder='Email',
+                        [ngClass]="{'is-invalid': fgvm.email.hasErrors(userEditForm)}")
+                      .invalid-feedback Please enter a email.
+                  .row
+                    .form-group.col-sm-7
+                      .row.form-inline
+                        h4.col-sm Current Password
+                        .col-sm(*ngIf="!passwordChangeMode")
+                          button.btn.btn-primary((click)="passwordChangeToggle()") Change Password
+                      input.form-control(formControlName='{{fs.passwordCurrent}}', type='password', placeholder='Current Password',
+                        [ngClass]="{'is-invalid': fgvm.passwordCurrent.hasErrors(userEditForm)}")
+                      .invalid-feedback(*ngIf="fgvm.passwordCurrent.requiredForUserName(userEditForm)") Current password is required for Username Change.
+                      .invalid-feedback(*ngIf="fgvm.passwordCurrent.requiredForEmail(userEditForm)") Current password is required for Email change.
+                      .invalid-feedback(*ngIf="fgvm.passwordCurrent.requiredForPasswordChange(userEditForm)") Current Password is required for Password change.
+                  div(*ngIf="passwordChangeMode")
                     .row
-                      .col-sm-6(*ngFor="let game of fgvm.games.getFavoriteGames(userEditForm); let i = index")
-                        .form-check
-                          label.form-check-label
-                            input.form-check-input(type="checkbox", [formControlName]="i")
-                            | {{allGames[i].description}}
-                    .form-group.text-center.mt-3
-                      button.btn.btn-primary(disabled) Add New Game (WIP)
-                  .form-group.col-sm(formArrayName='{{fs.genres}}')
-                    h4 Favorite Game Genres
-                    .row
-                      .col-sm-6(*ngFor="let genre of fgvm.genres.getFavoriteGenres(userEditForm); let i = index")
-                        .form-check
-                          label.form-check-label
-                            input.form-check-input(type="checkbox", [formControlName]="i")
-                            | {{allGenres[i].description}}
-                    .form-group.text-center.mt-3
-                      button.btn.btn-primary(disabled) Add New Genre (WIP)
-          tab(heading="Edit Photos")
-            app-photo-editor([photos]="user.photos")
-  div(*ngIf="debug")
-    p Form Value: {{userEditForm.value | json}}
-    p Form Status: {{userEditForm.status | json}}
+                      .form-group.col-sm
+                        h4 New Password
+                        input.form-control(formControlName='{{fs.password}}', type='password', placeholder='New Password',
+                          [ngClass]="{'is-invalid': fgvm.password.hasErrors(userEditForm)}")
+                        .invalid-feedback(*ngIf="fgvm.password.passwordNewRequired(userEditForm)") New Password is required.
+                        .invalid-feedback(*ngIf="fgvm.password.minLength(userEditForm)") Password must be at least 8 characters.
+                        .invalid-feedback(*ngIf="fgvm.password.maxLength(userEditForm)") Password can't excced 16 characters.
+                      .form-group.col-sm
+                        h4 Confirm New Password
+                        input.form-control(formControlName='{{fs.passwordConfirm}}', type='password', placeholder='Confirm New Password',
+                          [ngClass]="{'is-invalid': fgvm.passwordConfirm.hasErrors(userEditForm)}")
+                        .invalid-feedback(*ngIf="fgvm.passwordConfirm.confirmationPasswordMatches(userEditForm)") Confirmation password does not match.
+                    .form-group.text-center
+                      button.btn.btn-primary((click)="passwordChangeToggle()") Cancel Password Change
+                  .form-group
+                    h4 Your Story
+                    textarea.form-control(formControlName='{{fs.description}}' rows="6", placeholder='Your story...')
+                  .row
+                    .form-group.col-sm
+                      h4 Your Gender
+                      select.form-control(formControlName='{{fs.gender}}', id="gender")
+                        option(*ngFor="let gender of listOfGenders", [value]="gender.id") {{gender.description}}
+                    .form-group.col-sm
+                      h4 Your Birthday
+                      input.form-control(formControlName='{{fs.birthday}}', type='text', bsDatepicker,
+                        [bsConfig]="bsConfig", placeholder='Birthday', [maxDate]="maxDate",
+                        [ngClass]="{'is-invalid': fgvm.birthday.hasErrors(userEditForm)}")
+                      .invalid-feedback(*ngIf="fgvm.birthday.required(userEditForm)") Your Birthday is required
+                  .row
+                    .form-group.col-sm(formArrayName='{{fs.games}}')
+                      h4 Favorite Games
+                      .row
+                        .col-sm-6(*ngFor="let game of fgvm.games.getFavoriteGames(userEditForm); let i = index")
+                          .form-check
+                            label.form-check-label
+                              input.form-check-input(type="checkbox", [formControlName]="i")
+                              | {{allGames[i].description}}
+                      .form-group.text-center.mt-3
+                        button.btn.btn-primary(disabled) Add New Game (WIP)
+                    .form-group.col-sm(formArrayName='{{fs.genres}}')
+                      h4 Favorite Game Genres
+                      .row
+                        .col-sm-6(*ngFor="let genre of fgvm.genres.getFavoriteGenres(userEditForm); let i = index")
+                          .form-check
+                            label.form-check-label
+                              input.form-check-input(type="checkbox", [formControlName]="i")
+                              | {{allGenres[i].description}}
+                      .form-group.text-center.mt-3
+                        button.btn.btn-primary(disabled) Add New Genre (WIP)
+            tab(heading="Edit Photos")
+              app-photo-editor([photos]="user.photos")
+    div(*ngIf="debug")
+      p Form Value: {{userEditForm.value | json}}
+      p Form Status: {{userEditForm.status | json}}

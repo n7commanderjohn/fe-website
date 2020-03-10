@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+
 using FEWebsite.API.DTOs.BaseDTOs;
 
 namespace FEWebsite.API.DTOs.MiscDTOs

@@ -1,3 +1,4 @@
+import { AlertifyService } from './alertify.service';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
@@ -22,7 +23,8 @@ export class UserService {
   message = 'message';
   messsageThread = this.message + '/thread';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+              private alertify: AlertifyService) { }
 
   getUsers(page?: number, itemsPerPage?: number, userParams?: UserParams) {
     const paginatedResult = new PaginatedResult<User[]>();
@@ -122,7 +124,11 @@ export class UserService {
 
   markAsRead(userId: number, messageId: number) {
     this.http.post(this.baseUrl + this.user + '/' + userId + '/' + this.message + '/' + messageId + '/read', {})
-      .subscribe();
+      .subscribe({
+        error: () => {
+          this.alertify.error('Your message failed to be marked as read.');
+        }
+      });
   }
 
   private AddPageAndItemsPerPageParams(page: number, itemsPerPage: number, params: HttpParams): HttpParams {
