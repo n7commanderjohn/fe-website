@@ -97,8 +97,8 @@ export class PhotoEditorComponent implements OnInit {
           } else {
             this.setDefaultUserPhoto();
           }
-        }, error: error => {
-          this.alertify.error(error);
+        }, error: () => {
+          this.alertify.error('This photo has failed to be deleted.');
         }
       });
     });

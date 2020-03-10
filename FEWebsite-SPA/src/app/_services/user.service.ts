@@ -125,8 +125,8 @@ export class UserService {
   markAsRead(userId: number, messageId: number) {
     this.http.post(this.baseUrl + this.user + '/' + userId + '/' + this.message + '/' + messageId + '/read', {})
       .subscribe({
-        error: (error: string) => {
-          this.alertify.error(error);
+        error: () => {
+          this.alertify.error('Your message failed to be marked as read.');
         }
       });
   }

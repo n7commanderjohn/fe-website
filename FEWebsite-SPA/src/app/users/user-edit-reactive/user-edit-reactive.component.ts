@@ -99,13 +99,15 @@ export class UserEditReactiveComponent implements OnInit {
         console.log(this.allGenres);
       } else {
         const userId = Number(this.authService.decodedToken.nameid);
-        this.userService.updateUser(userId, this.user).subscribe(response => {
-          this.resetForm(this.userEditForm.value, true);
-          this.authService.updateTokenAndUserDetails(response);
-          this.user.age = response.userAge;
-        }, (error: string) => {
-          this.alertify.error(error);
-        });
+        this.userService.updateUser(userId, this.user).subscribe({
+          next: response => {
+            this.resetForm(this.userEditForm.value, true);
+            this.authService.updateTokenAndUserDetails(response);
+            this.user.age = response.userAge;
+          },
+          error: (error: StatusCodeResultReturnObject) => {
+            this.alertify.error(error.response);
+        }});
       }
     }
   }
