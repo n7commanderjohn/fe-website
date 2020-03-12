@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
+
 using FEWebsite.API.Models;
+
 using Newtonsoft.Json;
 
 namespace FEWebsite.API.Data
@@ -11,7 +13,7 @@ namespace FEWebsite.API.Data
         {
             if (!context.Users.Any())
             {
-                var userData = System.IO.File.ReadAllText("Data/UserSeedData.json");
+                var userData = System.IO.File.ReadAllText("Data/UserSeedData-v2.json");
                 var users = JsonConvert.DeserializeObject<List<User>>(userData);
                 foreach (var user in users)
                 {
@@ -28,7 +30,7 @@ namespace FEWebsite.API.Data
 
         private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
-            using (var hmac = new System.Security.Cryptography.HMACSHA512())
+            using(var hmac = new System.Security.Cryptography.HMACSHA512())
             {
                 passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
                 passwordSalt = hmac.Key;

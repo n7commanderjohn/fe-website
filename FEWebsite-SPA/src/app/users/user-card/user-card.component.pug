@@ -6,10 +6,11 @@
         button.btn.btn-primary([routerLink]="['/users/', user.id]")
           i.fa.fa-user
       li.list-inline-item
-        button.btn.btn-primary
-          i.fa.fa-heart
+        button.btn.btn-primary((click)="toggleLike(user.id)")
+          //- this will not work if using SVG version of Font Awesome. Need to use the FA Angular Library eventually.
+          i.fa-bell([ngClass]="{'fas': isUserLiked(), 'far': !isUserLiked()}")
       li.list-inline-item
-        button.btn.btn-primary
+        button.btn.btn-primary([routerLink]="['/users/', user.id]", [queryParams]="{tab: 4}")
           i.fa.fa-envelope
   .card-body.p-1
     h6.card-title.text-center.mb-1
@@ -17,4 +18,5 @@
       | &nbsp;{{user.name}}, {{user.age}}
     .card-text.text-muted.text-center Last Active:
     p.card-text.text-muted.text-center {{user.lastLogin | timeAgo}}
-    p.card-text.text-muted.text-center Gender: {{user.gender}}
+    .card-text.text-muted.text-center Gender:
+    p.card-text.text-muted.text-center {{user.gender}}

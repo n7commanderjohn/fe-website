@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,21 +16,22 @@ namespace FEWebsite.API.Helpers
     {
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            var actionsToSkip = new List<string>() {
-                nameof(UsersController) + "." + nameof(UsersController.GetGenders)
+            var resultContext = await next().ConfigureAwait(false);
+            var actionsToSkip = new List<string>()
+            {
+                nameof(UserController) + "." + nameof(UserController.GetGenders)
             };
 
             var currentAction = context.ActionDescriptor.DisplayName;
             bool actionShouldBeSkipped = actionsToSkip.Any(action => currentAction.Contains(action));
-            if (actionShouldBeSkipped) {
+            if (actionShouldBeSkipped)
+            {
                 return;
             }
 
-            var resultContext = await next().ConfigureAwait(false);
-
             var userId = int.Parse(resultContext.HttpContext.User
                 .FindFirst(ClaimTypes.NameIdentifier).Value);
-            var userService = resultContext.HttpContext.RequestServices.GetService<IUsersService>();
+            var userService = resultContext.HttpContext.RequestServices.GetService<IUserService>();
             var user = await userService.GetUser(userId).ConfigureAwait(false);
 
             user.LastLogin = DateTime.Now;

@@ -11,15 +11,16 @@ import { Game } from '../_models/game';
 })
 export class GamesService {
   baseUrl = environment.apiUrl;
+  game = 'game';
 
   constructor(private http: HttpClient) { }
 
   getGames(): Observable<Game[]> {
-    return this.http.get<Game[]>(this.baseUrl + 'games');
+    return this.http.get<Game[]>(this.baseUrl + this.game);
   }
 
   getGame(id: number): Observable<Game> {
-    return this.http.get<Game>(this.baseUrl + 'games/' + id);
+    return this.http.get<Game>(this.baseUrl + this.game + '/' + id);
   }
 
 }

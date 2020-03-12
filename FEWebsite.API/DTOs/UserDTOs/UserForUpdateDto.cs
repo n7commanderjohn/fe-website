@@ -1,5 +1,6 @@
 using System;
-using FEWebsite.API.Models;
+
+using FEWebsite.API.Models.ManyToManyModels;
 
 namespace FEWebsite.API.DTOs.UserDTOs
 {

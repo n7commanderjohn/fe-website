@@ -1,22 +1,24 @@
-.text-center
-  .container.mt-5(*ngIf="isLoggedIn()")
-    div(*ngIf="!isRegisterMode()" style='text-align: center')
-    h1 You are logged in.
-    p.lead (Home Page News WIP)
-    .btn-group
-      button.btn.btn-primary.btn-lg.mr-2((click)="registerToggle();") Link 1
-      button.btn.btn-info.btn-lg Link 2
-  .container.mt-5(*ngIf="!isLoggedIn()")
+.container.text-center
+  .jumbotron.transparent-bg.mt-5(*ngIf="isLoggedIn()")
+    .row
+      .col-sm
+        img.lyn(src="../../assets/pictures/Lyn.jpg", alt="my bby")
+        h1 You are logged in, Welcome!
+        p.lead (Home Page News WIP)
+        .btn-group
+          button.btn.btn-primary.btn-lg.mr-2 Link 1
+          button.btn.btn-info.btn-lg Link 2
+      .col-sm
+        iframe(src="https://titanembeds.com/embed/340884266403758091?defaultchannel=375984562456756234&fixedsidenav=true",
+          height="600", width="600", frameborder="0")
+  .jumbotron.transparent-bg.mt-5(*ngIf="!isLoggedIn()")
     div(*ngIf="isRegisterMode(); else registerSection")
       .row.justify-content-center
-        .col-4
-          app-register-reactive
+        app-register-reactive
     ng-template.container("#registerSection")
       div(*ngIf="isPWResetMode(); else homeSection")
-        .container
-          .row.justify-content-center
-            .col-4
-              app-password-reset
+        .container.px-5
+          app-password-reset
       ng-template(#homeSection)
         h1 Become the Expert Tactician people need.
         p.lead Learn all you need to know to be the best... All you need to do is sign up!

@@ -1,5 +1,7 @@
 using System.Linq;
+
 using AutoMapper;
+
 using FEWebsite.API.DTOs.GameDTOs;
 using FEWebsite.API.DTOs.GameGenreDTOs;
 using FEWebsite.API.DTOs.MiscDTOs;
@@ -7,6 +9,7 @@ using FEWebsite.API.DTOs.PhotoDTOs;
 using FEWebsite.API.DTOs.UserDTOs;
 using FEWebsite.API.Models;
 using FEWebsite.API.Models.ManyToManyModels;
+using FEWebsite.API.Models.ManyToManyModels.ComboModels;
 
 namespace FEWebsite.API.Helpers
 {
@@ -25,7 +28,8 @@ namespace FEWebsite.API.Helpers
 
         private void CreateMapForUser()
         {
-            this.CreateMap<User, UserForLoginDto>()
+            // no way to avoid null references for these, since null propagator operator cannot be used in expression tree
+            this.CreateMap<User, UserForLoginResponseDto>()
                 .ForMember(dest => dest.PhotoUrl,
                     source => source.MapFrom(source => source.Photos.FirstOrDefault(p => p.IsMain).Url));
             this.CreateMap<User, UserForListDto>()
@@ -45,13 +49,15 @@ namespace FEWebsite.API.Helpers
                 .ForMember(dest => dest.GenderId,
                     source => source.MapFrom(source => source.Gender.Id))
                 .ForMember(dest => dest.Games,
-                    source => source.MapFrom(source => source.FavoriteGames.ToList().Select(fg => fg.Game)))
+                    source => source.MapFrom(source => source.FavoriteGames.Select(fg => fg.Game)))
                 .ForMember(dest => dest.ListOfGames,
-                    source => source.MapFrom(source => source.FavoriteGames.ToList().Select(fg => fg.Game.Description)))
+                    source => source.MapFrom(source => source.FavoriteGames.Select(fg => fg.Game.Description)))
                 .ForMember(dest => dest.Genres,
-                    source => source.MapFrom(source => source.FavoriteGenres.ToList().Select(fg => fg.GameGenre)))
+                    source => source.MapFrom(source => source.FavoriteGenres.Select(fg => fg.GameGenre)))
                 .ForMember(dest => dest.ListOfGenres,
-                    source => source.MapFrom(source => source.FavoriteGenres.ToList().Select(fg => fg.GameGenre.Description)));
+                    source => source.MapFrom(source => source.FavoriteGenres.Select(fg => fg.GameGenre.Description)))
+                .ForMember(dest => dest.ListOfLikees,
+                    source => source.MapFrom(source => source.Likees.Select(l => l.LikeeId)));
             this.CreateMap<UserForUpdateDto, User>()
                 .AfterMap(this.MapNewFaveGamesAndGenres);
             this.CreateMap<UserForRegisterDto, User>()
@@ -59,6 +65,13 @@ namespace FEWebsite.API.Helpers
                     source => source.Ignore())
                 .ForMember(dest => dest.GenderId,
                     source => source.MapFrom(source => source.Gender));
+            this.CreateMap<UserMessageCreationDto, UserMessage>()
+                .ReverseMap();
+            this.CreateMap<UserMessage, UserMessageToReturnDto>()
+                .ForMember(dest => dest.SenderPhotoUrl,
+                    source => source.MapFrom(source => source.Sender.Photos.First(p => p.IsMain).Url))
+                .ForMember(dest => dest.RecipientPhotoUrl,
+                    source => source.MapFrom(source => source.Recipient.Photos.First(p => p.IsMain).Url));
         }
 
         private void MapNewFaveGamesAndGenres(UserForUpdateDto userForUpdateDto, User currentUser)

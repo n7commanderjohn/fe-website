@@ -33,6 +33,7 @@ export class UserEditReactiveComponent implements OnInit {
   bsConfig: Partial<BsDatepickerConfig>;
   maxDate = new Date();
   passwordChangeMode = false;
+  debug = false;
 
   @HostListener('window:beforeunload', ['$event'])
   unloadNotification($event: any) {
@@ -79,7 +80,7 @@ export class UserEditReactiveComponent implements OnInit {
     this.fgvm.passwordCurrent.toggleOtherPasswordFields(this.userEditForm, this.passwordChangeMode);
   }
 
-  resetForm(formGroupValue: any, isUpdate: boolean) {
+  resetForm(formGroupValue: any, isUpdate?: boolean) {
     this.userEditForm.patchValue({passwordCurrent: undefined});
     this.userEditForm.reset(formGroupValue);
     if (isUpdate) {
@@ -89,22 +90,24 @@ export class UserEditReactiveComponent implements OnInit {
     }
   }
 
-  updateUser(debug: boolean) {
+  updateUser() {
     if (this.userEditForm.valid) {
       this.assignFormValuesToUser();
-      if (debug) {
+      if (this.debug) {
         console.log(this.user);
         console.log(this.allGames);
         console.log(this.allGenres);
       } else {
         const userId = Number(this.authService.decodedToken.nameid);
-        this.userService.updateUser(userId, this.user).subscribe(response => {
-          this.resetForm(this.userEditForm.value, true);
-          this.authService.updateTokenAndUserDetails(response);
-          this.user.age = response.userAge;
-        }, (error: StatusCodeResultReturnObject) => {
-          this.alertify.error(error.response);
-        });
+        this.userService.updateUser(userId, this.user).subscribe({
+          next: response => {
+            this.resetForm(this.userEditForm.value, true);
+            this.authService.updateTokenAndUserDetails(response);
+            this.user.age = response.userAge;
+          },
+          error: (error: StatusCodeResultReturnObject) => {
+            this.alertify.error(error.response);
+        }});
       }
     }
   }
@@ -112,7 +115,6 @@ export class UserEditReactiveComponent implements OnInit {
   private assignFormValuesToUser() {
     this.user = Object.assign(this.user, this.userEditForm.value);
     this.user.genderId = this.user.gender;
-    // this.user.gender = null;
     this.user.games.forEach((element, index) => {
       this.allGames[index].checked = element as unknown as boolean; // the form returns an array of booleans
     });
@@ -216,8 +218,8 @@ export class UserEditReactiveComponent implements OnInit {
   private getGenders() {
     this.userService.getGenders().subscribe(genders => {
       this.listOfGenders = genders;
-    }, error => {
-      this.alertify.error(error);
+    }, (error: StatusCodeResultReturnObject) => {
+      this.alertify.error(error.response);
     });
   }
 }

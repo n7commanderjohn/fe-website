@@ -11,7 +11,7 @@ export interface User extends BaseModel {
     gender: string;
     birthday: Date;
     accountCreated: Date;
-    lastLogin: Date;
+    lastLogin: Date | any;
     photoUrl: string;
     photos: Photo[];
     listOfGames?: string[];
@@ -22,4 +22,5 @@ export interface User extends BaseModel {
     password: string;
     passwordConfirm: string;
     isPasswordNeeded: boolean;
+    listOfLikees?: number[];
 }

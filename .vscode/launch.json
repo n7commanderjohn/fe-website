@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/FEWebsite.API/bin/Debug/netcoreapp2.2/FEWebsite.API.dll",
+            "program": "${workspaceFolder}/FEWebsite.API/bin/Debug/netcoreapp3.1/FEWebsite.API.dll",
             "args": [],
             "cwd": "${workspaceFolder}/FEWebsite.API",
             "stopAtEntry": false,

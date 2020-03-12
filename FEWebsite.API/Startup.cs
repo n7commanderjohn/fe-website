@@ -1,20 +1,24 @@
-﻿using System.Net;
+using System.Net;
 using System.Text;
+
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
+
+using AutoMapper;
+
+using FEWebsite.API.Controllers;
 using FEWebsite.API.Data;
 using FEWebsite.API.Data.BaseServices;
 using FEWebsite.API.Data.DerivedServices;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Http;
 using FEWebsite.API.Helpers;
-using Microsoft.Extensions.Hosting;
-using AutoMapper;
 
 namespace FEWebsite.API
 {
@@ -27,12 +31,34 @@ namespace FEWebsite.API
 
         public IConfiguration Configuration { get; }
 
+        public void ConfigureDevelopmentServices(IServiceCollection services)
+        {
+            // services.AddDbContext<DataContext>(x => x.UseSqlite(Configuration.GetConnectionString("SQLite")));
+            services.AddDbContext<DataContext>(x =>
+            {
+                x.UseLazyLoadingProxies();
+                x.UseMySql(Configuration.GetConnectionString("MySQL"));
+            });
+
+            this.ConfigureServices(services);
+        }
+
+        public void ConfigureProductionServices(IServiceCollection services)
+        {
+            services.AddDbContext<DataContext>(x =>
+            {
+                x.UseLazyLoadingProxies();
+                x.UseMySql(Configuration.GetConnectionString("MySQL"));
+            });
+            this.ConfigureServices(services);
+        }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DataContext>(x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
             services.AddControllers()
-                .AddNewtonsoftJson(opt => {
+                .AddNewtonsoftJson(opt =>
+                {
                     opt.SerializerSettings.ReferenceLoopHandling =
                         Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                 });
@@ -55,17 +81,17 @@ namespace FEWebsite.API
 
         private void AddAutoMappers(IServiceCollection services)
         {
-            services.AddAutoMapper(typeof(UsersService).Assembly);
-            services.AddAutoMapper(typeof(GamesService).Assembly);
-            services.AddAutoMapper(typeof(GameGenresService).Assembly);
+            services.AddAutoMapper(typeof(UserService).Assembly);
+            services.AddAutoMapper(typeof(GameService).Assembly);
+            services.AddAutoMapper(typeof(GameGenreService).Assembly);
         }
 
         private void AddServiceScopes(IServiceCollection services)
         {
             services.AddScoped<IAuthService, AuthService>();
-            services.AddScoped<IUsersService, UsersService>();
-            services.AddScoped<IGamesService, GamesService>();
-            services.AddScoped<IGameGenresService, GameGenresService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IGameService, GameService>();
+            services.AddScoped<IGameGenreService, GameGenreService>();
             services.AddScoped<LogUserActivity>();
         }
 
@@ -78,12 +104,15 @@ namespace FEWebsite.API
             }
             else
             {
-                app.UseExceptionHandler(builder => {
-                    builder.Run(async context => {
-                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                app.UseExceptionHandler(builder =>
+                {
+                    builder.Run(async context =>
+                    {
+                        context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
 
                         var error = context.Features.Get<IExceptionHandlerFeature>();
-                        if (error != null) {
+                        if (error != null)
+                        {
                             context.Response.AddApplicationError(error.Error.Message);
                             await context.Response.WriteAsync(error.Error.Message).ConfigureAwait(false);
                         }
@@ -105,7 +134,14 @@ namespace FEWebsite.API
                 .AllowAnyHeader()
             );
 
-            app.UseEndpoints(endpoints => endpoints.MapControllers());
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+                endpoints.MapFallbackToController(nameof(Fallback.Index), nameof(Fallback));
+            });
         }
     }
 }

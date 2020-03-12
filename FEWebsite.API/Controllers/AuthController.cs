@@ -1,11 +1,14 @@
 using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Mvc;
-using FEWebsite.API.Data.BaseServices;
-using FEWebsite.API.Models;
-using FEWebsite.API.Helpers;
-using FEWebsite.API.DTOs.UserDTOs;
 using Microsoft.Extensions.Configuration;
+
 using AutoMapper;
+
+using FEWebsite.API.Data.BaseServices;
+using FEWebsite.API.DTOs.UserDTOs;
+using FEWebsite.API.Helpers;
+using FEWebsite.API.Models;
 
 namespace FEWebsite.API.Controllers
 {
@@ -14,14 +17,14 @@ namespace FEWebsite.API.Controllers
     public class AuthController : ControllerBase
     {
         private IAuthService AuthService { get; }
-        private IUsersService UsersService { get; }
+        private IUserService UserService { get; }
         public IConfiguration Config { get; }
         public IMapper Mapper { get; }
 
-        public AuthController(IAuthService authService, IUsersService usersService, IConfiguration config, IMapper mapper)
+        public AuthController(IAuthService authService, IUserService userService, IConfiguration config, IMapper mapper)
         {
             this.AuthService = authService;
-            this.UsersService = usersService;
+            this.UserService = userService;
             this.Config = config;
             this.Mapper = mapper;
         }
@@ -48,9 +51,10 @@ namespace FEWebsite.API.Controllers
             {
                 var returnUser = this.Mapper.Map<UserForDetailedDto>(createdUser);
                 // return this.Created($"api/users/{createdUser.Id}", createdUser);
-                return this.CreatedAtRoute("GetUser", new { controller = "Users", id = returnUser.Id }, returnUser);
+                return this.CreatedAtRoute("GetUser", new { controller = "User", id = returnUser.Id }, returnUser);
             }
-            else {
+            else
+            {
                 return this.BadRequest(new StatusCodeResultReturnObject(this.BadRequest(),
                     "Registration failed when creating the user."));
             }
@@ -65,12 +69,11 @@ namespace FEWebsite.API.Controllers
 
             if (authenticatedUser == null)
             {
-                return this.BadRequest(new StatusCodeResultReturnObject(this.Unauthorized(),
-                    "Login failed."));
+                return this.Unauthorized("Login failed.");
             }
 
             var token = this.AuthService.CreateUserToken(authenticatedUser, this.Config.GetAppSettingsToken());
-            var user = this.Mapper.Map<UserForLoginDto>(authenticatedUser);
+            var user = this.Mapper.Map<UserForLoginResponseDto>(authenticatedUser);
 
             return this.Ok(new
             {
@@ -82,25 +85,26 @@ namespace FEWebsite.API.Controllers
         [HttpPut("resetpassword")]
         public async Task<IActionResult> ResetPassword(UserForPasswordResetDto userForPasswordResetDto)
         {
-            var matchedUser = await this.UsersService
+            var matchedUser = await this.UserService
                 .GetUserThroughPasswordResetProcess(userForPasswordResetDto).ConfigureAwait(false);
 
             if (matchedUser == null)
             {
                 return this.BadRequest(new StatusCodeResultReturnObject(this.BadRequest(),
-                "No user was found with the given information."));
+                    "No user was found with the given information."));
             }
 
             const string generatedTempPassword = "password"; //change this to a random temp password later on.
             this.AuthService.CreatePasswordHash(matchedUser, generatedTempPassword);
 
-            var passwordResetSuccessful = await this.UsersService.SaveAll().ConfigureAwait(false);
+            var passwordResetSuccessful = await this.UserService.SaveAll().ConfigureAwait(false);
             if (passwordResetSuccessful)
             {
                 return this.Ok(new StatusCodeResultReturnObject(this.Ok(),
                     generatedTempPassword));
             }
-            else {
+            else
+            {
                 return this.BadRequest(new StatusCodeResultReturnObject(this.BadRequest(),
                     "Password reset failed."));
             }

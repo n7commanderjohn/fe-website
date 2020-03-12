@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+
 using FEWebsite.API.DTOs.BaseDTOs;
 using FEWebsite.API.DTOs.GameDTOs;
 using FEWebsite.API.DTOs.GameGenreDTOs;
@@ -31,6 +32,8 @@ namespace FEWebsite.API.DTOs.UserDTOs
         public ICollection<string> ListOfGames { get; set; }
 
         public ICollection<string> ListOfGenres { get; set; }
+
+        public ICollection<int> ListOfLikees { get; set; }
 
         public ICollection<GameForDetailedDto> Games { get; set; }
 

@@ -1,11 +1,12 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { FileUploader } from 'ng2-file-upload';
 import { AuthService } from './../../_services/auth.service';
 import { AlertifyService } from './../../_services/alertify.service';
 import { UserService } from 'src/app/_services/user.service';
 import { environment } from 'src/environments/environment';
 import { Photo } from 'src/app/_models/photo';
-import { User } from 'src/app/_models/user';
-import { FileUploader } from 'ng2-file-upload';
+import { ProblemReturnObject } from './../../_models/problemReturnObject';
+import { StatusCodeResultReturnObject } from './../../_models/statusCodeResultReturnObject';
 
 @Component({
   selector: 'app-photo-editor',
@@ -36,7 +37,7 @@ export class PhotoEditorComponent implements OnInit {
 
   initializeUploader() {
     this.uploader = new FileUploader({
-      url: this.baseUrl + 'users/' + this.authService.decodedToken.nameid + '/photos',
+      url: this.baseUrl + this.userService.user + '/' + this.authService.decodedToken.nameid + '/' + this.userService.photo,
       authToken: 'Bearer ' + localStorage.getItem('token'),
       isHTML5: true,
       allowedFileType: ['image'],
@@ -65,37 +66,47 @@ export class PhotoEditorComponent implements OnInit {
 
   setMainPhoto(newMainPhoto: Photo) {
     const userId = Number(this.authService.decodedToken.nameid);
-    this.userService.setMainPhoto(userId, newMainPhoto.id).subscribe(() => {
-      this.currentMain = this.photos.filter(p => p.isMain)[0];
-      this.currentMain.isMain = false;
+    this.userService.setMainPhoto(userId, newMainPhoto.id as number).subscribe({
+      next: () => {
+        this.currentMain = this.photos.filter(p => p.isMain)[0];
+        this.currentMain.isMain = false;
 
-      this.setNewMainPhoto(newMainPhoto, 'Selected Photo has been set as main.');
-    }, error => {
-      this.alertify.error('Failed to set the selected photo as the main photo.');
-    });
+        this.setNewMainPhoto(newMainPhoto, 'Selected Photo has been set as main.');
+      },
+      error: (error: StatusCodeResultReturnObject | ProblemReturnObject) => {
+        if (error as ProblemReturnObject) {
+          const problem = error as ProblemReturnObject;
+          this.alertify.error(problem.detail);
+        } else {
+          const statusCodeResult = error as StatusCodeResultReturnObject;
+          this.alertify.error(statusCodeResult.response);
+        }
+    }});
   }
 
 
   deletePhoto(photoId: number) {
     this.alertify.confirm('Are you sure you wish to delete this photo?', () => {
       const userId = Number(this.authService.decodedToken.nameid);
-      this.userService.deletePhoto(userId, photoId).subscribe(() => {
-        this.photos.splice(this.photos.findIndex(p => p.id === photoId), 1);
-        this.alertify.success('The selected photo has been deleted.');
+      this.userService.deletePhoto(userId, photoId).subscribe({
+        next: () => {
+          this.photos.splice(this.photos.findIndex(p => p.id === photoId), 1);
+          this.alertify.success('The selected photo has been deleted.');
 
-        const areThereAnyPhotosLeft = this.photos.length > 0;
-        if (areThereAnyPhotosLeft) {
-          const areThereMainPhotos = this.photos.filter(p => p.isMain).length > 0;
-          if (!areThereMainPhotos) {
-            const newMainPhoto = this.photos.find(p => !p.isMain);
-            this.setNewMainPhoto(newMainPhoto, 'Another photo has been selected to be the main photo.');
+          const areThereAnyPhotosLeft = this.photos.length > 0;
+          if (areThereAnyPhotosLeft) {
+            const areThereMainPhotos = this.photos.filter(p => p.isMain).length > 0;
+            if (!areThereMainPhotos) {
+              const newMainPhoto = this.photos.find(p => !p.isMain);
+              this.setNewMainPhoto(newMainPhoto, 'Another photo has been selected to be the main photo.');
+            }
+
+          } else {
+            this.setDefaultUserPhoto();
           }
-
-        } else {
-          this.setDefaultUserPhoto();
+        }, error: () => {
+          this.alertify.error('This photo has failed to be deleted.');
         }
-      }, error => {
-        this.alertify.error('Failed to delete the selected photo.');
       });
     });
   }

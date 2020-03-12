@@ -1,0 +1,32 @@
+.card
+  .card-body#chatbox
+    div(*ngIf="messages?.length === 0")
+      p No conversation exists. Why don't you send a friendly greeting? :D
+    ul.chat#chat-messages
+      li(*ngFor="let message of messages")
+        div(*ngIf="message.senderId == recipientId")
+          span.chat-img.float-left.mr-1
+            img.img-circle.rounded-circle(src="{{message.senderPhotoUrl}}", alt="{{message.senderName}}")
+          .chat-body
+            .header
+              strong.primary-font {{message.senderName}}
+              small.text-muted.float-right
+                span.fa.fa-clock-o &nbsp;{{message.messageSent | timeAgo}}
+            p {{message.content}}
+        div(*ngIf="message.senderId != recipientId")
+          span.chat-img.float-right.ml-1
+            img.img-circle.rounded-circle(src="{{message.senderPhotoUrl}}", alt="{{message.senderName}}")
+          .chat-body
+            .header
+              small.text-muted
+                span.fa.fa-clock-o &nbsp;{{message.messageSent | timeAgo}}
+                span.text-warning(*ngIf="!message.isRead") &nbsp;(unread)
+                span.text-success(*ngIf="message.isRead") &nbsp;(Read {{message.dateRead | timeAgo}})
+              strong.primary-font.float-right {{message.senderName}}
+            p {{message.content}}
+  .card-footer
+    form("#messageForm=ngForm", (ngSubmit)="messageForm.valid && sendMessage()")
+      .input-group
+        input.form-control.input-sm([(ngModel)]="newMessage.content", name="content", required,
+          type="text", placeholder="Send a jolly message to {{recipientName}}!")
+        button.btn.btn-primary([disabled]="!messageForm.valid") Send
