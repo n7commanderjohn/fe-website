@@ -12,9 +12,9 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
 -- Dumping data for table fewebsite.gamegenres: ~4 rows (approximately)
-DELETE FROM `gamegenres`;
+DELETE FROM `GameGenres`;
 /*!40000 ALTER TABLE `gamegenres` DISABLE KEYS */;
-INSERT INTO `gamegenres` (`Id`, `Description`, `Name`) VALUES
+INSERT INTO `GameGenres` (`Id`, `Description`, `Name`) VALUES
 	(1, 'Action', 'AC'),
 	(2, 'Adventure', 'AD'),
 	(3, 'Role Playing Game', 'RPG'),
@@ -22,9 +22,9 @@ INSERT INTO `gamegenres` (`Id`, `Description`, `Name`) VALUES
 /*!40000 ALTER TABLE `gamegenres` ENABLE KEYS */;
 
 -- Dumping data for table fewebsite.games: ~16 rows (approximately)
-DELETE FROM `games`;
+DELETE FROM `Games`;
 /*!40000 ALTER TABLE `games` DISABLE KEYS */;
-INSERT INTO `games` (`Id`, `Description`, `Name`) VALUES
+INSERT INTO `Games` (`Id`, `Description`, `Name`) VALUES
 	(1, 'Fire Emblem 1', 'FE1'),
 	(2, 'Fire Emblem 2', 'FE2'),
 	(3, 'Fire Emblem 3', 'FE3'),
@@ -44,18 +44,18 @@ INSERT INTO `games` (`Id`, `Description`, `Name`) VALUES
 /*!40000 ALTER TABLE `games` ENABLE KEYS */;
 
 -- Dumping data for table fewebsite.genders: ~3 rows (approximately)
-DELETE FROM `genders`;
+DELETE FROM `Genders`;
 /*!40000 ALTER TABLE `genders` DISABLE KEYS */;
-INSERT INTO `genders` (`Id`, `Description`) VALUES
+INSERT INTO `Genders` (`Id`, `Description`) VALUES
 	('F', 'Female'),
 	('M', 'Male'),
 	('NA', 'Prefer not to say');
 /*!40000 ALTER TABLE `genders` ENABLE KEYS */;
 
 -- Dumping data for table fewebsite.photos: ~104 rows (approximately)
-DELETE FROM `photos`;
+DELETE FROM `Photos`;
 /*!40000 ALTER TABLE `photos` DISABLE KEYS */;
-INSERT INTO `photos` (`Id`, `Description`, `Name`, `UserId`, `Url`, `DateAdded`, `IsMain`, `PublicId`) VALUES
+INSERT INTO `Photos` (`Id`, `Description`, `Name`, `UserId`, `Url`, `DateAdded`, `IsMain`, `PublicId`) VALUES
 	(1, NULL, NULL, 3, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1579984470/ou6vccumvisalxhskcq4.jpg', '2020-01-25 15:34:29.719594', 0, 'ou6vccumvisalxhskcq4'),
 	(2, NULL, NULL, 3, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1579984484/zsioyswikx5wusbukeot.jpg', '2020-01-25 15:34:43.577329', 0, 'zsioyswikx5wusbukeot'),
 	(3, NULL, NULL, 3, 'http://res.cloudinary.com/n7commanderjohn-com/image/upload/v1580157128/shtmbjgki8sktvtleqys.png', '2020-01-27 15:32:07.617793', 1, 'shtmbjgki8sktvtleqys'),
@@ -163,9 +163,9 @@ INSERT INTO `photos` (`Id`, `Description`, `Name`, `UserId`, `Url`, `DateAdded`,
 /*!40000 ALTER TABLE `photos` ENABLE KEYS */;
 
 -- Dumping data for table fewebsite.usergamegenres: ~11 rows (approximately)
-DELETE FROM `usergamegenres`;
+DELETE FROM `UserGameGenres`;
 /*!40000 ALTER TABLE `usergamegenres` DISABLE KEYS */;
-INSERT INTO `usergamegenres` (`UserId`, `GameGenreId`) VALUES
+INSERT INTO `UserGameGenres` (`UserId`, `GameGenreId`) VALUES
 	(2, 1),
 	(1, 2),
 	(2, 2),
@@ -180,9 +180,9 @@ INSERT INTO `usergamegenres` (`UserId`, `GameGenreId`) VALUES
 /*!40000 ALTER TABLE `usergamegenres` ENABLE KEYS */;
 
 -- Dumping data for table fewebsite.usergames: ~14 rows (approximately)
-DELETE FROM `usergames`;
+DELETE FROM `UserGames`;
 /*!40000 ALTER TABLE `usergames` DISABLE KEYS */;
-INSERT INTO `usergames` (`UserId`, `GameId`) VALUES
+INSERT INTO `UserGames` (`UserId`, `GameId`) VALUES
 	(1, 7),
 	(2, 7),
 	(3, 7),
@@ -200,9 +200,9 @@ INSERT INTO `usergames` (`UserId`, `GameId`) VALUES
 /*!40000 ALTER TABLE `usergames` ENABLE KEYS */;
 
 -- Dumping data for table fewebsite.userlikes: ~5 rows (approximately)
-DELETE FROM `userlikes`;
+DELETE FROM `UserLikes`;
 /*!40000 ALTER TABLE `userlikes` DISABLE KEYS */;
-INSERT INTO `userlikes` (`LikerId`, `LikeeId`) VALUES
+INSERT INTO `UserLikes` (`LikerId`, `LikeeId`) VALUES
 	(2, 1),
 	(1, 2),
 	(1, 4),
@@ -211,9 +211,9 @@ INSERT INTO `userlikes` (`LikerId`, `LikeeId`) VALUES
 /*!40000 ALTER TABLE `userlikes` ENABLE KEYS */;
 
 -- Dumping data for table fewebsite.usermessages: ~8 rows (approximately)
-DELETE FROM `usermessages`;
+DELETE FROM `UserMessages`;
 /*!40000 ALTER TABLE `usermessages` DISABLE KEYS */;
-INSERT INTO `usermessages` (`Id`, `SenderId`, `RecipientId`, `Content`, `IsRead`, `DateRead`, `MessageSent`, `SenderDeleted`, `RecipientDeleted`) VALUES
+INSERT INTO `UserMessages` (`Id`, `SenderId`, `RecipientId`, `Content`, `IsRead`, `DateRead`, `MessageSent`, `SenderDeleted`, `RecipientDeleted`) VALUES
 	(1, 1, 3, 'hi clonee!!!', 1, '2020-03-10 02:15:22.758228', '2020-03-10 02:14:42.688440', 0, 0),
 	(2, 1, 2, 'Hi broooo', 1, '2020-03-06 22:31:40.417217', '2020-03-03 19:29:40.930727', 0, 0),
 	(3, 1, 2, 'are you smashin Eirika', 1, '2020-03-06 22:31:40.419321', '2020-03-03 19:34:58.849984', 0, 0),
@@ -225,9 +225,9 @@ INSERT INTO `usermessages` (`Id`, `SenderId`, `RecipientId`, `Content`, `IsRead`
 /*!40000 ALTER TABLE `usermessages` ENABLE KEYS */;
 
 -- Dumping data for table fewebsite.users: ~6 rows (approximately)
-DELETE FROM `users`;
+DELETE FROM `Users`;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` (`Id`, `Email`, `Username`, `PasswordHash`, `PasswordSalt`, `Birthday`, `AccountCreated`, `LastLogin`, `Gender`, `AboutMe`, `Alias`) VALUES
+INSERT INTO `Users` (`Id`, `Email`, `Username`, `PasswordHash`, `PasswordSalt`, `Birthday`, `AccountCreated`, `LastLogin`, `Gender`, `AboutMe`, `Alias`) VALUES
 	(1, 'kimgears2@gmail.com', 'n7cmdrjohn', _binary 0xF24BFE87D9540C423FFCAB0C3486C42BB25C859B3DB980C126D18A120B60008A44628F8225A7A10B493AE6D6DC0C843D620A7A286B3712BEC587547C8DF43707, _binary 0xACAA5A97CA2B4E560B3D25070E36C4BA7B0336CC22C572D2533741375F94B9973C60079243835876C447B2CD816EE6621777BC89983F4E22485D928ACB7616E28A1E3BF4A08934C99948E27BD7A4D0394A51289BF14F9427AD604A6814500A80B7191EB589EDF06236F2C3F34B5BB5C8B57A58C5CEAF4EFA14EFC022CF47F540, '1992-09-05 20:00:00.000000', '2015-01-30 00:00:00.000000', '2020-03-10 02:35:36.807112', 'NA', 'i will git gud', 'N7 John'),
 	(2, 'iloveeirika6969@gmail.com', 'iloveeirika6969', _binary 0x88AA267B8F6C6100C5743AB488CD3791E0BBC313EE825AE5DC3A8422166866016D944898B679FAD2155E8F28B7CEE436B2FE90E2B2A8F7D5AE7C487397AE2D1D, _binary 0x485ED4FE753FEEF6B44B9E43A99BAD49ABA23416683E41076DF5AC71B5063DF20C79F1A28913B8BBAB077025174C9351AA84A54269C060E8CF855CA0A07944AA8307BC930271EA59EAFF99214F02FE695D80387577F431EE7E0E6EF1FC47D531051BC489BC9675C8164B9C2313EB92687F3AE01B560BE33B1E4B4D6FEA716025, '1991-05-15 08:00:00.000000', '2015-05-15 00:00:00.000000', '2020-03-10 02:36:17.635150', 'M', 'eirika is my waifu\r\nhell yeah\r\npronouns\r\ngot 2000 orbs saved for Eirika', 'Ephriam'),
 	(3, 'kimgears3@gmail.com', 'n7cmdrjohn3', _binary 0x8A947D8F30796FCBE4A553A224B6D2054DA9A9E730248C3E7F67BFB2732176A3C9CB6C08D84DDA47AADBFE1AA06FAF7E8563FC0FC7E9F3B3A1A0DBF8292C8EEC, _binary 0xEC214667A76789D1282EF96B9C7D9C3BB4CFA89DAC8544B2CEC398D708A816B2A82876797DF19EDCDDEF8A0B8B5D32878CD2A9BF83FB4D7AA9E29BEC0F2F7459DFC9BDD0DD41DE01B4E57DC9C58762CCEC40669F4C559490F0F6827250C6284B9FB770DD006C355BA9CE8A24DD70E5579B3FEACF12619849A446803BDB610985, '1992-09-05 00:00:00.000000', '2015-01-30 00:00:00.000000', '2020-03-10 02:36:58.611402', 'NA', 'I am best pro\nand i will git gud', 'N7 John'),
@@ -237,9 +237,9 @@ INSERT INTO `users` (`Id`, `Email`, `Username`, `PasswordHash`, `PasswordSalt`, 
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 
 -- Dumping data for table fewebsite.__efmigrationshistory: ~2 rows (approximately)
-DELETE FROM `__efmigrationshistory`;
+DELETE FROM `__EFMigrationsHistory`;
 /*!40000 ALTER TABLE `__efmigrationshistory` DISABLE KEYS */;
-INSERT INTO `__efmigrationshistory` (`MigrationId`, `ProductVersion`) VALUES
+INSERT INTO `__EFMigrationsHistory` (`MigrationId`, `ProductVersion`) VALUES
 	('20200309194714_MySqlInit', '3.1.0'),
 	('20200309202525_PopulateLookupTables', '3.1.0');
 /*!40000 ALTER TABLE `__efmigrationshistory` ENABLE KEYS */;
