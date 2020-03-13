@@ -191,7 +191,8 @@ namespace FEWebsite.API.Controllers
                     var result = this.Cloudinary.Destroy(deletionParams);
 
                     bool isPhotoDestructionOnCloudinarySuccessful = result.Result.Equals("ok");
-                    if (isPhotoDestructionOnCloudinarySuccessful)
+                    bool photoNotFound = result.Result.Equals("not found");
+                    if (isPhotoDestructionOnCloudinarySuccessful || photoNotFound)
                     {
                         this.UserService.Delete(photoToDelete);
                     }
