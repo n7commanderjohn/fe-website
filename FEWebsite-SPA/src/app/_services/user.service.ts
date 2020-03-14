@@ -96,7 +96,7 @@ export class UserService {
     params = params.append('MessageContainer', messageArgs.toString());
     params = this.AddPageAndItemsPerPageParams(page, itemsPerPage, params);
 
-    return this.http.get<Message[]>(`${this.baseUrl}${this.user}/${userId}/${this.message}}`, { observe: 'response', params })
+    return this.http.get<Message[]>(`${this.baseUrl}${this.user}/${userId}/${this.message}`, { observe: 'response', params })
       .pipe(
         map(response => {
           paginatedResult.result = response.body;
