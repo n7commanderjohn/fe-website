@@ -2,3 +2,4 @@ FEWebsite.API/appsettings.json
 #store pug instead of html.
 FEWebsite-SPA/src/**/*.html
 .vs/*
+.vscode/settings.json

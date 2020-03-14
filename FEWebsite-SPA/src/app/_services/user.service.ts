@@ -46,7 +46,7 @@ export class UserService {
       }
     }
 
-    return this.http.get<User[]>(this.baseUrl + this.user, { observe: 'response', params })
+    return this.http.get<User[]>(`${this.baseUrl}${this.user}`, { observe: 'response', params })
       .pipe(
         map(response => {
           paginatedResult.result = response.body;
@@ -61,31 +61,31 @@ export class UserService {
   }
 
   getUser(id: number) {
-    return this.http.get<User>(this.baseUrl + this.user + '/' + id);
+    return this.http.get<User>(`${this.baseUrl}${this.user}/${id}`);
   }
 
   getGenders() {
-    return this.http.get<Gender[]>(this.baseUrl + this.user + '/' +  this.genders);
+    return this.http.get<Gender[]>(`${this.baseUrl}${this.user}/${this.genders}`);
   }
 
   updateUser(id: number, user: User) {
-    return this.http.put<UpdateResponse>(this.baseUrl + this.user + '/' + id, user);
+    return this.http.put<UpdateResponse>(`${this.baseUrl}${this.user}/${id}`, user);
   }
 
   setMainPhoto(userId: number, photoId: number) {
-    return this.http.put(this.baseUrl + this.user + '/' + userId + '/' + this.photo + '/' + photoId + '/setMain', null);
+    return this.http.put(`${this.baseUrl}${this.user}/${userId}/${this.photo}/${photoId}/setMain`, null);
   }
 
   deletePhoto(userId: number, photoId: number) {
-    return this.http.delete(this.baseUrl + this.user + '/' + userId + '/' + this.photo + '/' + photoId);
+    return this.http.delete(`${this.baseUrl}${this.user}/${userId}/${this.photo}/${photoId}`);
   }
 
   toggleLike(userId: number, recepientId: number) {
-    return this.http.post(this.baseUrl + this.user + '/' + userId + '/' + this.like + '/' + recepientId, {});
+    return this.http.post(`${this.baseUrl}${this.user}/${userId}/${this.like}/${recepientId}`, {});
   }
 
   getLikes(userId: number) {
-    return this.http.get<number[]>(this.baseUrl + this.user + '/' + userId + '/' + this.like);
+    return this.http.get<number[]>(`${this.baseUrl}${this.user}/${userId}/${this.like}`);
   }
 
   getUserMessages(userId: number, page?: number, itemsPerPage?: number, messageArgs?: number | string ) {
@@ -96,7 +96,7 @@ export class UserService {
     params = params.append('MessageContainer', messageArgs.toString());
     params = this.AddPageAndItemsPerPageParams(page, itemsPerPage, params);
 
-    return this.http.get<Message[]>(this.baseUrl + this.user + '/' + userId + '/' + this.message, { observe: 'response', params })
+    return this.http.get<Message[]>(`${this.baseUrl}${this.user}/${userId}/${this.message}}`, { observe: 'response', params })
       .pipe(
         map(response => {
           paginatedResult.result = response.body;
@@ -111,19 +111,19 @@ export class UserService {
   }
 
   getMessageThread(userId: number, recipientId: number) {
-    return this.http.get<Message[]>(this.baseUrl + this.user + '/' + userId + '/' + this.messsageThread + '/' + recipientId);
+    return this.http.get<Message[]>(`${this.baseUrl}${this.user}/${userId}/${this.messsageThread}/${recipientId}`);
   }
 
   sendMessage(userId: number, message: MessageToSend) {
-    return this.http.post<Message>(this.baseUrl + this.user + '/' + userId + '/' + this.message, message);
+    return this.http.post<Message>(`${this.baseUrl}${this.user}/${userId}/${this.message}`, message);
   }
 
   deleteMessage(messageId: number, userId: number) {
-    return this.http.post(this.baseUrl + this.user + '/' + userId + '/' + this.message + '/' + messageId, {});
+    return this.http.post(`${this.baseUrl}${this.user}/${userId}/${this.message}/${messageId}`, {});
   }
 
   markAsRead(userId: number, messageId: number) {
-    this.http.post(this.baseUrl + this.user + '/' + userId + '/' + this.message + '/' + messageId + '/read', {})
+    this.http.post(`${this.baseUrl}${this.user}/${userId}/${this.message}/${messageId}/read`, {})
       .subscribe({
         error: () => {
           this.alertify.error('Your message failed to be marked as read.');
