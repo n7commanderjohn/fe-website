@@ -57,9 +57,13 @@ export class PhotoEditorComponent implements OnInit {
         this.photos.push(photo);
       }
     };
+    this.uploader.onErrorItem = (item) => {
+      const fileName = item._file.name;
+      this.alertify.error(`Photo "${fileName}" failed to upload.`);
+    };
     this.uploader.onCompleteAll = () => {
       this.uploader.clearQueue();
-      this.alertify.success('Photo uploads were successful.');
+      this.alertify.success('Photo uploads are complete.');
     };
     this.uploader.response.subscribe((res: string) => this.response = res );
   }
