@@ -87,7 +87,7 @@ namespace FEWebsite.API
         }
 
         private void AddServiceScopes(IServiceCollection services)
-        {
+        {;;;ff
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IGameService, GameService>();
