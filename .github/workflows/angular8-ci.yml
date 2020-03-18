@@ -5,9 +5,9 @@ name: Angular 8 CI
 
 on:
   push:
-    branches: [ master, develop, feature/** ]
+    branches: [ master, develop, hotfix/**, feature/** ]
   pull_request:
-    branches: [ master, develop, feature/** ]
+    branches: [ master, develop, hotfix/**, feature/** ]
 
 jobs:
   build:
