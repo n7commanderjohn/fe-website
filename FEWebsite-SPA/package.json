@@ -8,7 +8,7 @@
     "pug-it:w": "pug src -P -w --doctype html",
     "server": "ng serve --port 4200",
     "server-prod": "ng serve --prod --port 4200",
-    "prebuild": "yarn run pug-it",
+    "prebuild": "npm run pug-it",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
