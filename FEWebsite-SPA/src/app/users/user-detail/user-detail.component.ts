@@ -22,7 +22,9 @@ export class UserDetailComponent implements OnInit {
   ngOnInit() {
     this.route.data.subscribe(data => {
       this.user = data.user as User;
-      this.userDesc = this.user.description.split('\n');
+      if (this.user.description) {
+        this.userDesc = this.user.description.split('\n');
+      }
     });
 
     this.route.queryParams.subscribe(params => {
@@ -59,6 +61,8 @@ export class UserDetailComponent implements OnInit {
   }
 
   selectTab(tabId: number) {
-    this.userTabset.tabs[tabId].active = true;
+    if (this.userTabset.tabs.length > 0) {
+      this.userTabset.tabs[tabId].active = true;
+    }
   }
 }

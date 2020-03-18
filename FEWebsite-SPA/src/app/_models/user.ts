@@ -1,6 +1,6 @@
 import { BaseModel } from './_basemodels/basemodel';
 import { Game } from './game';
-import { GameGenre } from './gamegenre';
+import { GameGenre } from './gameGenre';
 import { Photo } from './photo';
 
 export interface User extends BaseModel {

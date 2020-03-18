@@ -36,12 +36,12 @@
               td
                 .row(*ngIf="messageContainer != mca.Outbox")
                   .col-sm-4
-                    img.img-circle.rounded-circle(src="{{message?.senderPhotoUrl}}")
+                    img.img-circle.rounded-circle(src="{{message?.senderPhotoUrl || defaultUserPic}}", alt="{{message.senderName}}")
                   .col-sm-8
                     strong {{message.senderName}}
                 .row(*ngIf="messageContainer == mca.Outbox")
                   .col-sm-4
-                    img.img-circle.rounded-circle(src="{{message?.recipientPhotoUrl}}")
+                    img.img-circle.rounded-circle(src="{{message?.recipientPhotoUrl || defaultUserPic}}", alt="{{message.recipientName}}")
                   .col-sm-8
                     strong {{message.recipientName}}
               td {{message.messageSent | timeAgo}}

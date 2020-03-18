@@ -6,7 +6,7 @@
       li(*ngFor="let message of messages")
         div(*ngIf="message.senderId == recipientId")
           span.chat-img.float-left.mr-1
-            img.img-circle.rounded-circle(src="{{message.senderPhotoUrl}}", alt="{{message.senderName}}")
+            img.img-circle.rounded-circle(src="{{message.senderPhotoUrl || defaultUserPic}}", alt="{{message.senderName}}")
           .chat-body
             .header
               strong.primary-font {{message.senderName}}
@@ -15,7 +15,7 @@
             p {{message.content}}
         div(*ngIf="message.senderId != recipientId")
           span.chat-img.float-right.ml-1
-            img.img-circle.rounded-circle(src="{{message.senderPhotoUrl}}", alt="{{message.senderName}}")
+            img.img-circle.rounded-circle(src="{{message.senderPhotoUrl || defaultUserPic}}", alt="{{message.senderName}}")
           .chat-body
             .header
               small.text-muted

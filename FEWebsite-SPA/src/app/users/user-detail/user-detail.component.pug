@@ -26,7 +26,7 @@
                 | &nbsp;Message
       .col-sm-9
         .tab-panel
-          tabset.user-tabset("#userTabset")
+          <tabset class="user-tabset" #userTabset>
             tab(heading="About {{user.name}}")
               h4 Description
               div(*ngFor="let paragraph of userDesc")
@@ -45,3 +45,4 @@
             tab(heading="Messages")
               h4 Messages
               app-user-messages([recipientId]="user.id", [recipientName]="user.name")
+          </tabset>
