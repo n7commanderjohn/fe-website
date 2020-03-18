@@ -5,7 +5,6 @@ import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { AlertifyService } from './../_services/alertify.service';
 import { AuthService } from './../_services/auth.service';
 
-import { StatusCodeResultReturnObject } from './../_models/statusCodeResultReturnObject';
 import { LoginCredentials } from './../_models/loginCredentials';
 
 @Component({
@@ -22,8 +21,6 @@ export class NavComponent implements OnInit {
   constructor(public authService: AuthService,
               private alertify: AlertifyService,
               private router: Router) { }
-
-  isLoggedIn = () => this.authService.loggedIn();
 
   ngOnInit() {
     this.loginCredentials = new LoginCredentials();
@@ -52,5 +49,9 @@ export class NavComponent implements OnInit {
   enterResetPasswordMode() {
     this.authService.enterPWResetMode();
     this.alertify.message('User Password Reset started.');
+  }
+
+  isLoggedIn() {
+    return this.authService.loggedIn();
   }
 }

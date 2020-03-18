@@ -11,15 +11,16 @@ nav.navbar.navbar-expand-md.navbar-dark.bg-primary
         a.nav-link([routerLink]="['/messages']") Messages
       li.nav-item.dropdown(dropdown, routerLinkActive="active")
         a.nav-link.dropdown-toggle(dropdownToggle) Games (WIP)
-        .dropdown-menu('*dropdownMenu')
+        <div class="dropdown-menu" *dropdownMenu>
           div(*ngFor="let num of nums")
             a.nav-link.dropdown-item([routerLink]="['games/FE' + num]") FE{{num}}
             .dropdown-divider
+        </div>
     button.btn.btn-primary.dropdown(*ngIf="isLoggedIn();", 'dropdown')
       span.mr-1
         img(src="{{photoUrl || '../../assets/defaultUser.png'}}", alt="")
       a.dropdown-toggle(dropdownToggle) Welcome {{authService.decodedToken?.unique_name | titlecase}}&nbsp;
-      .dropdown-menu.mt-4('*dropdownMenu')
+      <div class="dropdown-menu" *dropdownMenu>
         a.dropdown-item([routerLink]="['/user/edit']")
           i.fas.fa-user
           | &nbsp;Edit Profile
@@ -27,6 +28,7 @@ nav.navbar.navbar-expand-md.navbar-dark.bg-primary
         a.dropdown-item((click)="logout();")
           i.fas.fa-sign-out-alt
           | &nbsp;Logout
+      </div>
     form.form-inline.my-2.my-lg-0(*ngIf="!isLoggedIn();" #loginForm="ngForm", (ngSubmit)="login();")
       input.form-control.mr-sm-2(required type='text' name='username' placeholder='Username', [(ngModel)]="loginCredentials.username")
       input.form-control.mr-sm-2(required type='password' name='password' placeholder='Password', [(ngModel)]="loginCredentials.password")

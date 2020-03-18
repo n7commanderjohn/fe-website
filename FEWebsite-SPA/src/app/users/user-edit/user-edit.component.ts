@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { User } from 'src/app/_models/user';
 import { Game } from 'src/app/_models/game';
-import { GameGenre } from './../../_models/gamegenre';
+import { GameGenre } from '../../_models/gameGenre';
 
 import { AlertifyService } from './../../_services/alertify.service';
 import { UserService } from 'src/app/_services/user.service';

@@ -13,7 +13,7 @@ import { FormGroupValidatorMethods, FormStrings } from './../../_helpers/formgro
 import { StatusCodeResultReturnObject } from './../../_models/statusCodeResultReturnObject';
 import { User } from './../../_models/user';
 import { Game } from './../../_models/game';
-import { GameGenre } from './../../_models/gamegenre';
+import { GameGenre } from '../../_models/gameGenre';
 import { Gender } from './../../_models/gender';
 
 @Component({
