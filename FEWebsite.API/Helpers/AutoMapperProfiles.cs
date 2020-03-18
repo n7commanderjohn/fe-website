@@ -69,9 +69,9 @@ namespace FEWebsite.API.Helpers
                 .ReverseMap();
             this.CreateMap<UserMessage, UserMessageToReturnDto>()
                 .ForMember(dest => dest.SenderPhotoUrl,
-                    source => source.MapFrom(source => source.Sender.Photos.First(p => p.IsMain).Url))
+                    source => source.MapFrom(source => source.Sender.Photos.FirstOrDefault(p => p.IsMain).Url))
                 .ForMember(dest => dest.RecipientPhotoUrl,
-                    source => source.MapFrom(source => source.Recipient.Photos.First(p => p.IsMain).Url));
+                    source => source.MapFrom(source => source.Recipient.Photos.FirstOrDefault(p => p.IsMain).Url));
         }
 
         private void MapNewFaveGamesAndGenres(UserForUpdateDto userForUpdateDto, User currentUser)
