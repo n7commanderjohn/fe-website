@@ -1,2 +1,1 @@
-cd ..\FEWebsite-SPA
-ng build --prod
+npm run --prefix ../FEWebsite-SPA build-prod

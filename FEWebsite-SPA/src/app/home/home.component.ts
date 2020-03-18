@@ -12,10 +12,6 @@ export class HomeComponent implements OnInit {
   constructor(private alertify: AlertifyService,
               private authService: AuthService) { }
 
-  isRegisterMode = () => this.authService.registerMode;
-  isPWResetMode = () => this.authService.pwResetMode;
-  isLoggedIn = () => this.authService.loggedIn();
-
   ngOnInit() {
   }
 
@@ -24,4 +20,15 @@ export class HomeComponent implements OnInit {
     this.alertify.message('Registration started.');
   }
 
+  isRegisterMode() {
+    return this.authService.registerMode;
+  }
+
+  isPWResetMode() {
+    return this.authService.pwResetMode;
+  }
+
+  isLoggedIn() {
+    return this.authService.loggedIn();
+  }
 }
