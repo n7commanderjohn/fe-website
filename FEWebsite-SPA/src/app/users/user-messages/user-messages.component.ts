@@ -21,7 +21,7 @@ export class UserMessagesComponent implements OnInit, DoCheck {
   private chatbox: HTMLElement;
   private messageSent: boolean;
   private firstLoad = true;
-  readonly defaultUserPic = '~/../../../../assets/defaultUser.png';
+  readonly defaultUserPic = '../../../assets/defaultUser.png';
 
   constructor(
     private userService: UserService,

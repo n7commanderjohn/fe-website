@@ -19,7 +19,7 @@ export class MessagesComponent implements OnInit {
   pagination: Pagination;
   mca = MessageContainerArgs;
   messageContainer: string;
-  readonly defaultUserPic = '~/../../../../assets/defaultUser.png';
+  readonly defaultUserPic = '../../assets/defaultUser.png';
   private readonly successMsg = 'Messages loaded successfully.';
   private readonly userId = Number(this.authService.decodedToken.nameid);
 
