@@ -1,0 +1,49 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Digital-Ocean-CD over SFTP
+
+# Controls when the action will run. Triggers the workflow on push or pull request 
+# events but only for the master branch
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  SFTP-Deploy-Action:
+    name: SFTP-Deploy-Action
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [10.x, 12.x]
+
+    steps:
+    - name: Check out repo code
+      uses: actions/checkout@v2
+
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.101
+    - name: Build with dotnet
+      run: dotnet build --configuration Release
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: npm --prefix ./FEWebsite-SPA ci
+    - run: npm --prefix ./FEWebsite-SPA run build --if-present
+    - run: npm --prefix ./FEWebsite-SPA run build-prod --if-present
+#     - run: npm --prefix ./FEWebsite-SPA test until unit tests are set up properly, disable
+      env:
+        CI: true
+
+    - name: SFTP-Deploy-Action To Digital Ocean fire-emblem-network droplet
+      uses: SamKirkland/FTP-Deploy-Action@3.0.0
+      with:
+        ftp-server: sftp://64.227.31.227:22/var/fe-website
+        ftp-username: root
+        ftp-password: ${{ secrets.SFTP_PASSWORD }}
+        local-dir: FEWebsite.API/bin/Release/netcoreapp3.1/publish/
+        git-ftp-args: --insecure # if your certificate is setup correctly this can be removed
