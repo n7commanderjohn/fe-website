@@ -1,4 +1,5 @@
 import { FormGroup, FormArray, ValidationErrors } from '@angular/forms';
+import { Injectable } from '@angular/core';
 
 export const FormStrings = {
     gender: 'gender',
@@ -20,6 +21,7 @@ export const FormStrings = {
     genres: 'genres',
 };
 
+@Injectable()
 export class FormGroupValidatorMethods {
     customValidators = {
         passwordNewRequired(fg: FormGroup): ValidationErrors | null {
