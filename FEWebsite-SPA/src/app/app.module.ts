@@ -13,7 +13,7 @@ import {
    PaginationModule,
    TabsModule
    } from 'ngx-bootstrap';
-import { NgxGalleryModule } from 'ngx-gallery';
+import { NgxGalleryModule } from '@kolkov/ngx-gallery';
 import { TimeAgoPipe } from 'time-ago-pipe';
 import { AuthGuard } from './_guards/auth.guard';
 import { PreventUnsavedChangesGuard } from './_guards/prevent-unsaved-changes.guard';

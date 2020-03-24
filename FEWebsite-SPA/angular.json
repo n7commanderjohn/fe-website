@@ -18,7 +18,7 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
-            "aot": true,
+            "aot": false,
             "assets": [
               "src/assets/favicon-32x32.png",
               "src/assets"
@@ -131,5 +131,8 @@
       }
     }
   },
-  "defaultProject": "FEWebsite-SPA"
+  "defaultProject": "FEWebsite-SPA",
+  "cli": {
+    "analytics": true
+  }
 }
