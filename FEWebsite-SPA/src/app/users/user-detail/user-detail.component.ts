@@ -39,7 +39,7 @@ export class UserDetailComponent implements OnInit {
         imagePercent: 100,
         thumbnailsColumns: 4,
         imageAnimation: NgxGalleryAnimation.Slide,
-        preview: false
+        // preview: false
       }
     ];
 
