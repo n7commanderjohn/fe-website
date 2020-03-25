@@ -4,6 +4,7 @@
 ![Digital-Ocean-CD over SFTP](https://github.com/n7commanderjohn/fe-website/workflows/Digital-Ocean-CD%20over%20SFTP/badge.svg)
 
 This is a WIP of a online storefront/news/forum for all Fire Emblem related content.
+You can find the currently deployed version of the website [here](http://fireemblemnetwork.com).
 
 If you wish to join the team, feel free to contact me at n7cmdrjohn@gmail.com. Or you can join my [Slack Workspace](https://join.slack.com/t/n7s/shared_invite/zt-cw7z18z9-iZ4TNzSFwTrrbnZbry4foQ) or [Discord Server](https://discord.gg/Xnn9YtW)! The help will be greatly appreciated!
 
