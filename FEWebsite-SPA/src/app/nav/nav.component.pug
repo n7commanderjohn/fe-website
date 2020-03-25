@@ -9,18 +9,43 @@ nav.navbar.navbar-expand-md.navbar-dark.bg-primary
         a.nav-link([routerLink]="['/media']") Media
       li.nav-item(routerLinkActive="active")
         a.nav-link([routerLink]="['/messages']") Messages
-      li.nav-item.dropdown(dropdown, routerLinkActive="active")
+      li.nav-item.dropdown('dropdown', routerLinkActive="active")
         a.nav-link.dropdown-toggle(dropdownToggle) Games (WIP)
-        <div class="dropdown-menu" *dropdownMenu>
-          div(*ngFor="let num of nums")
-            a.nav-link.dropdown-item([routerLink]="['games/FE' + num]") FE{{num}}
-            .dropdown-divider
-        </div>
-    button.btn.btn-primary.dropdown(*ngIf="isLoggedIn();", 'dropdown')
+        .dropdown-menu(*dropdownMenu, )
+          a.nav-link.dropdown-item([routerLink]="['games/FE1']") FE1
+          .dropdown-divider
+          a.nav-link.dropdown-item([routerLink]="['games/FE2']") FE2
+          .dropdown-divider
+          a.nav-link.dropdown-item([routerLink]="['games/FE3']") FE3
+          .dropdown-divider
+          a.nav-link.dropdown-item([routerLink]="['games/FE4']") FE4
+          .dropdown-divider
+          a.nav-link.dropdown-item([routerLink]="['games/FE5']") FE5
+          .dropdown-divider
+          a.nav-link.dropdown-item([routerLink]="['games/FE6']") FE6
+          .dropdown-divider
+          a.nav-link.dropdown-item([routerLink]="['games/FE7']") FE7
+          .dropdown-divider
+          a.nav-link.dropdown-item([routerLink]="['games/FE8']") FE8
+          .dropdown-divider
+          a.nav-link.dropdown-item([routerLink]="['games/FE9']") FE9
+          .dropdown-divider
+          a.nav-link.dropdown-item([routerLink]="['games/FE10']") FE10
+          .dropdown-divider
+          a.nav-link.dropdown-item([routerLink]="['games/FE11']") FE11
+          .dropdown-divider
+          a.nav-link.dropdown-item([routerLink]="['games/FE12']") FE12
+          .dropdown-divider
+          a.nav-link.dropdown-item([routerLink]="['games/FE13']") FE13
+          .dropdown-divider
+          a.nav-link.dropdown-item([routerLink]="['games/FE14']") FE14
+          .dropdown-divider
+          a.nav-link.dropdown-item([routerLink]="['games/FE15']") FE15
+    button.btn.btn-primary.dropdown(*ngIf="isLoggedIn();", 'dropdown', 'dropdownToggle')
       span.mr-1
         img(src="{{photoUrl || '../../assets/defaultUser.png'}}", alt="")
-      a.dropdown-toggle(dropdownToggle) Welcome {{authService.decodedToken?.unique_name | titlecase}}&nbsp;
-      <div class="dropdown-menu" *dropdownMenu>
+      a.dropdown-toggle Welcome {{authService.decodedToken?.unique_name | titlecase}}&nbsp;
+      .dropdown-menu.ml-5(*dropdownMenu)
         a.dropdown-item([routerLink]="['/user/edit']")
           i.fas.fa-user
           | &nbsp;Edit Profile
@@ -28,7 +53,6 @@ nav.navbar.navbar-expand-md.navbar-dark.bg-primary
         a.dropdown-item((click)="logout();")
           i.fas.fa-sign-out-alt
           | &nbsp;Logout
-      </div>
     form.form-inline.my-2.my-lg-0(*ngIf="!isLoggedIn();" #loginForm="ngForm", (ngSubmit)="login();")
       input.form-control.mr-sm-2(required type='text' name='username' placeholder='Username', [(ngModel)]="loginCredentials.username")
       input.form-control.mr-sm-2(required type='password' name='password' placeholder='Password', [(ngModel)]="loginCredentials.password")
