@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TabsetComponent } from 'ngx-bootstrap';
-import { NgxGalleryAnimation, NgxGalleryImage, NgxGalleryOptions } from 'ngx-gallery';
+import { NgxGalleryAnimation, NgxGalleryImage, NgxGalleryOptions } from '@kolkov/ngx-gallery';
 import { User } from '../../_models/user';
 
 
@@ -39,7 +39,7 @@ export class UserDetailComponent implements OnInit {
         imagePercent: 100,
         thumbnailsColumns: 4,
         imageAnimation: NgxGalleryAnimation.Slide,
-        preview: false
+        // preview: false
       }
     ];
 

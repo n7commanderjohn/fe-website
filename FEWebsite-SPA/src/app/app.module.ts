@@ -1,5 +1,5 @@
 import { HttpClientModule } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import { NgModule, Injectable } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule, HAMMER_GESTURE_CONFIG, HammerGestureConfig } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -13,7 +13,7 @@ import {
    PaginationModule,
    TabsModule
    } from 'ngx-bootstrap';
-import { NgxGalleryModule } from 'ngx-gallery';
+import { NgxGalleryModule } from '@kolkov/ngx-gallery';
 import { TimeAgoPipe } from 'time-ago-pipe';
 import { AuthGuard } from './_guards/auth.guard';
 import { PreventUnsavedChangesGuard } from './_guards/prevent-unsaved-changes.guard';
@@ -49,6 +49,7 @@ export function tokenGetter() {
    return localStorage.getItem('token');
 }
 
+@Injectable()
 export class CustomHammerConfig extends HammerGestureConfig  {
    overrides = {
        pinch: { enable: false },
