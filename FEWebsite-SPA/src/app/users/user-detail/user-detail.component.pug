@@ -18,8 +18,9 @@
               p {{user.accountCreated | date:'MMMM d, y'}}
           .card-footer
             .btn-group.d-flex
-              .btn.btn-primary.w-100 
-                i.fas.fa-bell
+              .btn.btn-primary.w-100((click)="toggleLike()")
+                //- this will not work if using SVG version of Font Awesome. Need to use the FA Angular Library eventually.
+                i.fa-bell([ngClass]="{'fas': isUserLiked(), 'far': !isUserLiked()}") 
                 | &nbsp;Follow
               .btn.btn-success.w-100((click)="selectTab(4)")
                 i.fas.fa-paper-plane
