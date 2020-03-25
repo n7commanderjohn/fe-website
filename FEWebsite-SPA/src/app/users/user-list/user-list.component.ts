@@ -33,10 +33,12 @@ export class UserListComponent implements OnInit {
               private alertify: AlertifyService) { }
 
   ngOnInit() {
-    this.route.data.subscribe(data => {
-      const users: PaginatedResult<User[]> = data.users;
-      this.users = users.result;
-      this.pagination = users.pagination;
+    this.route.data.subscribe({
+      next: data => {
+        const users: PaginatedResult<User[]> = data.users;
+        this.users = users.result;
+        this.pagination = users.pagination;
+      }
     });
     this.getUserLikes();
 
@@ -50,8 +52,10 @@ export class UserListComponent implements OnInit {
 
   private getUserLikes() {
     this.userService.getLikes(this.loggedInUserId)
-    .subscribe(likes => {
-      this.loggedInUser.listOfLikees = likes;
+    .subscribe({
+      next: likes => {
+        this.loggedInUser.listOfLikees = likes;
+      }
     });
   }
 
@@ -77,16 +81,19 @@ export class UserListComponent implements OnInit {
   }
 
   private getGenders() {
-    this.userService.getGenders().subscribe(genders => {
-      genders.unshift({
-        id: '',
-        description: 'All',
-        name: undefined,
-        selected: true
-      });
-      this.listOfGenders = genders;
-    }, (error: StatusCodeResultReturnObject) => {
-      this.alertify.error(error.response);
+    this.userService.getGenders().subscribe({
+      next: genders => {
+        genders.unshift({
+          id: '',
+          description: 'All',
+          name: undefined,
+          selected: true
+        });
+        this.listOfGenders = genders;
+      },
+      error: (error: StatusCodeResultReturnObject) => {
+        this.alertify.error(error.response);
+      }
     });
   }
 
@@ -113,12 +120,15 @@ export class UserListComponent implements OnInit {
       }
     }
     this.userService.getUsers(this.pagination.currentPage, this.pagination.itemsPerPage, this.userParams)
-    .subscribe((response) => {
-      this.users = response.result;
-      this.pagination = response.pagination;
-      this.getUserLikes();
-    }, (error: StatusCodeResultReturnObject) => {
-      this.alertify.error(error.response);
+    .subscribe({
+      next: (response) => {
+        this.users = response.result;
+        this.pagination = response.pagination;
+        this.getUserLikes();
+      },
+      error: (error: StatusCodeResultReturnObject) => {
+        this.alertify.error(error.response);
+      }
     });
   }
 }

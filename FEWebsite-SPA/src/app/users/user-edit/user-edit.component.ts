@@ -41,13 +41,17 @@ export class UserEditComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.route.data.subscribe(data => {
-      this.user = data.user;
+    this.route.data.subscribe({
+      next: data => {
+        this.user = data.user;
 
-      this.getGames();
-      this.getGameGenres();
+        this.getGames();
+        this.getGameGenres();
+      }
     });
-    this.authService.currentPhotoUrl.subscribe(photoUrl => this.photoUrl = photoUrl);
+    this.authService.currentPhotoUrl.subscribe({
+      next: photoUrl => this.photoUrl = photoUrl
+    });
   }
 
   updateUser() {
@@ -59,24 +63,27 @@ export class UserEditComponent implements OnInit {
       }})
     );
 
-    this.userService.updateUser(Number(this.authService.decodedToken.nameid), this.user).subscribe(next => {
-        this.alertify.success('Profile updated successfully.');
-        this.editForm.reset(this.user);
-    }, error => {
-      this.alertify.error(error);
+    this.userService.updateUser(Number(this.authService.decodedToken.nameid), this.user).subscribe({
+      next: next => {
+          this.alertify.success('Profile updated successfully.');
+          this.editForm.reset(this.user);
+      },
+      error: error => {
+        this.alertify.error(error);
+      }
     });
   }
 
   getGames() {
-    this.gamesService.getGames().subscribe(
-      retrievedGames => {
+    this.gamesService.getGames().subscribe({
+      next: retrievedGames => {
         this.setActiveGamesForUser(retrievedGames);
       },
-      error => {
+      error: error => {
         this.alertify.error('List of Games failed to load.');
         console.log(error);
       }
-    );
+    });
   }
 
   setActiveGamesForUser(retrievedGames: Game[]) {
@@ -101,14 +108,14 @@ export class UserEditComponent implements OnInit {
   }
 
   getGameGenres() {
-    this.gameGenresService.getGameGenres().subscribe(
-      genres => {
+    this.gameGenresService.getGameGenres().subscribe({
+      next: genres => {
         this.allGenres = genres;
       },
-      error => {
+      error: error => {
         this.alertify.error('List of Game Genres failed to load.');
         console.log(error);
       }
-    );
+    });
   }
 }

@@ -27,12 +27,15 @@ export class UserCardComponent implements OnInit {
 
   toggleLike(recepientId: number) {
     this.userService.toggleLike(this.currentUserId, recepientId)
-    .subscribe((next: StatusCodeResultReturnObject) => {
-      this.userliked = !this.userliked;
-      this.likeToggled.emit();
-      this.alertify.success(next.response);
-    }, (error: StatusCodeResultReturnObject) => {
-      this.alertify.error(error.response);
+    .subscribe({
+      next: (next: StatusCodeResultReturnObject) => {
+        this.userliked = !this.userliked;
+        this.likeToggled.emit();
+        this.alertify.success(next.response);
+      },
+      error: (error: StatusCodeResultReturnObject) => {
+        this.alertify.error(error.response);
+      }
     });
   }
 
