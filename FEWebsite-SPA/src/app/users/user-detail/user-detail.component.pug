@@ -26,23 +26,45 @@
                 | &nbsp;Message
       .col-sm-9
         .tab-panel
-          <tabset class="user-tabset" #userTabset>
+          tabset.user-tabset(#userTabset)
             tab(heading="About {{user.name}}")
-              h4 Description
-              div(*ngFor="let paragraph of userDesc")
-                p {{paragraph}}
+              .card
+                h4.card-header All About {{user.name}}!
+                hr
+                .card-body
+                  div(*ngIf="userDesc")
+                    div(*ngFor="let paragraph of userDesc")
+                      p {{paragraph}}
+                  div(*ngIf="!userDesc")
+                    p {{user.name}} has shared nothing about themselves. How boring!!!
             tab(heading="Favorite Games")
-              h4 Favorite Games
-              ul
-                li(*ngFor="let game of user.games") {{game.description}}
+              .card
+                h4.card-header All of {{user.name}}'s Favorite Games!
+                hr
+                .card-body
+                  div(*ngIf="user.games?.length > 0")
+                    ul
+                      li(*ngFor="let game of user.games") {{game.description}}
+                  div(*ngIf="user.games?.length === 0")
+                    p {{user.name}} has shared nothing about their favorite games. How boring!!!
             tab(heading="Favorite Game Genres")
-              h4 Favorite Game Genres
-              ul
-                li(*ngFor="let genre of user.genres") {{genre.description}}
+              .card
+                h4.card-header All of {{user.name}}'s Favorite Game Genres!
+                hr
+                .card-body
+                  div(*ngIf="user.genres?.length > 0")
+                    ul
+                      li(*ngFor="let genre of user.genres") {{genre.description}}
+                  div(*ngIf="user.genres?.length === 0")
+                    p {{user.name}} has shared nothing about their favorite genres. How boring!!!
             tab(heading="Photos")
-              h4 Photos
-              ngx-gallery.ngx-gallery([options]="galleryOptions", [images]="galleryImages")
+              .card
+                h4.card-header All of {{user.name}}'s Photos!
+                hr
+                .card-body
+                  div(*ngIf="user.photos?.length > 0")
+                    ngx-gallery.ngx-gallery([options]="galleryOptions", [images]="galleryImages")
+                  div(*ngIf="user.photos?.length === 0")
+                    p {{user.name}} hasn't uploaded any pictures. Boooooo!!!
             tab(heading="Messages")
-              h4 Messages
               app-user-messages([recipientId]="user.id", [recipientName]="user.name")
-          </tabset>

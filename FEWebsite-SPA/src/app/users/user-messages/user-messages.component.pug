@@ -1,4 +1,6 @@
 .card
+  h4.card-header Your awesome conversation with {{recipientName}}!
+  hr
   .card-body#chatbox
     div(*ngIf="messages?.length === 0")
       p No conversation exists. Why don't you send a friendly greeting? :D
