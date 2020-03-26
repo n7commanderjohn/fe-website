@@ -47,14 +47,20 @@ export class RegisterReactiveComponent implements OnInit {
   register() {
     if (this.registerForm.valid) {
       this.userModel = Object.assign({}, this.registerForm.value);
-      this.authService.register(this.userModel).subscribe((response) => {
-        this.alertify.success('Registration successful.');
-      }, (error: StatusCodeResultReturnObject) => {
-        this.alertify.error(error.response);
-      }, () => {
-        this.authService.login(this.userModel).subscribe(() => {
-          this.router.navigate(['/home']);
-        });
+      this.authService.register(this.userModel).subscribe({
+        next: (response) => {
+          this.alertify.success('Registration successful.');
+        },
+        error: (error: StatusCodeResultReturnObject) => {
+          this.alertify.error(error.response);
+        },
+        complete: () => {
+          this.authService.login(this.userModel).subscribe({
+            next: () => {
+              this.router.navigate(['/home']);
+            }
+          });
+        }
       });
     }
   }
@@ -83,18 +89,24 @@ export class RegisterReactiveComponent implements OnInit {
   }
 
   private getGames() {
-    this.gamesService.getGames().subscribe(games => {
-      this.listOfGames = games;
-    }, error => {
-      this.alertify.error(error);
+    this.gamesService.getGames().subscribe({
+      next: games => {
+        this.listOfGames = games;
+      },
+      error: error => {
+        this.alertify.error(error);
+      }
     });
   }
 
   private getGenders() {
-    this.userService.getGenders().subscribe(genders => {
-      this.listOfGenders = genders;
-    }, error => {
-      this.alertify.error(error);
+    this.userService.getGenders().subscribe({
+      next: genders => {
+        this.listOfGenders = genders;
+      },
+      error: error => {
+        this.alertify.error(error);
+      }
     });
   }
 

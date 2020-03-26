@@ -30,17 +30,21 @@ export class UserDetailComponent implements OnInit {
               private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.route.data.subscribe(data => {
+    this.route.data.subscribe({
+      next: data => {
         this.user = data.user as User;
         if (this.user.description) {
           this.userDesc = this.user.description.split('\n');
         }
-        this.getUserLikes();
+      }
     });
 
-    this.route.queryParams.subscribe(params => {
+    this.getUserLikes();
+    this.route.queryParams.subscribe({
+      next: params => {
         const selectedTab = Number(params.tab > 0 ? params.tab : 0);
         this.selectTab(selectedTab);
+      }
     });
 
     this.galleryOptions = [

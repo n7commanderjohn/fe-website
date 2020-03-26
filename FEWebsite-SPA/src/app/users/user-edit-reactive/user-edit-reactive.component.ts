@@ -57,8 +57,8 @@ export class UserEditReactiveComponent implements OnInit {
     this.bsConfig = {
       containerClass: 'theme-dark-blue'
     };
-    this.route.data.subscribe(
-      data => {
+    this.route.data.subscribe({
+      next: data => {
         this.user = data.user;
 
         this.createUserEditForm(this.user);
@@ -66,13 +66,13 @@ export class UserEditReactiveComponent implements OnInit {
         this.getGameGenres();
         this.getGenders();
       },
-      (error: StatusCodeResultReturnObject) => {
+      error: (error: StatusCodeResultReturnObject) => {
         this.alertify.error(error.response);
       }
-    );
-    this.authService.currentPhotoUrl.subscribe(
-      photoUrl => (this.photoUrl = photoUrl)
-    );
+    });
+    this.authService.currentPhotoUrl.subscribe({
+      next: photoUrl => (this.photoUrl = photoUrl)
+    });
   }
 
   passwordChangeToggle() {
@@ -157,29 +157,29 @@ export class UserEditReactiveComponent implements OnInit {
   }
 
   private getGames() {
-    this.gamesService.getGames().subscribe(
-      retrievedGames => {
+    this.gamesService.getGames().subscribe({
+      next: retrievedGames => {
         this.setActiveGamesForUser(retrievedGames);
         this.initialFormState = this.userEditForm.value;
       },
-      error => {
+      error: error => {
         this.alertify.error('List of Games failed to load.');
         console.log(error);
       }
-    );
+    });
   }
 
   private getGameGenres() {
-    this.gameGenresService.getGameGenres().subscribe(
-      retrievedGenres => {
+    this.gameGenresService.getGameGenres().subscribe({
+      next: retrievedGenres => {
         this.setActiveGenresForUser(retrievedGenres);
         this.initialFormState = this.userEditForm.value;
       },
-      error => {
+      error: error => {
         this.alertify.error('List of Game Genres failed to load.');
         console.log(error);
       }
-    );
+    });
   }
 
   private setActiveGamesForUser(retrievedGames: Game[]) {
@@ -216,10 +216,13 @@ export class UserEditReactiveComponent implements OnInit {
   }
 
   private getGenders() {
-    this.userService.getGenders().subscribe(genders => {
-      this.listOfGenders = genders;
-    }, (error: StatusCodeResultReturnObject) => {
-      this.alertify.error(error.response);
+    this.userService.getGenders().subscribe({
+      next: genders => {
+        this.listOfGenders = genders;
+      },
+      error: (error: StatusCodeResultReturnObject) => {
+        this.alertify.error(error.response);
+      }
     });
   }
 }
