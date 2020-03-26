@@ -29,26 +29,35 @@ export class RegisterComponent implements OnInit {
   }
 
   private getGames() {
-    this.gamesService.getGames().subscribe(games => {
-      this.listOfGames = games;
-    }, error => {
-      this.alertify.error(error);
+    this.gamesService.getGames().subscribe({
+      next: games => {
+        this.listOfGames = games;
+      },
+      error: error => {
+        this.alertify.error(error);
+      }
     });
   }
 
   private getGenders() {
-    this.userService.getGenders().subscribe(genders => {
-      this.listOfGenders = genders;
-    }, error => {
-      this.alertify.error(error);
+    this.userService.getGenders().subscribe({
+      next: genders => {
+        this.listOfGenders = genders;
+      },
+      error: error => {
+        this.alertify.error(error);
+      }
     });
   }
 
   register() {
-    this.authService.register(this.userModel).subscribe((response) => {
-      this.alertify.success('Registration successful.');
-    }, (error: any) => {
-      this.alertify.error(error);
+    this.authService.register(this.userModel).subscribe({
+      next: (response) => {
+        this.alertify.success('Registration successful.');
+      },
+      error: (error: any) => {
+        this.alertify.error(error);
+      }
     });
   }
 

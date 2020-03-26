@@ -28,9 +28,17 @@ body {
 }
 
 .tab-panel {
-  border: 1px solid #ddd;
   padding: 10px;
+}
+
+.tab-panel,
+.user-tabset>.nav-tabs>.nav-item {
+  border: 1px solid #ddd;
   border-radius: 4px;
+}
+
+.user-tabset>.nav-tabs>.nav-item>.nav-link {
+  padding: 0.5rem 1.25rem;
 }
 
 .nav-tabs>li.open,
@@ -60,6 +68,16 @@ body {
   position: relative;
 }
 
+.user-tabset>.nav-tabs>li>.nav-link.active,
+/* .user-tabset>.tab-content, */
+.user-tabset>.tab-content>tab,
+.user-tabset>.tab-content>tab>.card,
+.user-tabset>.tab-content>tab>app-user-messages>.card,
+.container>.jumbotron>.row>div>.card,
+.container>.jumbotron>.row>div>.card>.card-footer {
+  background-color: rgba(34, 34, 34, 0.50);
+}
+
 .user-tabset>.nav-tabs>li.active>a {
   border: 0 !important;
   color: #E95420;
@@ -70,8 +88,8 @@ body {
 }
 
 .user-tabset>.tab-content {
-  margin-top: -3px;
-  background-color: #303030;
+  /* margin-top: -3px; */
+  /* background-color: #303030; */
   border: 0;
   border-top: 1px solid #eee;
   padding: 15px 0;
@@ -110,4 +128,9 @@ input.ng-dirty[type=text]:not(.is-invalid),
 select.ng-dirty:not(.is-invalid),
 textarea.ng-dirty:not(.is-invalid) {
   border: solid 3px yellow;
+}
+
+.ngx-gallery {
+  display: inline-block;
+  margin-bottom: 20px;
 }

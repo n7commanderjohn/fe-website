@@ -16,7 +16,9 @@ export class UserListResolver implements Resolve<User[]> {
                 private alertify: AlertifyService) {}
 
     resolve(route: ActivatedRouteSnapshot): Observable<User[]> {
-        return this.userService.getUsers(this.pageNumber, this.pageSize, null).pipe(
+        const userParams = this.userService.getDefaultUserParams();
+
+        return this.userService.getUsers(this.pageNumber, this.pageSize, userParams).pipe(
             catchError(error => {
                 this.alertify.error('Error occured while trying to retrieve user data.');
                 this.router.navigate(['/home']);

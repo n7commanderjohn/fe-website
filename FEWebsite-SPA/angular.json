@@ -46,7 +46,6 @@
               "sourceMap": false,
               "extractCss": true,
               "namedChunks": false,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": false,
@@ -132,5 +131,8 @@
       }
     }
   },
-  "defaultProject": "FEWebsite-SPA"
+  "defaultProject": "FEWebsite-SPA",
+  "cli": {
+    "analytics": true
+  }
 }

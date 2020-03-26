@@ -35,14 +35,14 @@ export class PasswordResetComponent implements OnInit {
 
   changePassword() {
     this.userModel = Object.assign({}, this.passwordResetForm.value);
-    this.authService.resetPassword(this.userModel).subscribe(
-      (response: StatusCodeResultReturnObject) => {
+    this.authService.resetPassword(this.userModel).subscribe({
+      next: (response: StatusCodeResultReturnObject) => {
         this.alertify.success('Your new temporary password is "' + response.response + '".');
       },
-      (error: StatusCodeResultReturnObject) => {
+      error: (error: StatusCodeResultReturnObject) => {
         this.alertify.error(error.response);
       }
-    );
+    });
   }
 
   cancel() {

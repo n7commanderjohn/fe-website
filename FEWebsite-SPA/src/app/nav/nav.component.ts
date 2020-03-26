@@ -16,7 +16,6 @@ import { LoginCredentials } from './../_models/loginCredentials';
 export class NavComponent implements OnInit {
   loginCredentials: LoginCredentials;
   photoUrl: string;
-  nums: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ];
 
   constructor(public authService: AuthService,
               private alertify: AlertifyService,
@@ -24,7 +23,7 @@ export class NavComponent implements OnInit {
 
   ngOnInit() {
     this.loginCredentials = new LoginCredentials();
-    this.authService.currentPhotoUrl.subscribe(photoUrl => this.photoUrl = photoUrl);
+    this.authService.currentPhotoUrl.subscribe({next: photoUrl => this.photoUrl = photoUrl});
   }
 
   login() {
