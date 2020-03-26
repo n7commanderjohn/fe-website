@@ -66,7 +66,7 @@ namespace FEWebsite.API.Data.DerivedServices
         public async Task<User> Register(User user, string password)
         {
             this.CreatePasswordHash(user, password);
-            if (user.Name == null)
+            if (user.Name?.Equals("") != false)
             {
                 user.Name = user.Username;
             }

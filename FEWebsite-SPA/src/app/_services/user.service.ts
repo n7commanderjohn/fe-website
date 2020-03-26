@@ -1,7 +1,7 @@
-import { AlertifyService } from './alertify.service';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
+import { AlertifyService } from './alertify.service';
 import { Gender } from './../_models/gender';
 import { Message } from './../_models/message';
 import { MessageToSend } from './../_models/messageToSend';
@@ -22,9 +22,31 @@ export class UserService {
   like = 'like';
   message = 'message';
   messsageThread = this.message + '/thread';
+  loggedInUser: User = JSON.parse(localStorage.getItem('user'));
 
   constructor(private http: HttpClient,
-              private alertify: AlertifyService) { }
+    private alertify: AlertifyService) { }
+
+  getDefaultUserParams(): UserParams {
+    let genderId = this.loggedInUser.genderId;
+    switch (genderId) {
+      case 'NA':
+        genderId = ''; break;
+      case 'F':
+        genderId = 'M'; break;
+      case 'M':
+        genderId = 'F'; break;
+      default:
+        genderId = ''; break;
+    }
+    return {
+        genderId,
+        minAge: 18,
+        maxAge: 99,
+        orderBy: UPO.OrderBy.lastLogin,
+        likeFilter: UPO.LikeFilter.all
+    };
+  }
 
   getUsers(page?: number, itemsPerPage?: number, userParams?: UserParams) {
     const paginatedResult = new PaginatedResult<User[]>();

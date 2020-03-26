@@ -56,24 +56,7 @@ export class UserListComponent implements OnInit {
   }
 
   private setUserParams() {
-    let genderId: string;
-    switch (this.loggedInUser.genderId) {
-      case 'NA':
-        genderId = ''; break;
-      case 'F':
-        genderId = 'M'; break;
-      case 'M':
-        genderId = 'F'; break;
-      default:
-        genderId = ''; break;
-    }
-    this.userParams = {
-      genderId,
-      minAge: 18,
-      maxAge: 99,
-      orderBy: this.upo.OrderBy.lastLogin,
-      likeFilter: this.upo.LikeFilter.all
-    };
+    this.userParams = this.userService.getDefaultUserParams();
   }
 
   private getGenders() {
