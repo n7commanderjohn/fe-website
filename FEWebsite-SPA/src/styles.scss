@@ -17,82 +17,71 @@
     1px 1px 0 #000;
 }
 
-body {
+html {
   background-image: url(./assets/wallpapers/eirika_by_marimbamonkey14_x2.png);
+  background-repeat: no-repeat;
+  background-position-x: center;
+  background-attachment: fixed;
   background-size: cover;
-  /* background-blend-mode: difference; */
+  body {
+    background-color: unset;
+  }
 }
 
-.jumbotron.transparent-bg, .transparent-bg {
+.transparent-bg {
   background-color: rgba(0, 0, 0, 0.75);
 }
 
-.tab-panel {
-  padding: 10px;
-}
-
-.tab-panel,
-.user-tabset>.nav-tabs>.nav-item {
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-.user-tabset>.nav-tabs>.nav-item>.nav-link {
-  padding: 0.5rem 1.25rem;
-}
-
-.nav-tabs>li.open,
-.user-tabset>.nav-tabs>li:hover {
-  border-bottom: 4px solid #fbcdcf;
-}
-
-.user-tabset>.nav-tabs>li.open>a,
-.user-tabset>.nav-tabs>li:hover>a {
-  border: 0;
-  background: none !important;
-  color: #E95420;
-}
-
-.user-tabset>.nav-tabs>li.open>a>i,
-.user-tabset>.nav-tabs>li:hover>a>i {
-  color: #a6a6a6;
-}
-
-.user-tabset>.nav-tabs>li.open .dropdown-menu,
-.user-tabset>.nav-tabs>li:hover .dropdown-menu {
-  margin-top: 0px;
-}
-
-.user-tabset>.nav-tabs>li.active {
-  border-bottom: 4px solid #E95420;
-  position: relative;
-}
-
-.user-tabset>.nav-tabs>li>.nav-link.active,
-/* .user-tabset>.tab-content, */
-.user-tabset>.tab-content>tab,
-.user-tabset>.tab-content>tab>.card,
-.user-tabset>.tab-content>tab>app-user-messages>.card,
-.container>.jumbotron>.row>div>.card,
-.container>.jumbotron>.row>div>.card>.card-footer {
-  background-color: rgba(34, 34, 34, 0.50);
-}
-
-.user-tabset>.nav-tabs>li.active>a {
-  border: 0 !important;
-  color: #E95420;
-}
-
-.user-tabset>.nav-tabs>li.active>a>i {
-  color: #404040;
-}
-
-.user-tabset>.tab-content {
-  /* margin-top: -3px; */
-  /* background-color: #303030; */
-  border: 0;
-  border-top: 1px solid #eee;
-  padding: 15px 0;
+.container {
+  .card, .nav-link.active{
+    background-color: rgba(34, 34, 34, 0.50);
+    .card-footer {
+      background-color: rgba(34, 34, 34, 0.50);
+    }
+  }
+  .user-tabset {
+    padding: 10px;
+    li.open, li:hover {
+      border-bottom: 4px solid #fbcdcf;
+      a {
+        border: 0;
+        background: none !important;
+        color: #E95420;
+        i {
+          color: #a6a6a6;
+        }
+      }
+      .dropdown-menu {
+        margin-top: 0px;
+      }
+    }
+    .nav-tabs {
+      justify-content: center;
+      li.active {
+        border-bottom: 4px solid #E95420;
+        position: relative;
+        a {
+          border: 0 !important;
+          color: #E95420;
+          i {
+            color: #404040;
+          }
+        }
+      }
+    }
+    .nav-item {
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    .nav-link {
+      padding: 0.5rem 1.25rem;
+    }
+    .tab-content {
+      border: 0;
+      border-top: 1px solid #eee;
+      padding: 15px 0;
+    }
+  }
 }
 
 hr {
