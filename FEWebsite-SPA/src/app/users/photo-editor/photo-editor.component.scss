@@ -9,6 +9,8 @@ img.img-thumbnail {
     margin-bottom: 6px;
 }
 
-input[type=file] {
-    color: transparent;
+label.file-upload-btn {
+    input[type=file] {
+        display: none;
+    }
 }

@@ -98,9 +98,8 @@ namespace FEWebsite.API.Controllers
             }
 
             var currentUser = await this.UserService.GetUser(id).ConfigureAwait(false);
-            var passwordVerficationPassed = userForUpdateDto.IsPasswordNeeded ?
-                this.AuthService.ComparePassword(currentUser, userForUpdateDto.PasswordCurrent) :
-                true;
+            var passwordVerficationPassed = !userForUpdateDto.IsPasswordNeeded ||
+                this.AuthService.ComparePassword(currentUser, userForUpdateDto.PasswordCurrent);
             if (passwordVerficationPassed)
             {
                 this.Mapper.Map(userForUpdateDto, currentUser);
