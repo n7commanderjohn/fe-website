@@ -10,7 +10,7 @@ import { LoginCredentials } from './../_models/loginCredentials';
 @Component({
   selector: 'app-nav',
   templateUrl: './nav.component.html',
-  styleUrls: ['./nav.component.css'],
+  styleUrls: ['./nav.component.scss'],
   providers: [{ provide: BsDropdownConfig, useValue: { isAnimated: true, autoClose: true } }]
 })
 export class NavComponent implements OnInit {
