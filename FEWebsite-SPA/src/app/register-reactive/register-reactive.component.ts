@@ -17,7 +17,7 @@ import { User } from '../_models/user';
 @Component({
   selector: 'app-register-reactive',
   templateUrl: './register-reactive.component.html',
-  styleUrls: ['./register-reactive.component.css']
+  styleUrls: ['./register-reactive.component.scss']
 })
 export class RegisterReactiveComponent implements OnInit {
   listOfGames: Game[];

@@ -1,0 +1,125 @@
+/* You can add global styles to this file, and also import other style files */
+
+.cloister-black {
+  font-family: 'Cloister Black', 'Lato', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 
+    'Helvetica Neue', 'Arial', 'sans-serif', 'Apple Color Emoji', 'Segoe UI Emoji', 
+    'Segoe UI Symbol', 'Arial Narrow', 'Arial', 'sans-serif';
+
+  -webkit-text-fill-color: white;
+  /* Will override color (regardless of order) */
+  -webkit-text-stroke-width: .5px black;
+
+  text-shadow:
+    3px 3px 0 #000,
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    1px 1px 0 #000;
+}
+
+html {
+  background-image: url(./assets/wallpapers/eirika_by_marimbamonkey14_x2.png);
+  background-repeat: no-repeat;
+  background-position-x: center;
+  background-attachment: fixed;
+  background-size: cover;
+  body {
+    background-color: unset;
+  }
+}
+
+.transparent-bg {
+  background-color: rgba(0, 0, 0, 0.75);
+}
+
+.container {
+  .card, .nav-link.active{
+    background-color: rgba(34, 34, 34, 0.50);
+    .card-footer {
+      background-color: rgba(34, 34, 34, 0.50);
+    }
+  }
+  .user-tabset {
+    padding: 10px;
+    li.open, li:hover {
+      border-bottom: 4px solid #fbcdcf;
+      a {
+        border: 0;
+        background: none !important;
+        color: #E95420;
+        i {
+          color: #a6a6a6;
+        }
+      }
+      .dropdown-menu {
+        margin-top: 0px;
+      }
+    }
+    .nav-tabs {
+      justify-content: center;
+      li.active {
+        border-bottom: 4px solid #E95420;
+        position: relative;
+        a {
+          border: 0 !important;
+          color: #E95420;
+          i {
+            color: #404040;
+          }
+        }
+      }
+    }
+    .nav-item {
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    .nav-link {
+      padding: 0.5rem 1.25rem;
+    }
+    .tab-content {
+      border: 0;
+      border-top: 1px solid #eee;
+      padding: 15px 0;
+    }
+  }
+}
+
+hr {
+  overflow: visible; /* For IE */
+  height: 30px;
+  border-style: solid;
+  border-color: white;
+  border-width: 1px 0 0 0;
+  border-radius: 20px;
+  margin-bottom: -15px;
+}
+
+hr:before { /* Not really supposed to work, but does */
+  display: block;
+  content: "";
+  height: 30px;
+  margin-top: -31px;
+  border-style: solid;
+  border-color: white;
+  border-width: 0 0 1px 0;
+  border-radius: 20px;
+}
+
+.my-drop-zone {
+  border-color: white;
+}
+
+.nv-file-over {
+  border: dotted 3px green;
+}
+
+input.ng-dirty[type=text]:not(.is-invalid),
+select.ng-dirty:not(.is-invalid),
+textarea.ng-dirty:not(.is-invalid) {
+  border: solid 3px yellow;
+}
+
+.ngx-gallery {
+  display: inline-block;
+  margin-bottom: 20px;
+}
