@@ -29,7 +29,7 @@
               "./node_modules/@fortawesome/fontawesome-free/css/all.css",
               "./node_modules/alertifyjs/build/css/alertify.min.css",
               "./node_modules/alertifyjs/build/css/themes/bootstrap.min.css",
-              "./src/styles.css"
+              "./src/styles.scss"
             ],
             "scripts": []
           },
@@ -98,7 +98,7 @@
               "./node_modules/@fortawesome/fontawesome-free/css/all.css",
               "./node_modules/alertifyjs/build/css/alertify.min.css",
               "./node_modules/alertifyjs/build/css/themes/bootstrap.min.css",
-              "./src/styles.css"
+              "./src/styles.scss"
             ],
             "scripts": []
           }
@@ -134,5 +134,10 @@
   "defaultProject": "FEWebsite-SPA",
   "cli": {
     "analytics": true
+  },
+  "schematics": {
+    "@schematics/angular:component": {
+      "styleext": "scss"
+    }
   }
 }

@@ -15,7 +15,7 @@ import { GamesService } from './../../_services/games.service';
 @Component({
   selector: 'app-user-edit',
   templateUrl: './user-edit.component.html',
-  styleUrls: ['./user-edit.component.css']
+  styleUrls: ['./user-edit.component.scss']
 })
 export class UserEditComponent implements OnInit {
   @ViewChild('editForm', {static: true}) editForm: NgForm;

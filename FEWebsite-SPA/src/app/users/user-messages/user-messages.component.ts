@@ -10,7 +10,7 @@ import { tap } from 'rxjs/operators';
 @Component({
   selector: 'app-user-messages',
   templateUrl: './user-messages.component.html',
-  styleUrls: ['./user-messages.component.css']
+  styleUrls: ['./user-messages.component.scss']
 })
 export class UserMessagesComponent implements OnInit, DoCheck {
   @Input() recipientId: number;
