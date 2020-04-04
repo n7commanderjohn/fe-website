@@ -1,38 +1,27 @@
-using System;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using FEWebsite.API.Data;
 using FEWebsite.API.Data.DerivedServices;
 using FEWebsite.API.Models;
+using static FEWebsite.Tests.Helpers.MockEFDatabase;
 
 namespace FEWebsite.Tests
 {
     [TestClass]
     public class UnitTest_AuthService
     {
-        private const string DOESNTEXIST = "doesn't exist";
-
         private AuthService AuthService { get; }
-        private DataContext DataContext { get; }
 
         public UnitTest_AuthService()
         {
-            var options = new DbContextOptionsBuilder<DataContext>()
-                .UseInMemoryDatabase(databaseName: "fewebsite-test")
-                .Options;
-            this.DataContext = new DataContext(options);
-            DBSeeding.SeedUsers(this.DataContext);
-
-            this.AuthService = new AuthService(this.DataContext);
+            this.AuthService = new AuthService(GetMockDataContext());
         }
 
         [TestMethod]
         public void Test_CreateAndComparePassword()
         {
             var user = new User();
-            string[] passwords = GetTestPasswords();
+            string[] passwords = GetMockTestPasswords();
 
             foreach (var password in passwords)
             {
@@ -52,7 +41,7 @@ namespace FEWebsite.Tests
         [TestMethod]
         public void Test_CreateUserToken()
         {
-            var usernames = GetUsernames();
+            var usernames = GetMockUsernames();
             var user = new User() {
                 Id = 1,
                 Username = usernames[0]
@@ -66,7 +55,7 @@ namespace FEWebsite.Tests
         [TestMethod]
         public async Task Test_EmailExists()
         {
-            foreach (var email in GetExistingEmails())
+            foreach (var email in GetMockExistingEmails())
             {
                 Assert.IsTrue(await this.AuthService.EmailExists(email).ConfigureAwait(false));
             }
@@ -80,7 +69,7 @@ namespace FEWebsite.Tests
             var user = new User() {
                 Id = 6969
             };
-            foreach (var email in GetExistingEmails())
+            foreach (var email in GetMockExistingEmails())
             {
                 user.Email = email;
                 Assert.IsTrue(await this.AuthService.EmailExistsForAnotherUser(user).ConfigureAwait(false));
@@ -93,7 +82,7 @@ namespace FEWebsite.Tests
         [TestMethod]
         public async Task Test_UserNameExists()
         {
-            foreach (var username in GetUsernames())
+            foreach (var username in GetMockUsernames())
             {
                 Assert.IsTrue(await this.AuthService.UserNameExists(username).ConfigureAwait(false));
             }
@@ -107,7 +96,7 @@ namespace FEWebsite.Tests
             var user = new User() {
                 Id = 6969
             };
-            foreach (var username in GetUsernames())
+            foreach (var username in GetMockUsernames())
             {
                 user.Username = username;
                 Assert.IsTrue(await this.AuthService.UserNameExistsForAnotherUser(user).ConfigureAwait(false));
@@ -115,21 +104,6 @@ namespace FEWebsite.Tests
 
             user.Username = DOESNTEXIST;
             Assert.IsFalse(await this.AuthService.UserNameExistsForAnotherUser(user).ConfigureAwait(false));
-        }
-
-        private static string[] GetTestPasswords()
-        {
-            return new string[] { "igud", "pp4pp", "123&)(*&", "hahhaha" };
-        }
-
-        private static string[] GetExistingEmails()
-        {
-            return new string[] { "iloveeirika6969@gmail.com", "kimgears2@gmail.com", "kimgears3@gmail.com" };
-        }
-
-        private static string[] GetUsernames()
-        {
-            return new string[] { "n7cmdrjohn", "iloveeirika6969", "n7cmdrjohn3" };
         }
     }
 }
