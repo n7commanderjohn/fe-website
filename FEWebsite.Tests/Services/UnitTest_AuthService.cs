@@ -28,15 +28,28 @@ namespace FEWebsite.Tests
         [TestMethod]
         public void Test_CreateAndComparePassword()
         {
-            var user1 = new User();
+            var user = new User();
             string[] pws = {"igud", "pp4pp", "123&)(*&", "hahhaha"};
 
             foreach (var pw in pws) {
-                this.AuthService.CreatePasswordHash(user1, pw);
-                var isMatch = this.AuthService.ComparePassword(user1, pw);
+                this.AuthService.CreatePasswordHash(user, pw);
+                var isMatch = this.AuthService.ComparePassword(user, pw);
 
                 Assert.IsTrue(isMatch);
             }
+        }
+
+        [TestMethod]
+        public void Test_CreateUserToken()
+        {
+            var user = new User() {
+                Id = 1,
+                Username = "n7cmdrjohn"
+            };
+
+            var token = this.AuthService.CreateUserToken(user, "1fXr*D!iVNF!VK0Ib93@^n$7sq3wPF");
+
+            Assert.IsTrue(token.Length > 0);
         }
     }
 }
