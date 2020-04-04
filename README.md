@@ -1,7 +1,7 @@
 # Fire Emblem Network
-![Angular 8 CI](https://github.com/n7commanderjohn/fe-website/workflows/Angular%208%20CI/badge.svg)
-![.NET Core](https://github.com/n7commanderjohn/fe-website/workflows/.NET%20Core/badge.svg)
-![Digital-Ocean-CD over SFTP](https://github.com/n7commanderjohn/fe-website/workflows/Digital-Ocean-CD%20over%20SFTP/badge.svg)
+![Angular CI](https://github.com/n7commanderjohn/fe-website/workflows/Angular%20CI/badge.svg)
+![.NET Core CI](https://github.com/n7commanderjohn/fe-website/workflows/.NET%20Core%20CI/badge.svg)
+![Website Deployment](https://github.com/n7commanderjohn/fe-website/workflows/Digital-Ocean-CD%20over%20SFTP/badge.svg)
 
 This is a WIP of a online storefront/news/forum for all Fire Emblem related content.
 You can find the currently deployed version of the website [here](http://fireemblemnetwork.com).
