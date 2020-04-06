@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using FEWebsite.API.Data.DerivedServices;
+using FEWebsite.API.DTOs.UserDTOs;
 using FEWebsite.API.Models;
 using static FEWebsite.Tests.Helpers.MockEFDatabase;
 
@@ -104,6 +105,86 @@ namespace FEWebsite.Tests
 
             user.Username = DOESNTEXIST;
             Assert.IsFalse(await this.AuthService.UserNameExistsForAnotherUser(user).ConfigureAwait(false));
+        }
+
+        [TestMethod]
+        public async Task Test_UserLogin()
+        {
+            var username = GetMockUsernames()[0];
+            //"password" is the defaulted seed password.
+            var user = await this.AuthService.Login(username, "password").ConfigureAwait(false);
+
+            Assert.IsNotNull(user);
+
+            user = await this.AuthService.Login(username, "incorrect password").ConfigureAwait(false);
+
+            Assert.IsNull(user);
+        }
+
+        [TestMethod]
+        public async Task Test_UserRegister()
+        {
+            const string testName = "Test User";
+            const string testPassword = "password";
+            UserForRegisterDto[] userRegisterDtos = {
+                new UserForRegisterDto()
+                {
+                    Username = testName + 1,
+                    Password = testPassword,
+                },
+                new UserForRegisterDto()
+                {
+                    Username = testName + 2,
+                    Password = testPassword,
+                },
+                new UserForRegisterDto()
+                {
+                    Username = testName + 3,
+                    Password = testPassword,
+                }
+            };
+
+            foreach (var userRegisterDto in userRegisterDtos)
+            {
+                await TestRegistration(userRegisterDto).ConfigureAwait(false);
+            }
+
+            async Task TestRegistration(UserForRegisterDto userRegisterDto)
+            {
+                var user = new User()
+                {
+                    Username = userRegisterDto.Username,
+                };
+
+                var registeredUser = await this.AuthService
+                    .Register(user, userRegisterDto.Password).ConfigureAwait(false);
+
+                Assert.IsNotNull(registeredUser);
+                Assert.AreEqual(userRegisterDto.Username, registeredUser.Name); //name should be autofilled with username if it is left blank
+                var lowerCasedUserName = userRegisterDto.Username.ToLower();
+                Assert.AreEqual(lowerCasedUserName, registeredUser.Username); //username should be auto lowercased
+
+                // test user login after successful registration
+                const string wrong = "wrong";
+                if (userRegisterDto.Username.Contains("1"))
+                {
+                    var loggedInUser = await this.AuthService
+                        .Login(lowerCasedUserName, userRegisterDto.Password).ConfigureAwait(false);
+                    Assert.IsNotNull(loggedInUser); //successful login
+                }
+                else if (userRegisterDto.Username.Contains("2"))
+                {
+                    var loggedInUser = await this.AuthService
+                        .Login(lowerCasedUserName, userRegisterDto.Password + wrong).ConfigureAwait(false);
+                    Assert.IsNull(loggedInUser); // should fail to authenticate with password
+                }
+                else
+                {
+                    var loggedInUser = await this.AuthService
+                        .Login(lowerCasedUserName + wrong, userRegisterDto.Password).ConfigureAwait(false);
+                    Assert.IsNull(loggedInUser); // should fail to find the user.
+                }
+            }
         }
     }
 }
