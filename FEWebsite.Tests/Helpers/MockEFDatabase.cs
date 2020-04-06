@@ -1,12 +1,18 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+using Microsoft.EntityFrameworkCore;
+
 using FEWebsite.API.Data;
 using FEWebsite.API.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace FEWebsite.Tests.Helpers
 {
     public static class MockEFDatabase
     {
         public const string DOESNTEXIST = "doesn't exist";
+
+        private static DataContext _dataContext;
 
         public static DataContext GetMockDataContext()
         {
@@ -16,6 +22,7 @@ namespace FEWebsite.Tests.Helpers
             var dataContext = new DataContext(options);
             DBSeeding.SeedUsers(dataContext);
 
+            _dataContext = dataContext;
             return dataContext;
         }
 
@@ -24,26 +31,9 @@ namespace FEWebsite.Tests.Helpers
             return new string[] { "igud", "pp4pp", "123&)(*&", "hahhaha" };
         }
 
-        public static User[] GetMockUsers()
+        public async static Task<IEnumerable<User>> GetMockUsers()
         {
-            return new User[]
-            {
-                new User() {
-                    Id = 1,
-                    Username = "iloveeirika6969",
-                    Email = "iloveeirika6969@gmail.com"
-                },
-                new User() {
-                    Id = 2,
-                    Username = "n7cmdrjohn",
-                    Email = "kimgears2@gmail.com"
-                },
-                new User() {
-                    Id = 3,
-                    Username = "n7cmdrjohn3",
-                    Email = "kimgears3@gmail.com"
-                }
-            };
+            return await _dataContext.Users.ToListAsync().ConfigureAwait(false);
         }
     }
 }

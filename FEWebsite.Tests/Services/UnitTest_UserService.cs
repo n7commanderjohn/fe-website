@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -19,8 +20,8 @@ namespace FEWebsite.Tests.Services
         [TestMethod]
         public async Task Test_GetUser()
         {
-            var users = GetMockUsers();
-            var user = await this.UserService.GetUser(users[0].Id).ConfigureAwait(false);
+            var users = await GetMockUsers().ConfigureAwait(false);
+            var user = await this.UserService.GetUser(users.First().Id).ConfigureAwait(false);
 
             Assert.IsNotNull(user);
 
