@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using FEWebsite.API.Data.DerivedServices;
+using FEWebsite.API.Helpers;
+using FEWebsite.API.Models;
 using static FEWebsite.Tests.Helpers.MockEFDatabase;
 
 namespace FEWebsite.Tests.Services
@@ -28,6 +30,28 @@ namespace FEWebsite.Tests.Services
             user = await this.UserService.GetUser(-1).ConfigureAwait(false);
 
             Assert.IsNull(user);
+        }
+
+        [TestMethod]
+        public async Task Test_GetUsers()
+        {
+            // var users = await GetMockUsers().ConfigureAwait(false);
+            var userParams = new UserParams(){
+                UserId = 1,
+                Likees = true,
+                OrderBy = nameof(User.AccountCreated).ToLower(),
+                PageNumber = 1,
+                PageSize = 2,
+                MinAge = 18,
+                MaxAge = 99
+            };
+            var users = await this.UserService.GetUsers(userParams).ConfigureAwait(false);
+
+            Assert.IsNotNull(users);
+
+            // users = await this.UserService.GetUser(-1).ConfigureAwait(false);
+
+            // Assert.IsNull(users);
         }
     }
 }

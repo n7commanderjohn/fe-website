@@ -5,8 +5,8 @@
     "GenderId": "NA",
     "Birthday": "1992-09-05",
     "Name": "N7 John",
-    "AccountCreated": "2015-01-30",
-    "LastLogin": "2015-01-30",
+    "AccountCreated": "2017-01-30",
+    "LastLogin": "2020-01-30",
     "Description": "I am best pro\nand i will git gud",
     "Photos": [
         {
@@ -379,6 +379,19 @@
       {
         "GameGenreId": 3
       }
+    ],
+    "Likers": [
+        {
+            "LikerId": 2
+        },
+        {
+            "LikerId": 3
+        }
+    ],
+    "Likees": [
+        {
+            "LikeeId": 2
+        }
     ]
   },
   {
@@ -389,7 +402,7 @@
     "Birthday": "1991-09-15",
     "Name": "Ephriam",
     "AccountCreated": "2015-01-30",
-    "LastLogin": "2015-01-30",
+    "LastLogin": "2015-03-30",
     "Description": "eirika is my waifu\nhell yeah\npronouns\ngot 2000 orbs saved for Eirika",
     "Photos": [
         {
@@ -429,16 +442,26 @@
       {
         "GameGenreId": 3
       }
+    ],
+    "Likers": [
+        {
+            "LikerId": 3
+        }
+    ],
+    "Likees": [
+        {
+            "LikeeId": 3
+        }
     ]
   },
   {
     "Username": "n7cmdrjohn3",
     "Email":  "kimgears3@gmail.com",
     "GenderId": "NA",
-    "Birthday": "1992-09-05",
+    "Birthday": "1992-12-05",
     "Name": "N7 John 3",
     "AccountCreated": "2015-01-30",
-    "LastLogin": "2015-01-30",
+    "LastLogin": "2018-01-30",
     "Description": "i am a clone",
     "Photos": [
         {
@@ -811,6 +834,6 @@
       {
         "GameGenreId": 3
       }
-    ]
+    ],
   }
 ]

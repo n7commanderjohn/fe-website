@@ -82,16 +82,10 @@ namespace FEWebsite.API.Data.DerivedServices
                     users = users.Where(GenderIdMatches(userParams));
                 }
 
-                if (userParams.Likers) // these two can possibly just be merged.
+                if (userParams.Likers || userParams.Likees)
                 {
                     var userLikerIds = await this.GetUserLikes(userParams).ConfigureAwait(false);
                     users = users.Where(u => userLikerIds.Contains(u.Id));
-                }
-
-                if (userParams.Likees)
-                {
-                    var userLikeeIds = await this.GetUserLikes(userParams).ConfigureAwait(false);
-                    users = users.Where(u => userLikeeIds.Contains(u.Id));
                 }
 
                 var orderBy = userParams.OrderBy?.ToLower() ?? nameof(User.LastLogin).ToLower();
@@ -141,6 +135,8 @@ namespace FEWebsite.API.Data.DerivedServices
         {
             var userId = userParams.UserId;
             var user = await this.Context.Users
+                .Include(u => u.Likees)
+                .Include(u => u.Likers)
                 .FirstOrDefaultAsync(u => u.Id == userId)
                 .ConfigureAwait(false);
 
