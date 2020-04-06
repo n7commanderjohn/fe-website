@@ -29,14 +29,17 @@ namespace FEWebsite.Tests.Helpers
             return new User[]
             {
                 new User() {
+                    Id = 1,
                     Username = "iloveeirika6969",
                     Email = "iloveeirika6969@gmail.com"
                 },
                 new User() {
+                    Id = 2,
                     Username = "n7cmdrjohn",
                     Email = "kimgears2@gmail.com"
                 },
                 new User() {
+                    Id = 3,
                     Username = "n7cmdrjohn3",
                     Email = "kimgears3@gmail.com"
                 }
