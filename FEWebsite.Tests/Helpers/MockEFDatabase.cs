@@ -1,4 +1,5 @@
 using FEWebsite.API.Data;
+using FEWebsite.API.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace FEWebsite.Tests.Helpers
@@ -23,14 +24,23 @@ namespace FEWebsite.Tests.Helpers
             return new string[] { "igud", "pp4pp", "123&)(*&", "hahhaha" };
         }
 
-        public static string[] GetMockExistingEmails()
+        public static User[] GetMockUsers()
         {
-            return new string[] { "iloveeirika6969@gmail.com", "kimgears2@gmail.com", "kimgears3@gmail.com" };
-        }
-
-        public static string[] GetMockUsernames()
-        {
-            return new string[] { "n7cmdrjohn", "iloveeirika6969", "n7cmdrjohn3" };
+            return new User[]
+            {
+                new User() {
+                    Username = "iloveeirika6969",
+                    Email = "iloveeirika6969@gmail.com"
+                },
+                new User() {
+                    Username = "n7cmdrjohn",
+                    Email = "kimgears2@gmail.com"
+                },
+                new User() {
+                    Username = "n7cmdrjohn3",
+                    Email = "kimgears3@gmail.com"
+                }
+            };
         }
     }
 }

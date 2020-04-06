@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -42,10 +43,10 @@ namespace FEWebsite.Tests
         [TestMethod]
         public void Test_CreateUserToken()
         {
-            var usernames = GetMockUsernames();
+            var mockUsers = GetMockUsers();
             var user = new User() {
                 Id = 1,
-                Username = usernames[0]
+                Username = mockUsers[0].Username
             };
 
             var token = this.AuthService.CreateUserToken(user, "1fXr*D!iVNF!VK0Ib93@^n$7sq3wPF");
@@ -56,7 +57,7 @@ namespace FEWebsite.Tests
         [TestMethod]
         public async Task Test_EmailExists()
         {
-            foreach (var email in GetMockExistingEmails())
+            foreach (var email in GetMockUsers().Select(u => u.Email))
             {
                 Assert.IsTrue(await this.AuthService.EmailExists(email).ConfigureAwait(false));
             }
@@ -70,7 +71,7 @@ namespace FEWebsite.Tests
             var user = new User() {
                 Id = 6969
             };
-            foreach (var email in GetMockExistingEmails())
+            foreach (var email in GetMockUsers().Select(u => u.Email))
             {
                 user.Email = email;
                 Assert.IsTrue(await this.AuthService.EmailExistsForAnotherUser(user).ConfigureAwait(false));
@@ -83,7 +84,7 @@ namespace FEWebsite.Tests
         [TestMethod]
         public async Task Test_UserNameExists()
         {
-            foreach (var username in GetMockUsernames())
+            foreach (var username in GetMockUsers().Select(u => u.Username))
             {
                 Assert.IsTrue(await this.AuthService.UserNameExists(username).ConfigureAwait(false));
             }
@@ -97,7 +98,7 @@ namespace FEWebsite.Tests
             var user = new User() {
                 Id = 6969
             };
-            foreach (var username in GetMockUsernames())
+            foreach (var username in GetMockUsers().Select(u => u.Username))
             {
                 user.Username = username;
                 Assert.IsTrue(await this.AuthService.UserNameExistsForAnotherUser(user).ConfigureAwait(false));
@@ -110,7 +111,7 @@ namespace FEWebsite.Tests
         [TestMethod]
         public async Task Test_UserLogin()
         {
-            var username = GetMockUsernames()[0];
+            var username = GetMockUsers()[0].Username;
             //"password" is the defaulted seed password.
             var user = await this.AuthService.Login(username, "password").ConfigureAwait(false);
 
