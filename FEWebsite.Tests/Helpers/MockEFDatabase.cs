@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 using FEWebsite.API.Data;
 using FEWebsite.API.Models;
@@ -17,7 +18,7 @@ namespace FEWebsite.Tests.Helpers
         public static DataContext GetMockDataContext()
         {
             var options = new DbContextOptionsBuilder<DataContext>()
-                .UseInMemoryDatabase(databaseName: "fewebsite-test")
+                .UseInMemoryDatabase("fewebsite-test", new InMemoryDatabaseRoot())
                 .UseLazyLoadingProxies()
                 .EnableSensitiveDataLogging()
                 .Options;
