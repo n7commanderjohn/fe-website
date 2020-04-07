@@ -35,23 +35,47 @@ namespace FEWebsite.Tests.Services
         [TestMethod]
         public async Task Test_GetUsers()
         {
-            // var users = await GetMockUsers().ConfigureAwait(false);
-            var userParams = new UserParams(){
+            var userParams = new UserParams()
+            {
                 UserId = 1,
-                Likees = true,
                 OrderBy = nameof(User.AccountCreated).ToLower(),
                 PageNumber = 1,
-                PageSize = 2,
+                PageSize = 3,
                 MinAge = 18,
                 MaxAge = 99
             };
             var users = await this.UserService.GetUsers(userParams).ConfigureAwait(false);
 
-            Assert.IsNotNull(users);
+            AssertCheckResults(users, userParams);
 
-            // users = await this.UserService.GetUser(-1).ConfigureAwait(false);
+            userParams.PageSize = 2;
+            users = await this.UserService.GetUsers(userParams).ConfigureAwait(false);
 
-            // Assert.IsNull(users);
+            AssertCheckResults(users, userParams);
+
+            userParams.Likees = true;
+            users = await this.UserService.GetUsers(userParams).ConfigureAwait(false);
+
+            AssertCheckResults(users, userParams, true, 1);
+
+            userParams.Likees = false;
+            userParams.Likers = true;
+            users = await this.UserService.GetUsers(userParams).ConfigureAwait(false);
+
+            AssertCheckResults(users, userParams, true, 2);
+
+            static void AssertCheckResults(PagedList<User> users, UserParams userParams, bool useExpectedCount = false, int expectedCount = 0)
+            {
+                if (useExpectedCount) // use expected count if there is a likee/liker filter
+                {
+                    Assert.IsTrue(users.Count == expectedCount); // should be x users found based on parameters
+                }
+                else
+                {
+                    Assert.IsTrue(users.Count == userParams.PageSize); // should be x users found based on parameters
+                }
+                Assert.IsFalse(users.Any(u => u.Id == userParams.UserId)); // should not include self in results
+            }
         }
     }
 }
