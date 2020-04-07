@@ -21,3 +21,7 @@ jobs:
       run: | 
         ASPNETCORE_ENVIRONMENT='Production'
         dotnet build --configuration Release
+    - name: Test with dotnet
+      run: | 
+        ASPNETCORE_ENVIRONMENT='Production'
+        dotnet test --configuration Release
