@@ -56,7 +56,7 @@ namespace FEWebsite.Tests.Services
             userParams.Likees = true;
             users = await this.UserService.GetUsers(userParams).ConfigureAwait(false);
 
-            AssertCheckResults(users, userParams, true, 2);
+            AssertCheckResults(users, userParams, true, 1);
 
             userParams.Likees = false;
             userParams.Likers = true;
