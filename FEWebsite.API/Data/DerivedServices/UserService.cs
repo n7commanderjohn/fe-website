@@ -135,8 +135,6 @@ namespace FEWebsite.API.Data.DerivedServices
         {
             var userId = userParams.UserId;
             var user = await this.Context.Users
-                .Include(u => u.Likees)
-                .Include(u => u.Likers)
                 .FirstOrDefaultAsync(u => u.Id == userId)
                 .ConfigureAwait(false);
 

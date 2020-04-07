@@ -18,6 +18,7 @@ namespace FEWebsite.Tests.Helpers
         {
             var options = new DbContextOptionsBuilder<DataContext>()
                 .UseInMemoryDatabase(databaseName: "fewebsite-test")
+                .UseLazyLoadingProxies()
                 .EnableSensitiveDataLogging()
                 .Options;
             var dataContext = new DataContext(options);
