@@ -27,7 +27,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: npm --prefix ./FEWebsite-SPA ci
     - run: npm --prefix ./FEWebsite-SPA run build-prod --if-present
-#     - run: npm --prefix ./FEWebsite-SPA test until unit tests are set up properly, disable
+#     - run: npm --prefix ./FEWebsite-SPA test until front end unit tests are set up properly, disable
       env:
         CI: true
 
@@ -36,6 +36,15 @@ jobs:
       with:
         dotnet-version: 3.1.101
       
+    - name: Build with dotnet
+      run: | 
+        ASPNETCORE_ENVIRONMENT='Production'
+        dotnet build --configuration Release
+    - name: Test with dotnet
+      run: | 
+        ASPNETCORE_ENVIRONMENT='Production'
+        dotnet test --configuration Release
+# build and test before deployment.
     - name: Publish with dotnet
       run: | 
         ASPNETCORE_ENVIRONMENT='Production'
