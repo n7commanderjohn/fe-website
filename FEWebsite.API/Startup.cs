@@ -24,6 +24,8 @@ namespace FEWebsite.API
 {
     public class Startup
     {
+        private readonly string policyName = "AllowOrigin";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -62,7 +64,15 @@ namespace FEWebsite.API
                     opt.SerializerSettings.ReferenceLoopHandling =
                         Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                 });
-            services.AddCors();
+            services.AddCors(options => {
+                options.AddPolicy(this.policyName,
+                    builder => builder.SetIsOriginAllowedToAllowWildcardSubdomains()
+                        .AllowAnyOrigin()
+                        // .WithOrigins("http://fireemblemnetwork.com", "http://localhost:4200")
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                );
+            });
             services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
             this.AddAutoMappers(services);
             this.AddServiceScopes(services);
@@ -129,18 +139,19 @@ namespace FEWebsite.API
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseCors(x => x.AllowAnyOrigin()
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-            );
+            app.UseCors(this.policyName);
 
             app.UseDefaultFiles();
             app.UseStaticFiles();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
-                endpoints.MapFallbackToController(nameof(Fallback.Index), nameof(Fallback));
+                endpoints.MapControllers()
+                    // .RequireCors(this.policyName)
+                    ;
+                endpoints.MapFallbackToController(nameof(Fallback.Index), nameof(Fallback))
+                    // .RequireCors(this.policyName)
+                    ;
             });
         }
     }
