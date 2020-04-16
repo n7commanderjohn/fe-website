@@ -33,6 +33,7 @@ import { HomeComponent } from './home/home.component';
 import { MediaComponent } from './media/media.component';
 import { MessagesComponent } from './messages/messages.component';
 import { NavComponent } from './nav/nav.component';
+import { NavSideComponent } from './nav/nav-side/nav-side.component';
 import { RegisterReactiveComponent } from './register-reactive/register-reactive.component';
 import { RegisterComponent } from './register/register.component';
 import { routes } from './routes';
@@ -61,6 +62,7 @@ export class CustomHammerConfig extends HammerGestureConfig  {
    declarations: [
       AppComponent,
       NavComponent,
+      NavSideComponent,
       HomeComponent,
       RegisterComponent,
       RegisterReactiveComponent,
