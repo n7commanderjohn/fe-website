@@ -17,14 +17,14 @@ namespace FEWebsite.API.Controllers
     public class AuthController : ControllerBase
     {
         private IAuthService AuthService { get; }
-        private IUserService UserService { get; }
+        private IUserRepoService UserRepoService { get; }
         public IConfiguration Config { get; }
         public IMapper Mapper { get; }
 
-        public AuthController(IAuthService authService, IUserService userService, IConfiguration config, IMapper mapper)
+        public AuthController(IAuthService authService, IUserRepoService userRepoService, IConfiguration config, IMapper mapper)
         {
             this.AuthService = authService;
-            this.UserService = userService;
+            this.UserRepoService = userRepoService;
             this.Config = config;
             this.Mapper = mapper;
         }
@@ -85,7 +85,7 @@ namespace FEWebsite.API.Controllers
         [HttpPut("resetpassword")]
         public async Task<IActionResult> ResetPassword(UserForPasswordResetDto userForPasswordResetDto)
         {
-            var matchedUser = await this.UserService
+            var matchedUser = await this.UserRepoService
                 .GetUserThroughPasswordResetProcess(userForPasswordResetDto).ConfigureAwait(false);
 
             if (matchedUser == null)
@@ -97,7 +97,7 @@ namespace FEWebsite.API.Controllers
             const string generatedTempPassword = "password"; //change this to a random temp password later on.
             this.AuthService.CreatePasswordHash(matchedUser, generatedTempPassword);
 
-            var passwordResetSuccessful = await this.UserService.SaveAll().ConfigureAwait(false);
+            var passwordResetSuccessful = await this.UserRepoService.SaveAll().ConfigureAwait(false);
             if (passwordResetSuccessful)
             {
                 return this.Ok(new StatusCodeResultReturnObject(this.Ok(),

@@ -11,26 +11,26 @@ using static FEWebsite.Tests.Helpers.MockEFDatabase;
 namespace FEWebsite.Tests.Services
 {
     [TestClass]
-    public class UnitTest_UserService
+    public class UnitTest_UserRepoService
     {
-        private UserService UserService { get; }
+        private UserRepoService UserRepoService { get; }
 
         private static int TestCount { get; set; }
 
-        public UnitTest_UserService()
+        public UnitTest_UserRepoService()
         {
-            this.UserService = new UserService(GetMockDataContext());
+            this.UserRepoService = new UserRepoService(GetMockDataContext());
         }
 
         [TestMethod]
         public async Task Test_GetUser()
         {
             var users = await GetMockUsers().ConfigureAwait(false);
-            var user = await this.UserService.GetUser(users.First().Id).ConfigureAwait(false);
+            var user = await this.UserRepoService.GetUser(users.First().Id).ConfigureAwait(false);
 
             Assert.IsNotNull(user);
 
-            user = await this.UserService.GetUser(-1).ConfigureAwait(false);
+            user = await this.UserRepoService.GetUser(-1).ConfigureAwait(false);
 
             Assert.IsNull(user);
         }
@@ -47,23 +47,23 @@ namespace FEWebsite.Tests.Services
                 MinAge = 18,
                 MaxAge = 99
             };
-            var users = await this.UserService.GetUsers(userParams).ConfigureAwait(false);
+            var users = await this.UserRepoService.GetUsers(userParams).ConfigureAwait(false);
 
             AssertCheckResults(users, userParams);
 
             userParams.PageSize = 3;
-            users = await this.UserService.GetUsers(userParams).ConfigureAwait(false);
+            users = await this.UserRepoService.GetUsers(userParams).ConfigureAwait(false);
 
             AssertCheckResults(users, userParams, true, 2);
 
             userParams.Likees = true;
-            users = await this.UserService.GetUsers(userParams).ConfigureAwait(false);
+            users = await this.UserRepoService.GetUsers(userParams).ConfigureAwait(false);
 
             AssertCheckResults(users, userParams, true, 1);
 
             userParams.Likees = false;
             userParams.Likers = true;
-            users = await this.UserService.GetUsers(userParams).ConfigureAwait(false);
+            users = await this.UserRepoService.GetUsers(userParams).ConfigureAwait(false);
 
             AssertCheckResults(users, userParams, true, 2);
 

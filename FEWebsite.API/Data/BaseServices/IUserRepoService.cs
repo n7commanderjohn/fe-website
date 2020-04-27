@@ -8,7 +8,7 @@ using FEWebsite.API.Models.ManyToManyModels.ComboModels;
 
 namespace FEWebsite.API.Data.BaseServices
 {
-    public interface IUserService
+    public interface IUserRepoService
     {
         void Add<T>(T entity) where T : class;
 

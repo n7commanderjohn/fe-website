@@ -81,7 +81,7 @@ namespace FEWebsite.API
 
         private void AddAutoMappers(IServiceCollection services)
         {
-            services.AddAutoMapper(typeof(UserService).Assembly);
+            services.AddAutoMapper(typeof(UserRepoService).Assembly);
             services.AddAutoMapper(typeof(GameService).Assembly);
             services.AddAutoMapper(typeof(GameGenreService).Assembly);
         }
@@ -89,7 +89,7 @@ namespace FEWebsite.API
         private void AddServiceScopes(IServiceCollection services)
         {
             services.AddScoped<IAuthService, AuthService>();
-            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserRepoService, UserRepoService>();
             services.AddScoped<IGameService, GameService>();
             services.AddScoped<IGameGenreService, GameGenreService>();
             services.AddScoped<LogUserActivity>();

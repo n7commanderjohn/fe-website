@@ -21,12 +21,12 @@ namespace FEWebsite.API.Controllers
     [ApiController]
     public class MessageController : ControllerBase
     {
-        private IUserService UserService { get; }
+        private IUserRepoService UserRepoService { get; }
         private IMapper Mapper { get; }
 
-        public MessageController(IUserService userService, IMapper mapper)
+        public MessageController(IUserRepoService userRepoService, IMapper mapper)
         {
-            this.UserService = userService;
+            this.UserRepoService = userRepoService;
             this.Mapper = mapper;
         }
 
@@ -39,7 +39,7 @@ namespace FEWebsite.API.Controllers
                 return unauthorization;
             }
 
-            var userMessage = await this.UserService.GetMessage(messageId).ConfigureAwait(false);
+            var userMessage = await this.UserRepoService.GetMessage(messageId).ConfigureAwait(false);
 
             if (userMessage == null)
             {
@@ -60,7 +60,7 @@ namespace FEWebsite.API.Controllers
             }
 
             messageParams.UserId = userId;
-            var pagedUserMessages = await this.UserService.GetMessagesForUser(messageParams)
+            var pagedUserMessages = await this.UserRepoService.GetMessagesForUser(messageParams)
                 .ConfigureAwait(false);
 
             var userMessages = this.Mapper.Map<IEnumerable<UserMessageToReturnDto>>(pagedUserMessages);
@@ -79,7 +79,7 @@ namespace FEWebsite.API.Controllers
                 return unauthorization;
             }
 
-            var messageThread = await this.UserService.GetMessageThread(userId, recipientId).ConfigureAwait(false);
+            var messageThread = await this.UserRepoService.GetMessageThread(userId, recipientId).ConfigureAwait(false);
 
             var returnMessageThread = this.Mapper.Map<IEnumerable<UserMessageToReturnDto>>(messageThread);
 
@@ -97,7 +97,7 @@ namespace FEWebsite.API.Controllers
 
             userMessageCreationDto.SenderId = userId;
 
-            var recipient = await this.UserService.GetUser(userMessageCreationDto.RecipientId).ConfigureAwait(false);
+            var recipient = await this.UserRepoService.GetUser(userMessageCreationDto.RecipientId).ConfigureAwait(false);
             if (recipient == null)
             {
                 return this.BadRequest(new StatusCodeResultReturnObject(this.BadRequest(),
@@ -105,11 +105,11 @@ namespace FEWebsite.API.Controllers
             }
 
             var outgoingMessage = this.Mapper.Map<UserMessage>(userMessageCreationDto);
-            this.UserService.Add(outgoingMessage);
+            this.UserRepoService.Add(outgoingMessage);
 
-            if (await this.UserService.SaveAll().ConfigureAwait(false))
+            if (await this.UserRepoService.SaveAll().ConfigureAwait(false))
             {
-                var sender = await this.UserService.GetUser(userMessageCreationDto.SenderId).ConfigureAwait(false);
+                var sender = await this.UserRepoService.GetUser(userMessageCreationDto.SenderId).ConfigureAwait(false);
                 if (sender != null)
                 {
                     outgoingMessage.Sender = sender;
@@ -132,7 +132,7 @@ namespace FEWebsite.API.Controllers
                 return unauthorization;
             }
 
-            var messageToDelete = await this.UserService.GetMessage(messageId).ConfigureAwait(false);
+            var messageToDelete = await this.UserRepoService.GetMessage(messageId).ConfigureAwait(false);
 
             if (messageToDelete.SenderId == userId)
             {
@@ -145,10 +145,10 @@ namespace FEWebsite.API.Controllers
 
             if (messageToDelete.SenderDeleted && messageToDelete.RecipientDeleted)
             {
-                this.UserService.Delete(messageToDelete);
+                this.UserRepoService.Delete(messageToDelete);
             }
 
-            if (await this.UserService.SaveAll().ConfigureAwait(false))
+            if (await this.UserRepoService.SaveAll().ConfigureAwait(false))
             {
                 return this.NoContent();
             }
@@ -165,7 +165,7 @@ namespace FEWebsite.API.Controllers
                 return unauthorization;
             }
 
-            var message = await this.UserService.GetMessage(messageId).ConfigureAwait(false);
+            var message = await this.UserRepoService.GetMessage(messageId).ConfigureAwait(false);
 
             if (message.RecipientId != userId)
             {
@@ -175,7 +175,7 @@ namespace FEWebsite.API.Controllers
             message.IsRead = true;
             message.DateRead = DateTime.Now;
 
-            await this.UserService.SaveAll().ConfigureAwait(false);
+            await this.UserRepoService.SaveAll().ConfigureAwait(false);
 
             return this.NoContent();
         }

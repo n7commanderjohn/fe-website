@@ -15,11 +15,11 @@ using FEWebsite.API.Models.ManyToManyModels.ComboModels;
 
 namespace FEWebsite.API.Data.DerivedServices
 {
-    public class UserService : BaseService, IUserService
+    public class UserRepoService : BaseService, IUserRepoService
     {
         private DataContext Context { get; }
 
-        public UserService(DataContext context)
+        public UserRepoService(DataContext context)
         {
             this.Context = context;
         }

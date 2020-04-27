@@ -22,17 +22,17 @@ namespace FEWebsite.API.Controllers
     [ApiController]
     public class PhotoController : ControllerBase
     {
-        public IUserService UserService { get; }
+        public IUserRepoService UserRepoService { get; }
         public IMapper Mapper { get; }
         public IOptions<CloudinarySettings> CloudinaryConfig { get; }
 
         public Cloudinary Cloudinary { get; }
 
-        public PhotoController(IUserService userService,
+        public PhotoController(IUserRepoService userRepoService,
             IMapper mapper,
             IOptions<CloudinarySettings> cloudinaryConfig)
         {
-            this.UserService = userService;
+            this.UserRepoService = userRepoService;
             this.Mapper = mapper;
             this.CloudinaryConfig = cloudinaryConfig;
 
@@ -48,7 +48,7 @@ namespace FEWebsite.API.Controllers
         [HttpGet("{id}", Name = "GetPhoto")]
         public async Task<IActionResult> GetPhoto(int id)
         {
-            var photoFromRepo = await this.UserService.GetPhoto(id).ConfigureAwait(false);
+            var photoFromRepo = await this.UserRepoService.GetPhoto(id).ConfigureAwait(false);
 
             var photo = this.Mapper.Map<PhotoForReturnDto>(photoFromRepo);
 
@@ -65,7 +65,7 @@ namespace FEWebsite.API.Controllers
                 return unauthorization;
             }
 
-            var currentUser = await this.UserService.GetUser(userId).ConfigureAwait(false);
+            var currentUser = await this.UserRepoService.GetUser(userId).ConfigureAwait(false);
             var file = photoForUploadDto.File;
             var uploadResult = new ImageUploadResult();
 
@@ -105,7 +105,7 @@ namespace FEWebsite.API.Controllers
             }
 
             currentUser.Photos.Add(photo);
-            bool isDatabaseSaveSuccessful = await this.UserService.SaveAll().ConfigureAwait(false);
+            bool isDatabaseSaveSuccessful = await this.UserRepoService.SaveAll().ConfigureAwait(false);
             if (isDatabaseSaveSuccessful)
             {
                 var photoToReturn = this.Mapper.Map<PhotoForReturnDto>(photo);
@@ -120,13 +120,13 @@ namespace FEWebsite.API.Controllers
         [HttpPut("{photoId}/setMain")]
         public async Task<IActionResult> SetMainPhoto(int userId, int photoId)
         {
-            var user = await this.UserService.GetUser(userId).ConfigureAwait(false);
+            var user = await this.UserRepoService.GetUser(userId).ConfigureAwait(false);
             var unauthorizedObj = this.IsUserAndPhotoAuthorized(user, photoId);
 
             bool isRequestAuthorized = unauthorizedObj == null;
             if (isRequestAuthorized)
             {
-                var photoToSetAsMain = await this.UserService.GetPhoto(photoId).ConfigureAwait(false);
+                var photoToSetAsMain = await this.UserRepoService.GetPhoto(photoId).ConfigureAwait(false);
                 if (photoToSetAsMain == null)
                 {
                     return this.BadRequest(new StatusCodeResultReturnObject(this.BadRequest(),
@@ -138,14 +138,14 @@ namespace FEWebsite.API.Controllers
                         "This photo is already the user's main photo."));
                 }
 
-                var setPhoto = await this.UserService
+                var setPhoto = await this.UserRepoService
                     .SetUserPhotoAsMain(userId, photoToSetAsMain).ConfigureAwait(false);
                 if (!setPhoto.IsMain)
                 {
                     return this.Problem(detail: "Setting the selected photo as the main photo failed.", statusCode: 500);
                 }
 
-                bool isDatabaseSaveSuccessful = await this.UserService.SaveAll().ConfigureAwait(false);
+                bool isDatabaseSaveSuccessful = await this.UserRepoService.SaveAll().ConfigureAwait(false);
                 if (isDatabaseSaveSuccessful)
                 {
                     return this.NoContent();
@@ -164,13 +164,13 @@ namespace FEWebsite.API.Controllers
         public async Task<IActionResult> DeletePhoto(int userId, int photoId)
         {
             const string failureBase = "Failed to delete the selected photo from the ";
-            var user = await this.UserService.GetUser(userId).ConfigureAwait(false);
+            var user = await this.UserRepoService.GetUser(userId).ConfigureAwait(false);
             var unauthorizedObj = this.IsUserAndPhotoAuthorized(user, photoId);
 
             bool isRequestAuthorized = unauthorizedObj == null;
             if (isRequestAuthorized)
             {
-                var photoToDelete = await this.UserService.GetPhoto(photoId).ConfigureAwait(false);
+                var photoToDelete = await this.UserRepoService.GetPhoto(photoId).ConfigureAwait(false);
                 if (photoToDelete.IsMain)
                 {
                     // return this.BadRequest(new StatusCodeResultReturnObject(this.BadRequest()){
@@ -194,7 +194,7 @@ namespace FEWebsite.API.Controllers
                     bool photoNotFound = result.Result.Equals("not found");
                     if (isPhotoDestructionOnCloudinarySuccessful || photoNotFound)
                     {
-                        this.UserService.Delete(photoToDelete);
+                        this.UserRepoService.Delete(photoToDelete);
                     }
                     else
                     {
@@ -204,10 +204,10 @@ namespace FEWebsite.API.Controllers
                 }
                 else
                 {
-                    this.UserService.Delete(photoToDelete);
+                    this.UserRepoService.Delete(photoToDelete);
                 }
 
-                bool isDatabaseSaveSuccessful = await this.UserService.SaveAll().ConfigureAwait(false);
+                bool isDatabaseSaveSuccessful = await this.UserRepoService.SaveAll().ConfigureAwait(false);
                 if (isDatabaseSaveSuccessful)
                 {
                     return this.Ok();
