@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 
 using FEWebsite.API.Models.AbstractModels;
 using FEWebsite.API.Models.ManyToManyModels.ComboModels;
