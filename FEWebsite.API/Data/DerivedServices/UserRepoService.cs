@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 
-using FEWebsite.API.Data.BaseServices;
+using FEWebsite.API.Interfaces;
 using FEWebsite.API.DTOs.UserDTOs;
 using FEWebsite.API.Helpers;
 using FEWebsite.API.Models;

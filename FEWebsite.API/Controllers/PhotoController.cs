@@ -10,7 +10,7 @@ using AutoMapper;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 
-using FEWebsite.API.Data.BaseServices;
+using FEWebsite.API.Interfaces;
 using FEWebsite.API.DTOs.PhotoDTOs;
 using FEWebsite.API.Helpers;
 using FEWebsite.API.Models;

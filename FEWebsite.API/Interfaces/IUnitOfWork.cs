@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace FEWebsite.API.Data.BaseServices
+namespace FEWebsite.API.Interfaces
 {
     public interface IUnitOfWork : IDisposable
     {

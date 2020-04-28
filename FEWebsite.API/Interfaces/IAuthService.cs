@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 
 using FEWebsite.API.Models;
 
-namespace FEWebsite.API.Data.BaseServices
+namespace FEWebsite.API.Interfaces
 {
     public interface IAuthService
     {

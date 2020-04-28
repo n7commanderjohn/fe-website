@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
 
 using FEWebsite.API.Controllers;
-using FEWebsite.API.Data.BaseServices;
+using FEWebsite.API.Interfaces;
 
 namespace FEWebsite.API.Helpers
 {

@@ -8,7 +8,7 @@ using Microsoft.Extensions.Configuration;
 
 using AutoMapper;
 
-using FEWebsite.API.Data.BaseServices;
+using FEWebsite.API.Interfaces;
 using FEWebsite.API.DTOs.UserDTOs;
 using FEWebsite.API.Helpers;
 using FEWebsite.API.Models.ManyToManyModels.ComboModels;

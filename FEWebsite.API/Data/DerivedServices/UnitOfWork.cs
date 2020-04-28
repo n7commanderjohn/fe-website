@@ -1,6 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using FEWebsite.API.Data.BaseServices;
+using FEWebsite.API.Interfaces;
 
 namespace FEWebsite.API.Data.DerivedServices
 {

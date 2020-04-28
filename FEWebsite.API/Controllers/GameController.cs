@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using AutoMapper;
 
-using FEWebsite.API.Data.BaseServices;
+using FEWebsite.API.Interfaces;
 using FEWebsite.API.DTOs.GameDTOs;
 
 namespace FEWebsite.API.Controllers

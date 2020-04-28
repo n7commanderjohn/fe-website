@@ -6,7 +6,7 @@ using FEWebsite.API.Helpers;
 using FEWebsite.API.Models;
 using FEWebsite.API.Models.ManyToManyModels.ComboModels;
 
-namespace FEWebsite.API.Data.BaseServices
+namespace FEWebsite.API.Interfaces
 {
     public interface IUserRepoService
     {

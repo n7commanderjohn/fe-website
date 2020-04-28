@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 using FEWebsite.API.Models.ManyToManyModels;
 
-namespace FEWebsite.API.Data.BaseServices
+namespace FEWebsite.API.Interfaces
 {
     public interface IGameGenreService
     {
