@@ -14,8 +14,6 @@ namespace FEWebsite.API.Data.BaseServices
 
         void Delete<T>(T entity) where T : class;
 
-        Task<bool> SaveAll();
-
         Task<PagedList<User>> GetUsers(UserParams userParams);
 
         Task<User> GetUser(int userId);
@@ -39,5 +37,7 @@ namespace FEWebsite.API.Data.BaseServices
         Task<PagedList<UserMessage>> GetMessagesForUser(MessageParams messageParams);
 
         Task<IEnumerable<UserMessage>> GetMessageThread(int userId, int recipientId);
+
+        bool DoesUserPhotoExist(User user, int photoId);
     }
 }

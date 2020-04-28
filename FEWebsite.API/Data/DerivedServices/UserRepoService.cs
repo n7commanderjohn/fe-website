@@ -17,11 +17,8 @@ namespace FEWebsite.API.Data.DerivedServices
 {
     public class UserRepoService : BaseService, IUserRepoService
     {
-        private DataContext Context { get; }
-
-        public UserRepoService(DataContext context)
+        public UserRepoService(DataContext context) : base(context)
         {
-            this.Context = context;
         }
 
         public void Add<T>(T entity) where T : class
@@ -320,6 +317,11 @@ namespace FEWebsite.API.Data.DerivedServices
                     .Where(um => (um.RecipientId == userId && !um.RecipientDeleted && um.SenderId == recipientId)
                         || (um.RecipientId == recipientId && !um.SenderDeleted && um.SenderId == userId));
             }
+        }
+
+        public bool DoesUserPhotoExist(User user, int photoId)
+        {
+            return user.Photos.Any(p => p.Id == photoId);
         }
     }
 }

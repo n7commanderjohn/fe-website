@@ -22,15 +22,17 @@ namespace FEWebsite.API.Controllers
     [ApiController]
     public class PhotoController : ControllerBase
     {
-        public IUserRepoService UserRepoService { get; }
-        public IMapper Mapper { get; }
-        public IOptions<CloudinarySettings> CloudinaryConfig { get; }
+        private IUserRepoService UserRepoService { get; }
+        private IMapper Mapper { get; }
+        private IOptions<CloudinarySettings> CloudinaryConfig { get; }
 
-        public Cloudinary Cloudinary { get; }
+        private Cloudinary Cloudinary { get; }
+        private IUnitOfWork UnitOfWork { get; }
 
         public PhotoController(IUserRepoService userRepoService,
             IMapper mapper,
-            IOptions<CloudinarySettings> cloudinaryConfig)
+            IOptions<CloudinarySettings> cloudinaryConfig,
+            IUnitOfWork unitOfWork)
         {
             this.UserRepoService = userRepoService;
             this.Mapper = mapper;
@@ -43,6 +45,7 @@ namespace FEWebsite.API.Controllers
             );
 
             this.Cloudinary = new Cloudinary(acc);
+            this.UnitOfWork = unitOfWork;
         }
 
         [HttpGet("{id}", Name = "GetPhoto")]
@@ -105,7 +108,7 @@ namespace FEWebsite.API.Controllers
             }
 
             currentUser.Photos.Add(photo);
-            bool isDatabaseSaveSuccessful = await this.UserRepoService.SaveAll().ConfigureAwait(false);
+            bool isDatabaseSaveSuccessful = await this.UnitOfWork.SaveAllAsync().ConfigureAwait(false);
             if (isDatabaseSaveSuccessful)
             {
                 var photoToReturn = this.Mapper.Map<PhotoForReturnDto>(photo);
@@ -145,7 +148,7 @@ namespace FEWebsite.API.Controllers
                     return this.Problem(detail: "Setting the selected photo as the main photo failed.", statusCode: 500);
                 }
 
-                bool isDatabaseSaveSuccessful = await this.UserRepoService.SaveAll().ConfigureAwait(false);
+                bool isDatabaseSaveSuccessful = await this.UnitOfWork.SaveAllAsync().ConfigureAwait(false);
                 if (isDatabaseSaveSuccessful)
                 {
                     return this.NoContent();
@@ -207,7 +210,7 @@ namespace FEWebsite.API.Controllers
                     this.UserRepoService.Delete(photoToDelete);
                 }
 
-                bool isDatabaseSaveSuccessful = await this.UserRepoService.SaveAll().ConfigureAwait(false);
+                bool isDatabaseSaveSuccessful = await this.UnitOfWork.SaveAllAsync().ConfigureAwait(false);
                 if (isDatabaseSaveSuccessful)
                 {
                     return this.Ok();
@@ -232,7 +235,8 @@ namespace FEWebsite.API.Controllers
             {
                 return unauthorization;
             }
-            if (!user.DoesPhotoExist(photoId))
+
+            if (!this.UserRepoService.DoesUserPhotoExist(user, photoId))
             {
                 return this.Unauthorized("This photo id doesn't match any of the user's photos.");
             }

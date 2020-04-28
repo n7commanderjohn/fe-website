@@ -23,11 +23,13 @@ namespace FEWebsite.API.Controllers
     {
         private IUserRepoService UserRepoService { get; }
         private IMapper Mapper { get; }
+        private IUnitOfWork UnitOfWork { get; }
 
-        public MessageController(IUserRepoService userRepoService, IMapper mapper)
+        public MessageController(IUserRepoService userRepoService, IMapper mapper, IUnitOfWork unitOfWork)
         {
             this.UserRepoService = userRepoService;
             this.Mapper = mapper;
+            this.UnitOfWork = unitOfWork;
         }
 
         [HttpGet("{messageId}", Name = "GetUserMessage")]
@@ -107,7 +109,7 @@ namespace FEWebsite.API.Controllers
             var outgoingMessage = this.Mapper.Map<UserMessage>(userMessageCreationDto);
             this.UserRepoService.Add(outgoingMessage);
 
-            if (await this.UserRepoService.SaveAll().ConfigureAwait(false))
+            if (await this.UnitOfWork.SaveAllAsync().ConfigureAwait(false))
             {
                 var sender = await this.UserRepoService.GetUser(userMessageCreationDto.SenderId).ConfigureAwait(false);
                 if (sender != null)
@@ -148,7 +150,7 @@ namespace FEWebsite.API.Controllers
                 this.UserRepoService.Delete(messageToDelete);
             }
 
-            if (await this.UserRepoService.SaveAll().ConfigureAwait(false))
+            if (await this.UnitOfWork.SaveAllAsync().ConfigureAwait(false))
             {
                 return this.NoContent();
             }
@@ -175,7 +177,7 @@ namespace FEWebsite.API.Controllers
             message.IsRead = true;
             message.DateRead = DateTime.Now;
 
-            await this.UserRepoService.SaveAll().ConfigureAwait(false);
+            await this.UnitOfWork.SaveAllAsync().ConfigureAwait(false);
 
             return this.NoContent();
         }

@@ -18,15 +18,18 @@ namespace FEWebsite.API.Controllers
     {
         private IAuthService AuthService { get; }
         private IUserRepoService UserRepoService { get; }
-        public IConfiguration Config { get; }
-        public IMapper Mapper { get; }
+        private IConfiguration Config { get; }
+        private IMapper Mapper { get; }
+        private IUnitOfWork UnitOfWork { get; }
 
-        public AuthController(IAuthService authService, IUserRepoService userRepoService, IConfiguration config, IMapper mapper)
+        public AuthController(IAuthService authService, IUserRepoService userRepoService, IUnitOfWork unitOfWork,
+             IConfiguration config, IMapper mapper)
         {
             this.AuthService = authService;
             this.UserRepoService = userRepoService;
             this.Config = config;
             this.Mapper = mapper;
+            this.UnitOfWork = unitOfWork;
         }
 
         [HttpPost("register")]
@@ -97,7 +100,7 @@ namespace FEWebsite.API.Controllers
             const string generatedTempPassword = "password"; //change this to a random temp password later on.
             this.AuthService.CreatePasswordHash(matchedUser, generatedTempPassword);
 
-            var passwordResetSuccessful = await this.UserRepoService.SaveAll().ConfigureAwait(false);
+            var passwordResetSuccessful = await this.UnitOfWork.SaveAllAsync().ConfigureAwait(false);
             if (passwordResetSuccessful)
             {
                 return this.Ok(new StatusCodeResultReturnObject(this.Ok(),

@@ -10,12 +10,9 @@ namespace FEWebsite.API.Data.DerivedServices
 {
     public class GameService : BaseService, IGameService
     {
-        public GameService(DataContext context)
+        public GameService(DataContext context) : base(context)
         {
-            Context = context;
         }
-
-        private DataContext Context { get; }
 
         public void Add<T>(T entity) where T : class
         {

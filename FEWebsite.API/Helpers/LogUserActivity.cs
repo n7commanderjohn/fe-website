@@ -32,10 +32,11 @@ namespace FEWebsite.API.Helpers
             var userId = int.Parse(resultContext.HttpContext.User
                 .FindFirst(ClaimTypes.NameIdentifier).Value);
             var userRepoService = resultContext.HttpContext.RequestServices.GetService<IUserRepoService>();
+            var unitOfWork = resultContext.HttpContext.RequestServices.GetService<IUnitOfWork>();
             var user = await userRepoService.GetUser(userId).ConfigureAwait(false);
 
             user.LastLogin = DateTime.Now;
-            await userRepoService.SaveAll().ConfigureAwait(false);
+            await unitOfWork.SaveAllAsync().ConfigureAwait(false);
         }
     }
 }

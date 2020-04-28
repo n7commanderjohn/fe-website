@@ -11,8 +11,6 @@ namespace FEWebsite.API.Data.BaseServices
 
         void Delete<T>(T entity) where T : class;
 
-        Task<bool> SaveAll();
-
         Task<IEnumerable<Game>> GetGames();
 
         Task<Game> GetGame(int gameId);

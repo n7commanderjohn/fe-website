@@ -14,12 +14,9 @@ namespace FEWebsite.API.Data.DerivedServices
 {
     public class AuthService : BaseService, IAuthService
     {
-        public AuthService(DataContext context)
+        public AuthService(DataContext context) : base(context)
         {
-            this.Context = context;
         }
-
-        private DataContext Context { get; }
 
         public async Task<User> Login(string username, string password)
         {

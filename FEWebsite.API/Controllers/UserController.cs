@@ -25,13 +25,16 @@ namespace FEWebsite.API.Controllers
         private IAuthService AuthService { get; }
         private IConfiguration Config { get; }
         private IMapper Mapper { get; }
+        private IUnitOfWork UnitOfWork { get; }
 
-        public UserController(IUserRepoService userRepoService, IAuthService authService, IConfiguration config, IMapper mapper)
+        public UserController(IUserRepoService userRepoService, IAuthService authService, IConfiguration config, IMapper mapper,
+            IUnitOfWork unitOfWork)
         {
             this.UserRepoService = userRepoService;
             this.AuthService = authService;
             this.Config = config;
             this.Mapper = mapper;
+            this.UnitOfWork = unitOfWork;
         }
 
         // GET api/user
@@ -127,7 +130,7 @@ namespace FEWebsite.API.Controllers
                         {
                             this.AuthService.CreatePasswordHash(currentUser, userForUpdateDto.Password);
                         }
-                        var userRecordsSaved = await this.UserRepoService.SaveAll().ConfigureAwait(false);
+                        var userRecordsSaved = await this.UnitOfWork.SaveAllAsync().ConfigureAwait(false);
                         if (userRecordsSaved)
                         {
                             var token = this.AuthService.CreateUserToken(currentUser, this.Config.GetAppSettingsToken());
@@ -188,7 +191,7 @@ namespace FEWebsite.API.Controllers
                 likeStatusMessage = $"You have started following {recipient.Name}.";
             }
 
-            var userRecordsSaved = await this.UserRepoService.SaveAll().ConfigureAwait(false);
+            var userRecordsSaved = await this.UnitOfWork.SaveAllAsync().ConfigureAwait(false);
             if (userRecordsSaved)
             {
                 return this.Ok(new StatusCodeResultReturnObject(this.Ok(),
