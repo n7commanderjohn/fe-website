@@ -2,14 +2,14 @@ using System.Linq;
 
 using AutoMapper;
 
-using FEWebsite.API.DTOs.GameDTOs;
-using FEWebsite.API.DTOs.GameGenreDTOs;
-using FEWebsite.API.DTOs.MiscDTOs;
-using FEWebsite.API.DTOs.PhotoDTOs;
-using FEWebsite.API.DTOs.UserDTOs;
-using FEWebsite.API.Models;
-using FEWebsite.API.Models.ManyToManyModels;
-using FEWebsite.API.Models.ManyToManyModels.ComboModels;
+using FEWebsite.API.Controllers.DTOs.GameDTOs;
+using FEWebsite.API.Controllers.DTOs.GameGenreDTOs;
+using FEWebsite.API.Controllers.DTOs.MiscDTOs;
+using FEWebsite.API.Controllers.DTOs.PhotoDTOs;
+using FEWebsite.API.Controllers.DTOs.UserDTOs;
+using FEWebsite.API.Core.Models;
+using FEWebsite.API.Core.Models.ManyToManyModels;
+using FEWebsite.API.Core.Models.ManyToManyModels.ComboModels;
 
 namespace FEWebsite.API.Helpers
 {

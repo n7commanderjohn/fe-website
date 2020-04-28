@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 
 using AutoMapper;
 
-using FEWebsite.API.Interfaces;
-using FEWebsite.API.DTOs.GameGenreDTOs;
+using FEWebsite.API.Core.Interfaces;
+using FEWebsite.API.Controllers.DTOs.GameGenreDTOs;
 
 namespace FEWebsite.API.Controllers
 {

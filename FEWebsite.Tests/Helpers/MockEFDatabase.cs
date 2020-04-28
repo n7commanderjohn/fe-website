@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
 using FEWebsite.API.Data;
-using FEWebsite.API.Models;
+using FEWebsite.API.Core.Models;
 
 namespace FEWebsite.Tests.Helpers
 {

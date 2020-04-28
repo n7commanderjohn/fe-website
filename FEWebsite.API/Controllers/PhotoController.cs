@@ -10,10 +10,10 @@ using AutoMapper;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 
-using FEWebsite.API.Interfaces;
-using FEWebsite.API.DTOs.PhotoDTOs;
+using FEWebsite.API.Core.Interfaces;
+using FEWebsite.API.Controllers.DTOs.PhotoDTOs;
 using FEWebsite.API.Helpers;
-using FEWebsite.API.Models;
+using FEWebsite.API.Core.Models;
 
 namespace FEWebsite.API.Controllers
 {

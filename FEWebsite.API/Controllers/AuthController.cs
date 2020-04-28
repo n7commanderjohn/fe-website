@@ -5,10 +5,10 @@ using Microsoft.Extensions.Configuration;
 
 using AutoMapper;
 
-using FEWebsite.API.Interfaces;
-using FEWebsite.API.DTOs.UserDTOs;
+using FEWebsite.API.Core.Interfaces;
+using FEWebsite.API.Controllers.DTOs.UserDTOs;
 using FEWebsite.API.Helpers;
-using FEWebsite.API.Models;
+using FEWebsite.API.Core.Models;
 
 namespace FEWebsite.API.Controllers
 {

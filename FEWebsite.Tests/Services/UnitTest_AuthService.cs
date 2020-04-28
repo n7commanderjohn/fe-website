@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using FEWebsite.API.Data.DerivedServices;
-using FEWebsite.API.DTOs.UserDTOs;
-using FEWebsite.API.Models;
+using FEWebsite.API.Controllers.DTOs.UserDTOs;
+using FEWebsite.API.Core.Models;
 using static FEWebsite.Tests.Helpers.MockEFDatabase;
 
 namespace FEWebsite.Tests

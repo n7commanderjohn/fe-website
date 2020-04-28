@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
-using FEWebsite.API.Interfaces;
-using FEWebsite.API.Models;
+using FEWebsite.API.Core.Interfaces;
+using FEWebsite.API.Core.Models;
 
 namespace FEWebsite.API.Data.DerivedServices
 {

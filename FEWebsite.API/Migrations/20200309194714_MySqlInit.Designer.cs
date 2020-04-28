@@ -19,7 +19,7 @@ namespace FEWebsite.API.Migrations
                 .HasAnnotation("ProductVersion", "3.1.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("FEWebsite.API.Models.Gender", b =>
+            modelBuilder.Entity("FEWebsite.API.Core.Models.Gender", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("varchar(3) CHARACTER SET utf8mb4")
@@ -33,7 +33,7 @@ namespace FEWebsite.API.Migrations
                     b.ToTable("Genders");
                 });
 
-            modelBuilder.Entity("FEWebsite.API.Models.ManyToManyModels.ComboModels.UserGame", b =>
+            modelBuilder.Entity("FEWebsite.API.Core.Models.ManyToManyModels.ComboModels.UserGame", b =>
                 {
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -48,7 +48,7 @@ namespace FEWebsite.API.Migrations
                     b.ToTable("UserGames");
                 });
 
-            modelBuilder.Entity("FEWebsite.API.Models.ManyToManyModels.ComboModels.UserGameGenre", b =>
+            modelBuilder.Entity("FEWebsite.API.Core.Models.ManyToManyModels.ComboModels.UserGameGenre", b =>
                 {
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -63,7 +63,7 @@ namespace FEWebsite.API.Migrations
                     b.ToTable("UserGameGenres");
                 });
 
-            modelBuilder.Entity("FEWebsite.API.Models.ManyToManyModels.ComboModels.UserLike", b =>
+            modelBuilder.Entity("FEWebsite.API.Core.Models.ManyToManyModels.ComboModels.UserLike", b =>
                 {
                     b.Property<int>("LikerId")
                         .HasColumnType("int");
@@ -78,7 +78,7 @@ namespace FEWebsite.API.Migrations
                     b.ToTable("UserLikes");
                 });
 
-            modelBuilder.Entity("FEWebsite.API.Models.ManyToManyModels.ComboModels.UserMessage", b =>
+            modelBuilder.Entity("FEWebsite.API.Core.Models.ManyToManyModels.ComboModels.UserMessage", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -117,7 +117,7 @@ namespace FEWebsite.API.Migrations
                     b.ToTable("UserMessages");
                 });
 
-            modelBuilder.Entity("FEWebsite.API.Models.ManyToManyModels.Game", b =>
+            modelBuilder.Entity("FEWebsite.API.Core.Models.ManyToManyModels.Game", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -134,7 +134,7 @@ namespace FEWebsite.API.Migrations
                     b.ToTable("Games");
                 });
 
-            modelBuilder.Entity("FEWebsite.API.Models.ManyToManyModels.GameGenre", b =>
+            modelBuilder.Entity("FEWebsite.API.Core.Models.ManyToManyModels.GameGenre", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -151,7 +151,7 @@ namespace FEWebsite.API.Migrations
                     b.ToTable("GameGenres");
                 });
 
-            modelBuilder.Entity("FEWebsite.API.Models.Photo", b =>
+            modelBuilder.Entity("FEWebsite.API.Core.Models.Photo", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -185,7 +185,7 @@ namespace FEWebsite.API.Migrations
                     b.ToTable("Photos");
                 });
 
-            modelBuilder.Entity("FEWebsite.API.Models.User", b =>
+            modelBuilder.Entity("FEWebsite.API.Core.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -231,78 +231,78 @@ namespace FEWebsite.API.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("FEWebsite.API.Models.ManyToManyModels.ComboModels.UserGame", b =>
+            modelBuilder.Entity("FEWebsite.API.Core.Models.ManyToManyModels.ComboModels.UserGame", b =>
                 {
-                    b.HasOne("FEWebsite.API.Models.ManyToManyModels.Game", "Game")
+                    b.HasOne("FEWebsite.API.Core.Models.ManyToManyModels.Game", "Game")
                         .WithMany("UserGames")
                         .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FEWebsite.API.Models.User", "User")
+                    b.HasOne("FEWebsite.API.Core.Models.User", "User")
                         .WithMany("FavoriteGames")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("FEWebsite.API.Models.ManyToManyModels.ComboModels.UserGameGenre", b =>
+            modelBuilder.Entity("FEWebsite.API.Core.Models.ManyToManyModels.ComboModels.UserGameGenre", b =>
                 {
-                    b.HasOne("FEWebsite.API.Models.ManyToManyModels.GameGenre", "GameGenre")
+                    b.HasOne("FEWebsite.API.Core.Models.ManyToManyModels.GameGenre", "GameGenre")
                         .WithMany("UserGameGenres")
                         .HasForeignKey("GameGenreId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FEWebsite.API.Models.User", "User")
+                    b.HasOne("FEWebsite.API.Core.Models.User", "User")
                         .WithMany("FavoriteGenres")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("FEWebsite.API.Models.ManyToManyModels.ComboModels.UserLike", b =>
+            modelBuilder.Entity("FEWebsite.API.Core.Models.ManyToManyModels.ComboModels.UserLike", b =>
                 {
-                    b.HasOne("FEWebsite.API.Models.User", "Likee")
+                    b.HasOne("FEWebsite.API.Core.Models.User", "Likee")
                         .WithMany("Likers")
                         .HasForeignKey("LikeeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("FEWebsite.API.Models.User", "Liker")
+                    b.HasOne("FEWebsite.API.Core.Models.User", "Liker")
                         .WithMany("Likees")
                         .HasForeignKey("LikerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("FEWebsite.API.Models.ManyToManyModels.ComboModels.UserMessage", b =>
+            modelBuilder.Entity("FEWebsite.API.Core.Models.ManyToManyModels.ComboModels.UserMessage", b =>
                 {
-                    b.HasOne("FEWebsite.API.Models.User", "Recipient")
+                    b.HasOne("FEWebsite.API.Core.Models.User", "Recipient")
                         .WithMany("MessagesRecieved")
                         .HasForeignKey("RecipientId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("FEWebsite.API.Models.User", "Sender")
+                    b.HasOne("FEWebsite.API.Core.Models.User", "Sender")
                         .WithMany("MessagesSent")
                         .HasForeignKey("SenderId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("FEWebsite.API.Models.Photo", b =>
+            modelBuilder.Entity("FEWebsite.API.Core.Models.Photo", b =>
                 {
-                    b.HasOne("FEWebsite.API.Models.User", "User")
+                    b.HasOne("FEWebsite.API.Core.Models.User", "User")
                         .WithMany("Photos")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("FEWebsite.API.Models.User", b =>
+            modelBuilder.Entity("FEWebsite.API.Core.Models.User", b =>
                 {
-                    b.HasOne("FEWebsite.API.Models.Gender", "Gender")
+                    b.HasOne("FEWebsite.API.Core.Models.Gender", "Gender")
                         .WithMany()
                         .HasForeignKey("GenderId");
                 });

@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
 
-using FEWebsite.API.Interfaces;
-using FEWebsite.API.Models.ManyToManyModels;
+using FEWebsite.API.Core.Interfaces;
+using FEWebsite.API.Core.Models.ManyToManyModels;
 
 namespace FEWebsite.API.Data.DerivedServices
 {

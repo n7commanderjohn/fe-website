@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 
-using FEWebsite.API.Interfaces;
-using FEWebsite.API.DTOs.UserDTOs;
+using FEWebsite.API.Core.Interfaces;
+using FEWebsite.API.Controllers.DTOs.UserDTOs;
 using FEWebsite.API.Helpers;
-using FEWebsite.API.Models;
-using FEWebsite.API.Models.ManyToManyModels.ComboModels;
+using FEWebsite.API.Core.Models;
+using FEWebsite.API.Core.Models.ManyToManyModels.ComboModels;
 
 namespace FEWebsite.API.Data.DerivedServices
 {

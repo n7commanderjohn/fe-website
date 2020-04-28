@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using FEWebsite.API.Data.DerivedServices;
 using FEWebsite.API.Helpers;
-using FEWebsite.API.Models;
+using FEWebsite.API.Core.Models;
 using static FEWebsite.Tests.Helpers.MockEFDatabase;
 
 namespace FEWebsite.Tests.Services
