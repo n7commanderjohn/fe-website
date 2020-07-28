@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
 
 using FEWebsite.API.Controllers;
-using FEWebsite.API.Data.BaseServices;
+using FEWebsite.API.Core.Interfaces;
 
 namespace FEWebsite.API.Helpers
 {
@@ -31,11 +31,12 @@ namespace FEWebsite.API.Helpers
 
             var userId = int.Parse(resultContext.HttpContext.User
                 .FindFirst(ClaimTypes.NameIdentifier).Value);
-            var userService = resultContext.HttpContext.RequestServices.GetService<IUserService>();
-            var user = await userService.GetUser(userId).ConfigureAwait(false);
+            var userRepoService = resultContext.HttpContext.RequestServices.GetService<IUserRepoService>();
+            var unitOfWork = resultContext.HttpContext.RequestServices.GetService<IUnitOfWork>();
+            var user = await userRepoService.GetUser(userId).ConfigureAwait(false);
 
             user.LastLogin = DateTime.Now;
-            await userService.SaveAll().ConfigureAwait(false);
+            await unitOfWork.SaveAllAsync().ConfigureAwait(false);
         }
     }
 }

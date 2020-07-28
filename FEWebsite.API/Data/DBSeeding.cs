@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using FEWebsite.API.Models;
+using FEWebsite.API.Core.Models;
 
 using Newtonsoft.Json;
 

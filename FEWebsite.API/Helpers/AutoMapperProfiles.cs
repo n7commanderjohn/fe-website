@@ -2,14 +2,14 @@ using System.Linq;
 
 using AutoMapper;
 
-using FEWebsite.API.DTOs.GameDTOs;
-using FEWebsite.API.DTOs.GameGenreDTOs;
-using FEWebsite.API.DTOs.MiscDTOs;
-using FEWebsite.API.DTOs.PhotoDTOs;
-using FEWebsite.API.DTOs.UserDTOs;
-using FEWebsite.API.Models;
-using FEWebsite.API.Models.ManyToManyModels;
-using FEWebsite.API.Models.ManyToManyModels.ComboModels;
+using FEWebsite.API.Controllers.DTOs.GameDTOs;
+using FEWebsite.API.Controllers.DTOs.GameGenreDTOs;
+using FEWebsite.API.Controllers.DTOs.MiscDTOs;
+using FEWebsite.API.Controllers.DTOs.PhotoDTOs;
+using FEWebsite.API.Controllers.DTOs.UserDTOs;
+using FEWebsite.API.Core.Models;
+using FEWebsite.API.Core.Models.ManyToManyModels;
+using FEWebsite.API.Core.Models.ManyToManyModels.ComboModels;
 
 namespace FEWebsite.API.Helpers
 {
@@ -87,56 +87,52 @@ namespace FEWebsite.API.Helpers
             static void MapGames(UserForUpdateDto userForUpdateDto, User currentUser)
             {
                 var currFaveGames = currentUser.FavoriteGames.ToList();
-                var newFaveGames = userForUpdateDto.Games.Select(game => new UserGame()
+                var updatedFaveGames = userForUpdateDto.Games.Select(game => new UserGame()
                 {
                     Game = game,
                     GameId = game.Id,
                     User = currentUser,
                     UserId = currentUser.Id,
                 });
-                foreach (var game in newFaveGames)
+
+                var addedFaveGames = updatedFaveGames
+                    .Where(addedGames => !currFaveGames.Any(g => g.GameId == addedGames.GameId));
+                foreach (var game in addedFaveGames)
                 {
-                    var isThisANewFavorite = !currFaveGames.Any(fg => fg.GameId == game.GameId);
-                    if (isThisANewFavorite)
-                    {
-                        currentUser.FavoriteGames.Add(game);
-                    }
+                    currentUser.FavoriteGames.Add(game);
                 }
-                foreach (var game in currFaveGames)
+
+                var removedFaveGames = currFaveGames
+                    .Where(removedGames => !updatedFaveGames.Any(g => g.GameId == removedGames.GameId));
+                foreach (var game in removedFaveGames)
                 {
-                    var isThisExistingFavoriteNoMore = !newFaveGames.Any(g => g.GameId == game.GameId);
-                    if (isThisExistingFavoriteNoMore)
-                    {
-                        currentUser.FavoriteGames.Remove(game);
-                    }
+                    currentUser.FavoriteGames.Remove(game);
                 }
             }
 
             static void MapGameGenres(UserForUpdateDto userForUpdateDto, User currentUser)
             {
                 var currFaveGenres = currentUser.FavoriteGenres.ToList();
-                var newFaveGenres = userForUpdateDto.Genres.Select(genre => new UserGameGenre()
+                var updatedFaveGenres = userForUpdateDto.Genres.Select(genre => new UserGameGenre()
                 {
                     GameGenre = genre,
                     GameGenreId = genre.Id,
                     User = currentUser,
                     UserId = currentUser.Id,
                 });
-                foreach (var genre in newFaveGenres)
+
+                var addedFaveGenres = updatedFaveGenres
+                    .Where(addedGenres => !currFaveGenres.Any(g => g.GameGenreId == addedGenres.GameGenreId));
+                foreach (var genres in addedFaveGenres)
                 {
-                    var isThisANewFavorite = !currFaveGenres.Any(fg => fg.GameGenreId == genre.GameGenreId);
-                    if (isThisANewFavorite)
-                    {
-                        currentUser.FavoriteGenres.Add(genre);
-                    }
+                    currentUser.FavoriteGenres.Add(genres);
                 }
-                foreach (var genre in currFaveGenres)
+
+                var removedFaveGenres = currFaveGenres
+                    .Where(removedGenres => !updatedFaveGenres.Any(g => g.GameGenreId == removedGenres.GameGenreId));
+                foreach (var genre in removedFaveGenres)
                 {
-                    var isThisExistingFavoriteNoMore = !newFaveGenres.Any(g => g.GameGenreId == genre.GameGenreId);
-                    if (isThisExistingFavoriteNoMore)
-                    {
-                        currentUser.FavoriteGenres.Remove(genre);
-                    }
+                    currentUser.FavoriteGenres.Remove(genre);
                 }
             }
         }

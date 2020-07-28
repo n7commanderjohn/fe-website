@@ -16,7 +16,7 @@ using AutoMapper;
 
 using FEWebsite.API.Controllers;
 using FEWebsite.API.Data;
-using FEWebsite.API.Data.BaseServices;
+using FEWebsite.API.Core.Interfaces;
 using FEWebsite.API.Data.DerivedServices;
 using FEWebsite.API.Helpers;
 
@@ -81,15 +81,16 @@ namespace FEWebsite.API
 
         private void AddAutoMappers(IServiceCollection services)
         {
-            services.AddAutoMapper(typeof(UserService).Assembly);
+            services.AddAutoMapper(typeof(UserRepoService).Assembly);
             services.AddAutoMapper(typeof(GameService).Assembly);
             services.AddAutoMapper(typeof(GameGenreService).Assembly);
         }
 
         private void AddServiceScopes(IServiceCollection services)
         {
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IAuthService, AuthService>();
-            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserRepoService, UserRepoService>();
             services.AddScoped<IGameService, GameService>();
             services.AddScoped<IGameGenreService, GameGenreService>();
             services.AddScoped<LogUserActivity>();

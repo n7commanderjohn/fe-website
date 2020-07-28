@@ -8,10 +8,10 @@ using Microsoft.Extensions.Configuration;
 
 using AutoMapper;
 
-using FEWebsite.API.Data.BaseServices;
-using FEWebsite.API.DTOs.UserDTOs;
+using FEWebsite.API.Core.Interfaces;
+using FEWebsite.API.Controllers.DTOs.UserDTOs;
 using FEWebsite.API.Helpers;
-using FEWebsite.API.Models.ManyToManyModels.ComboModels;
+using FEWebsite.API.Core.Models.ManyToManyModels.ComboModels;
 
 namespace FEWebsite.API.Controllers
 {
@@ -21,17 +21,20 @@ namespace FEWebsite.API.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private IUserService UserService { get; }
+        private IUserRepoService UserRepoService { get; }
         private IAuthService AuthService { get; }
         private IConfiguration Config { get; }
         private IMapper Mapper { get; }
+        private IUnitOfWork UnitOfWork { get; }
 
-        public UserController(IUserService userService, IAuthService authService, IConfiguration config, IMapper mapper)
+        public UserController(IUserRepoService userRepoService, IAuthService authService, IConfiguration config, IMapper mapper,
+            IUnitOfWork unitOfWork)
         {
-            this.UserService = userService;
+            this.UserRepoService = userRepoService;
             this.AuthService = authService;
             this.Config = config;
             this.Mapper = mapper;
+            this.UnitOfWork = unitOfWork;
         }
 
         // GET api/user
@@ -40,7 +43,7 @@ namespace FEWebsite.API.Controllers
         {
             userParams.UserId = this.GetUserIdFromClaim();
 
-            var users = await this.UserService
+            var users = await this.UserRepoService
                 .GetUsers(userParams)
                 .ConfigureAwait(false);
 
@@ -55,7 +58,7 @@ namespace FEWebsite.API.Controllers
         [HttpGet("{id}", Name = "GetUser")]
         public async Task<OkObjectResult> GetUser(int id)
         {
-            var user = await this.UserService
+            var user = await this.UserRepoService
                 .GetUser(id)
                 .ConfigureAwait(false);
 
@@ -68,7 +71,7 @@ namespace FEWebsite.API.Controllers
         [HttpGet("{id}/like")]
         public async Task<OkObjectResult> GetUserLikes(int id)
         {
-            var likes = await this.UserService
+            var likes = await this.UserRepoService
                 .GetLikes(id)
                 .ConfigureAwait(false);
 
@@ -80,7 +83,7 @@ namespace FEWebsite.API.Controllers
         [HttpGet("genders")]
         public async Task<OkObjectResult> GetGenders()
         {
-            var genders = await this.UserService
+            var genders = await this.UserRepoService
                 .GetGenders()
                 .ConfigureAwait(false);
 
@@ -97,7 +100,7 @@ namespace FEWebsite.API.Controllers
                 return unauthorization;
             }
 
-            var currentUser = await this.UserService.GetUser(id).ConfigureAwait(false);
+            var currentUser = await this.UserRepoService.GetUser(id).ConfigureAwait(false);
             var passwordVerficationPassed = !userForUpdateDto.IsPasswordNeeded ||
                 this.AuthService.ComparePassword(currentUser, userForUpdateDto.PasswordCurrent);
             if (passwordVerficationPassed)
@@ -127,7 +130,7 @@ namespace FEWebsite.API.Controllers
                         {
                             this.AuthService.CreatePasswordHash(currentUser, userForUpdateDto.Password);
                         }
-                        var userRecordsSaved = await this.UserService.SaveAll().ConfigureAwait(false);
+                        var userRecordsSaved = await this.UnitOfWork.SaveAllAsync().ConfigureAwait(false);
                         if (userRecordsSaved)
                         {
                             var token = this.AuthService.CreateUserToken(currentUser, this.Config.GetAppSettingsToken());
@@ -166,15 +169,15 @@ namespace FEWebsite.API.Controllers
                 return unauthorization;
             }
 
-            var like = await this.UserService.GetLike(id, recipientId).ConfigureAwait(false);
-            var recipient = await this.UserService.GetUser(recipientId).ConfigureAwait(false);
+            var like = await this.UserRepoService.GetLike(id, recipientId).ConfigureAwait(false);
+            var recipient = await this.UserRepoService.GetUser(recipientId).ConfigureAwait(false);
             string likeStatusMessage;
             if (like != null)
             {
                 // var returnObj
                 //     = new StatusCodeResultReturnObject(this.BadRequest(), "You already like this user.");
                 // return this.BadRequest(returnObj);
-                this.UserService.Delete(like); // should untoggle the like by removing it from the Likes table.
+                this.UserRepoService.Delete(like); // should untoggle the like by removing it from the Likes table.
                 likeStatusMessage = $"You have stopped following {recipient.Name}.";
             }
             else
@@ -184,11 +187,11 @@ namespace FEWebsite.API.Controllers
                     LikerId = id,
                     LikeeId = recipientId,
                 };
-                this.UserService.Add(like);
+                this.UserRepoService.Add(like);
                 likeStatusMessage = $"You have started following {recipient.Name}.";
             }
 
-            var userRecordsSaved = await this.UserService.SaveAll().ConfigureAwait(false);
+            var userRecordsSaved = await this.UnitOfWork.SaveAllAsync().ConfigureAwait(false);
             if (userRecordsSaved)
             {
                 return this.Ok(new StatusCodeResultReturnObject(this.Ok(),

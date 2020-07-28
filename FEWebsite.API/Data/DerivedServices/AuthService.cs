@@ -7,19 +7,16 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
-using FEWebsite.API.Data.BaseServices;
-using FEWebsite.API.Models;
+using FEWebsite.API.Core.Interfaces;
+using FEWebsite.API.Core.Models;
 
 namespace FEWebsite.API.Data.DerivedServices
 {
     public class AuthService : BaseService, IAuthService
     {
-        public AuthService(DataContext context)
+        public AuthService(DataContext context) : base(context)
         {
-            this.Context = context;
         }
-
-        private DataContext Context { get; }
 
         public async Task<User> Login(string username, string password)
         {

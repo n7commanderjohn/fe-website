@@ -5,10 +5,10 @@ using Microsoft.Extensions.Configuration;
 
 using AutoMapper;
 
-using FEWebsite.API.Data.BaseServices;
-using FEWebsite.API.DTOs.UserDTOs;
+using FEWebsite.API.Core.Interfaces;
+using FEWebsite.API.Controllers.DTOs.UserDTOs;
 using FEWebsite.API.Helpers;
-using FEWebsite.API.Models;
+using FEWebsite.API.Core.Models;
 
 namespace FEWebsite.API.Controllers
 {
@@ -17,16 +17,19 @@ namespace FEWebsite.API.Controllers
     public class AuthController : ControllerBase
     {
         private IAuthService AuthService { get; }
-        private IUserService UserService { get; }
-        public IConfiguration Config { get; }
-        public IMapper Mapper { get; }
+        private IUserRepoService UserRepoService { get; }
+        private IConfiguration Config { get; }
+        private IMapper Mapper { get; }
+        private IUnitOfWork UnitOfWork { get; }
 
-        public AuthController(IAuthService authService, IUserService userService, IConfiguration config, IMapper mapper)
+        public AuthController(IAuthService authService, IUserRepoService userRepoService, IUnitOfWork unitOfWork,
+             IConfiguration config, IMapper mapper)
         {
             this.AuthService = authService;
-            this.UserService = userService;
+            this.UserRepoService = userRepoService;
             this.Config = config;
             this.Mapper = mapper;
+            this.UnitOfWork = unitOfWork;
         }
 
         [HttpPost("register")]
@@ -85,7 +88,7 @@ namespace FEWebsite.API.Controllers
         [HttpPut("resetpassword")]
         public async Task<IActionResult> ResetPassword(UserForPasswordResetDto userForPasswordResetDto)
         {
-            var matchedUser = await this.UserService
+            var matchedUser = await this.UserRepoService
                 .GetUserThroughPasswordResetProcess(userForPasswordResetDto).ConfigureAwait(false);
 
             if (matchedUser == null)
@@ -97,7 +100,7 @@ namespace FEWebsite.API.Controllers
             const string generatedTempPassword = "password"; //change this to a random temp password later on.
             this.AuthService.CreatePasswordHash(matchedUser, generatedTempPassword);
 
-            var passwordResetSuccessful = await this.UserService.SaveAll().ConfigureAwait(false);
+            var passwordResetSuccessful = await this.UnitOfWork.SaveAllAsync().ConfigureAwait(false);
             if (passwordResetSuccessful)
             {
                 return this.Ok(new StatusCodeResultReturnObject(this.Ok(),
