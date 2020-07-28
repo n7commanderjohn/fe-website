@@ -34,29 +34,20 @@ namespace FEWebsite.API.Data.DerivedServices
         public async Task<User> GetUser(int userId)
         {
             var user = await this.Context.Users
-                .SingleOrDefaultAsync(UserIdMatches(userId))
+                .SingleOrDefaultAsync(u => u.Id == userId)
                 .ConfigureAwait(false);
 
             return user;
-
-            static Expression<Func<User, bool>> UserIdMatches(int userId)
-            {
-                return u => u.Id == userId;
-            }
         }
 
         public async Task<User> GetUserThroughPasswordResetProcess(UserForPasswordResetDto userForPasswordResetDto)
         {
+            var dto = userForPasswordResetDto;
             var user = await Context.Users
-                .SingleOrDefaultAsync(UsernameAndEmailMatches(userForPasswordResetDto))
+                .SingleOrDefaultAsync(u => u.Email == dto.Email && u.Username == dto.Username)
                 .ConfigureAwait(false);
 
             return user;
-
-            static Expression<Func<User, bool>> UsernameAndEmailMatches(UserForPasswordResetDto dto)
-            {
-                return u => u.Email == dto.Email && u.Username == dto.Username;
-            }
         }
 
         public async Task<PagedList<User>> GetUsers(UserParams userParams)
@@ -72,11 +63,11 @@ namespace FEWebsite.API.Data.DerivedServices
             async Task<IQueryable<User>> GetUsersFromContext(UserParams userParams)
             {
                 var users = this.Context.Users
-                    .Where(NotUserIdMatches(userParams));
+                    .Where(u => u.Id != userParams.UserId);
 
                 if (!string.IsNullOrEmpty(userParams.GenderId))
                 {
-                    users = users.Where(GenderIdMatches(userParams));
+                    users = users.Where(u => u.Gender.Id == userParams.GenderId);
                 }
 
                 if (userParams.Likers || userParams.Likees)
@@ -106,25 +97,10 @@ namespace FEWebsite.API.Data.DerivedServices
                     var minDob = DateTime.Today.AddYears(-userParams.MaxAge - 1);
                     var maxDob = DateTime.Today.AddYears(-userParams.MinAge);
 
-                    users = users.Where(UsersAreWithinAgeFilters(minDob, maxDob));
+                    users = users.Where(u => u.Birthday >= minDob && u.Birthday <= maxDob);
                 }
 
                 return users;
-            }
-
-            static Expression<Func<User, bool>> NotUserIdMatches(UserParams userParams)
-            {
-                return u => u.Id != userParams.UserId;
-            }
-
-            static Expression<Func<User, bool>> GenderIdMatches(UserParams userParams)
-            {
-                return u => u.Gender.Id == userParams.GenderId;
-            }
-
-            static Expression<Func<User, bool>> UsersAreWithinAgeFilters(DateTime minDob, DateTime maxDob)
-            {
-                return u => u.Birthday >= minDob && u.Birthday <= maxDob;
             }
         }
 
@@ -161,15 +137,10 @@ namespace FEWebsite.API.Data.DerivedServices
         public async Task<Photo> GetPhoto(int photoId)
         {
             var photo = await this.Context.Photos
-                .FirstOrDefaultAsync(PhotoIdMatches(photoId))
+                .FirstOrDefaultAsync(p => p.Id == photoId)
                 .ConfigureAwait(false);
 
             return photo;
-
-            static Expression<Func<Photo, bool>> PhotoIdMatches(int photoId)
-            {
-                return p => p.Id == photoId;
-            }
         }
 
         private IQueryable<User> DefaultUserIncludes(bool expandedInclude = false)
@@ -202,23 +173,11 @@ namespace FEWebsite.API.Data.DerivedServices
                 .Include(u => u.Likees);
         }
 
-        public async Task<bool> SaveAll()
-        {
-            return await this.Context
-                .SaveChangesAsync()
-                .ConfigureAwait(false) > 0;
-        }
-
         public async Task<Photo> GetCurrentMainPhotoForUser(int userId)
         {
             return await this.Context.Photos
-                .FirstOrDefaultAsync(UserIdMatchesAndPhotoIsMain(userId))
+                .FirstOrDefaultAsync(p => p.UserId == userId && p.IsMain)
                 .ConfigureAwait(false);
-
-            static Expression<Func<Photo, bool>> UserIdMatchesAndPhotoIsMain(int userId)
-            {
-                return p => p.UserId == userId && p.IsMain;
-            }
         }
 
         public async Task<Photo> SetUserPhotoAsMain(int userId, Photo photoToBeSet)
@@ -235,14 +194,9 @@ namespace FEWebsite.API.Data.DerivedServices
 
         public async Task<UserLike> GetLike(int userId, int recipientId)
         {
-            return await this.Context.UserLikes.FirstOrDefaultAsync(
-                    GetSelectedLikeOfCurrentUser(userId, recipientId))
+            return await this.Context.UserLikes
+                .FirstOrDefaultAsync(u => u.LikerId == userId && u.LikeeId == recipientId)
                 .ConfigureAwait(false);
-
-            static Expression<Func<UserLike, bool>> GetSelectedLikeOfCurrentUser(int userId, int recipientId)
-            {
-                return u => u.LikerId == userId && u.LikeeId == recipientId;
-            }
         }
 
         public async Task<IEnumerable<int>> GetLikes(int userId)
@@ -272,17 +226,13 @@ namespace FEWebsite.API.Data.DerivedServices
             var messages = this.Context.UserMessages
                 .AsQueryable();
 
-            Expression<Func<UserMessage, bool>> IsUnreadRecipientMessageAndNotDeleted =
-                um => um.RecipientId == messageParams.UserId && !um.IsRead && !um.RecipientDeleted;
-            Expression<Func<UserMessage, bool>> IsRecipientMessageAndNotDeleted = um => um.RecipientId == messageParams.UserId && !um.RecipientDeleted;
-            Expression<Func<UserMessage, bool>> IsSenderMessageAndNotDeleted = um => um.SenderId == messageParams.UserId && !um.SenderDeleted;
             messages = messageParams.MessageContainer
             switch
             {
-                MessageContainerArgs.Unread => messages.Where(IsUnreadRecipientMessageAndNotDeleted),
-                MessageContainerArgs.Inbox => messages.Where(IsRecipientMessageAndNotDeleted),
-                MessageContainerArgs.Outbox => messages.Where(IsSenderMessageAndNotDeleted),
-                _ => messages.Where(IsUnreadRecipientMessageAndNotDeleted),
+                MessageContainerArgs.Unread => messages.Where(um => um.RecipientId == messageParams.UserId && !um.IsRead && !um.RecipientDeleted),
+                MessageContainerArgs.Inbox => messages.Where(um => um.RecipientId == messageParams.UserId && !um.RecipientDeleted),
+                MessageContainerArgs.Outbox => messages.Where(um => um.SenderId == messageParams.UserId && !um.SenderDeleted),
+                _ => messages.Where(um => um.RecipientId == messageParams.UserId && !um.IsRead && !um.RecipientDeleted),
             };
 
             messages = messages.OrderByDescending(um => um.MessageSent);
