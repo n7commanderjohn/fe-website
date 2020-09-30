@@ -1,4 +1,5 @@
 # Fire Emblem Network
+÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷÷
 ![Angular CI](https://github.com/n7commanderjohn/fe-website/workflows/Angular%20CI/badge.svg)
 ![.NET Core CI](https://github.com/n7commanderjohn/fe-website/workflows/.NET%20Core%20CI/badge.svg)
 ![Website Deployment](https://github.com/n7commanderjohn/fe-website/workflows/Digital-Ocean-CD%20over%20SFTP/badge.svg)
